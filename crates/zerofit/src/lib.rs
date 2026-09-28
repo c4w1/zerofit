@@ -25,3 +25,6 @@ extern crate alloc;
 extern crate std;
 
 pub mod crc;
+mod error;
+
+pub use error::{Error, ErrorKind};

@@ -13,11 +13,12 @@ categories = ["parser-implementations", "no-std", "encoding", "embedded"]
 [features]
 default = ["std"]
 ## Enables `std::io`-based APIs and `std::error::Error` integration. Implies `alloc`.
-std = ["alloc"]
+std = ["alloc", "thiserror/std"]
 ## Enables APIs that need a heap (owned definitions for streaming decoding).
 alloc = []
 
 [dependencies]
+thiserror = { version = "2.0.21", default-features = false }
 
 [dev-dependencies]
 proptest = "1.11.0"
