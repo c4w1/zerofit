@@ -15,8 +15,13 @@
 //! With `default-features = false` the crate is `#![no_std]` and allocation
 //! free.
 #![no_std]
+// Test code may use arithmetic freely. The non-test lib build (also checked
+// by `clippy --all-targets`) still enforces the lint.
+#![cfg_attr(test, allow(clippy::arithmetic_side_effects))]
 
 #[cfg(feature = "alloc")]
 extern crate alloc;
 #[cfg(any(feature = "std", test))]
 extern crate std;
+
+pub mod crc;
