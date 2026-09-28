@@ -15,9 +15,12 @@
 //! With `default-features = false` the crate is `#![no_std]` and allocation
 //! free.
 #![no_std]
-// Test code may use arithmetic freely. The non-test lib build (also checked
-// by `clippy --all-targets`) still enforces the lint.
-#![cfg_attr(test, allow(clippy::arithmetic_side_effects))]
+// Test code may use arithmetic and casts freely. The non-test lib build (also
+// checked by `clippy --all-targets`) still enforces these lints.
+#![cfg_attr(
+    test,
+    allow(clippy::arithmetic_side_effects, clippy::cast_possible_truncation)
+)]
 
 #[cfg(feature = "alloc")]
 extern crate alloc;
@@ -26,12 +29,11 @@ extern crate std;
 
 mod base_type;
 pub mod crc;
-// Temporarily unused outside tests; wired into the decoder in the next commit.
-#[allow(dead_code)]
+mod decoder;
 mod definition;
 mod error;
 mod header;
-#[allow(dead_code)]
+mod message;
 mod record_header;
 mod value;
 
@@ -40,12 +42,14 @@ mod value;
 mod test_builder;
 
 pub use base_type::{BaseType, Endian};
+pub use decoder::{DecodeOptions, Decoder, Record};
 pub use definition::{
     Definition, DeveloperFieldDefinition, DeveloperFieldDefinitions, FieldDefinition,
     FieldDefinitions,
 };
 pub use error::{Error, ErrorKind};
 pub use header::{FileHeader, ProtocolVersion};
+pub use message::{DataMessage, DeveloperField, DeveloperFields, Field, Fields};
 pub use value::{Array, ArrayIter, FitStr, Value};
 
 #[cfg(test)]

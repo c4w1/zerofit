@@ -183,7 +183,9 @@ impl<'a> Definition<'a> {
 
     /// Total size of the regular fields in each data message.
     pub(crate) fn regular_fields_size(&self) -> usize {
-        self.fields().map(|f| usize::from(f.size())).sum()
+        self.fields()
+            .map(|f| usize::from(f.size()))
+            .fold(0, usize::saturating_add)
     }
 }
 
@@ -305,7 +307,6 @@ impl Iterator for DeveloperFieldDefinitions<'_> {
 impl ExactSizeIterator for DeveloperFieldDefinitions<'_> {}
 
 #[cfg(test)]
-#[allow(clippy::cast_possible_truncation)]
 mod tests {
     use super::*;
     use std::vec::Vec;
