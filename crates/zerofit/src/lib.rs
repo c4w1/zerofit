@@ -26,5 +26,7 @@ extern crate std;
 
 pub mod crc;
 mod error;
+mod header;
 
 pub use error::{Error, ErrorKind};
+pub use header::{FileHeader, ProtocolVersion};
