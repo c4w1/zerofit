@@ -1,0 +1,10 @@
+/target
+.idea/
+*.swp
+.DS_Store
+
+# Fuzzing output
+/fuzz/target
+/fuzz/corpus
+/fuzz/artifacts
+/fuzz/coverage

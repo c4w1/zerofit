@@ -1,0 +1,25 @@
+[package]
+name = "zerofit"
+description = "Zero-copy, no_std, panic-free decoder for FIT (Flexible and Interoperable Data Transfer) activity files"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+readme = "../../README.md"
+keywords = ["fit", "garmin", "gps", "fitness", "no_std"]
+categories = ["parser-implementations", "no-std", "encoding", "embedded"]
+
+[features]
+default = ["std"]
+## Enables `std::io`-based APIs and `std::error::Error` integration. Implies `alloc`.
+std = ["alloc"]
+## Enables APIs that need a heap (owned definitions for streaming decoding).
+alloc = []
+
+[dependencies]
+
+[dev-dependencies]
+
+[lints]
+workspace = true
