@@ -24,9 +24,13 @@ extern crate alloc;
 #[cfg(any(feature = "std", test))]
 extern crate std;
 
+mod base_type;
 pub mod crc;
 mod error;
 mod header;
+mod value;
 
+pub use base_type::{BaseType, Endian};
 pub use error::{Error, ErrorKind};
 pub use header::{FileHeader, ProtocolVersion};
+pub use value::{Array, ArrayIter, FitStr, Value};
