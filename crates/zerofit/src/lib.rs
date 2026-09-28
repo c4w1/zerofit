@@ -7,13 +7,46 @@
 //! headers, CRCs, definition and data messages, base types) but has no
 //! knowledge of the FIT profile (message and field names, units, scaling).
 //!
+//! # Example
+//!
+//! ```
+//! # let bytes: &[u8] = &[0x0E, 0x20, 0x54, 0x08, 0x12, 0x00, 0x00, 0x00, 0x2E, 0x46, 0x49, 0x54, 0x39, 0x04, 0x40, 0x00, 0x00, 0x14, 0x00, 0x02, 0xFD, 0x04, 0x86, 0x03, 0x01, 0x02, 0x00, 0x00, 0xCA, 0x9A, 0x3B, 0x8E, 0x20, 0xD3];
+//! use zerofit::{Decoder, Record, Value};
+//!
+//! // `bytes` is the contents of a .fit file. Nothing is copied or allocated:
+//! // every message borrows from it.
+//! for record in Decoder::new(bytes) {
+//!     if let Record::Data(msg) = record? {
+//!         // Global message 20 is `record`; field 3 is `heart_rate`.
+//!         if msg.global_message_number() == 20 {
+//!             if let Some(Value::UInt8(bpm)) = msg.field(3).and_then(|f| f.value()) {
+//!                 println!("{:?}: {bpm} bpm", msg.timestamp());
+//!             }
+//!         }
+//!     }
+//! }
+//! # Ok::<(), zerofit::Error>(())
+//! ```
+//!
+//! # Guarantees
+//!
+//! - **No panics on any input.** Library code is compiled with lints that
+//!   deny `unwrap`, `expect`, `panic!`, slice indexing and unchecked
+//!   arithmetic, and the decoder is fuzzed.
+//! - **No allocation.** The decoder's state is a fixed-size table; definitions
+//!   and messages borrow from the input.
+//! - **Precise errors.** Every [`Error`] carries the byte offset where decoding
+//!   stopped.
+//!
 //! # Features
 //!
-//! - `std` (default): `std::io` integration. Implies `alloc`.
-//! - `alloc`: APIs that need a heap.
+//! - `std` (default): reserved for the upcoming `std::io::Read`-based
+//!   decoder. Implies `alloc`.
+//! - `alloc`: reserved for APIs that need a heap.
 //!
 //! With `default-features = false` the crate is `#![no_std]` and allocation
-//! free.
+//! free, and builds for bare-metal targets such as `thumbv7em-none-eabihf`.
+//! [`Error`] implements [`core::error::Error`] in every configuration.
 #![no_std]
 // Test code may use arithmetic and casts freely. The non-test lib build (also
 // checked by `clippy --all-targets`) still enforces these lints.
