@@ -21,7 +21,6 @@ alloc = []
 thiserror = { version = "2.0.21", default-features = false }
 
 [dev-dependencies]
-fitparser = "0.11.0"
 proptest = "1.11.0"
 serde = { version = "1.0.229", features = ["derive"] }
 serde_json = "1.0.151"

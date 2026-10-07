@@ -1,0 +1,37 @@
+[package]
+name = "zerofit-bench"
+description = "Benchmarks: zerofit vs fitparser on the fixture files (internal)"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+fitparser = "0.11.0"
+zerofit = { workspace = true, features = ["std"] }
+zerofit-profile = { path = "../zerofit-profile" }
+
+[dev-dependencies]
+criterion = "0.8.2"
+
+[[bench]]
+name = "decode"
+harness = false
+
+[[bench]]
+name = "alloc_count"
+harness = false
+
+# Same as the workspace lints, except `unsafe_code` is `deny` instead of
+# `forbid`: the allocation-count bench needs a `GlobalAlloc`, an unsafe
+# trait, and is the only place it is allowed (with a local `#[allow]`).
+# The published crates keep `forbid`.
+[lints.rust]
+unsafe_code = "deny"
+missing_docs = "deny"
+
+[lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+unwrap_used = "deny"
+expect_used = "deny"
