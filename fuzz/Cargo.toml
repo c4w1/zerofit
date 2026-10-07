@@ -10,6 +10,7 @@ cargo-fuzz = true
 [dependencies]
 libfuzzer-sys = "0.4"
 zerofit = { path = "../crates/zerofit" }
+zerofit-profile = { path = "../crates/zerofit-profile", features = ["alloc"] }
 
 # Keep the fuzz crate out of the main workspace.
 [workspace]
@@ -18,6 +19,20 @@ members = ["."]
 [[bin]]
 name = "decode"
 path = "fuzz_targets/decode.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "differential"
+path = "fuzz_targets/differential.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "roundtrip"
+path = "fuzz_targets/roundtrip.rs"
 test = false
 doc = false
 bench = false
