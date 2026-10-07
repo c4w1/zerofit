@@ -107,6 +107,7 @@ impl<'a> DataMessage<'a> {
 
     /// Iterates over the regular fields in definition order.
     #[must_use]
+    #[inline]
     pub fn fields(&self) -> Fields<'a> {
         Fields {
             defs: self.definition.fields(),
@@ -118,6 +119,7 @@ impl<'a> DataMessage<'a> {
 
     /// The first regular field with definition number `number`.
     #[must_use]
+    #[inline]
     pub fn field(&self, number: u8) -> Option<Field<'a>> {
         self.fields().find(|f| f.number() == number)
     }
@@ -199,12 +201,14 @@ impl<'a> Field<'a> {
     /// The decoded value, or `None` if it is the base type's invalid
     /// sentinel (the device had no value).
     #[must_use]
+    #[inline]
     pub fn value(&self) -> Option<Value<'a>> {
         Some(self.raw_value()).filter(|v| !v.is_invalid())
     }
 
     /// The decoded value, including invalid sentinels.
     #[must_use]
+    #[inline]
     pub fn raw_value(&self) -> Value<'a> {
         Value::decode(self.base_type(), self.endian, self.bytes)
     }
@@ -292,6 +296,7 @@ pub struct Fields<'a> {
 impl<'a> Iterator for Fields<'a> {
     type Item = Field<'a>;
 
+    #[inline]
     fn next(&mut self) -> Option<Self::Item> {
         let definition = self.defs.next()?;
         let (bytes, rest) = self.rest.split_at_checked(usize::from(definition.size()))?;
@@ -323,6 +328,7 @@ pub struct DeveloperFields<'a> {
 impl<'a> Iterator for DeveloperFields<'a> {
     type Item = DeveloperField<'a>;
 
+    #[inline]
     fn next(&mut self) -> Option<Self::Item> {
         let definition = self.defs.next()?;
         let (bytes, rest) = self.rest.split_at_checked(usize::from(definition.size()))?;

@@ -349,6 +349,7 @@ pub struct FieldDefinitions<'a>(ChunksExact<'a, u8>);
 impl Iterator for FieldDefinitions<'_> {
     type Item = FieldDefinition;
 
+    #[inline]
     fn next(&mut self) -> Option<Self::Item> {
         match *self.0.next()? {
             [number, size, base_type_byte] => Some(FieldDefinition {
@@ -374,6 +375,7 @@ pub struct DeveloperFieldDefinitions<'a>(ChunksExact<'a, u8>);
 impl Iterator for DeveloperFieldDefinitions<'_> {
     type Item = DeveloperFieldDefinition;
 
+    #[inline]
     fn next(&mut self) -> Option<Self::Item> {
         match *self.0.next()? {
             [number, size, developer_data_index] => Some(DeveloperFieldDefinition {
