@@ -12,6 +12,10 @@ categories = ["parser-implementations", "no-std", "embedded"]
 # The extracted profile subset is the codegen input, not part of the library.
 exclude = ["codegen/"]
 
+[features]
+## Developer field resolution (needs a heap for names and lookup tables).
+alloc = []
+
 [dependencies]
 zerofit = { workspace = true }
 

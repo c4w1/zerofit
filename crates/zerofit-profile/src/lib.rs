@@ -40,6 +40,12 @@
 //! return `f64` in profile units, computed as `raw / scale - offset` (only
 //! `/` and `-`, which `core` provides without `libm`).
 //!
+//! # Features
+//!
+//! - `alloc`: [`developer`], which resolves developer fields (fields added
+//!   by apps such as Connect IQ data fields) using the file's
+//!   `field_description` messages.
+//!
 //! # Not (yet) covered
 //!
 //! Subfields (alternative meanings of a field selected by another field,
@@ -47,6 +53,12 @@
 //! underlying field is still available through its accessor or
 //! [`raw`](messages::Record::raw).
 #![no_std]
+
+#[cfg(feature = "alloc")]
+extern crate alloc;
+
+#[cfg(feature = "alloc")]
+pub mod developer;
 
 use zerofit::{ArrayIter, Value};
 

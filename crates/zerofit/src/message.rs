@@ -128,6 +128,7 @@ impl<'a> DataMessage<'a> {
         let regular = self.definition.regular_fields_size();
         DeveloperFields {
             defs: self.definition.developer_fields(),
+            endian: self.definition.endian(),
             rest: self.bytes.get(regular..).unwrap_or(&[]),
         }
     }
@@ -198,6 +199,7 @@ impl<'a> Field<'a> {
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct DeveloperField<'a> {
     definition: DeveloperFieldDefinition,
+    endian: Endian,
     bytes: &'a [u8],
 }
 
@@ -224,6 +226,13 @@ impl<'a> DeveloperField<'a> {
     #[must_use]
     pub const fn bytes(&self) -> &'a [u8] {
         self.bytes
+    }
+
+    /// Byte order of the message the field belongs to. Decoding the bytes
+    /// also needs the base type from the field's `field_description`.
+    #[must_use]
+    pub const fn endian(&self) -> Endian {
+        self.endian
     }
 }
 
@@ -263,6 +272,7 @@ impl<'a> Iterator for Fields<'a> {
 #[derive(Debug, Clone)]
 pub struct DeveloperFields<'a> {
     defs: DeveloperFieldDefinitions<'a>,
+    endian: Endian,
     rest: &'a [u8],
 }
 
@@ -273,7 +283,11 @@ impl<'a> Iterator for DeveloperFields<'a> {
         let definition = self.defs.next()?;
         let (bytes, rest) = self.rest.split_at_checked(usize::from(definition.size()))?;
         self.rest = rest;
-        Some(DeveloperField { definition, bytes })
+        Some(DeveloperField {
+            definition,
+            endian: self.endian,
+            bytes,
+        })
     }
 
     fn size_hint(&self) -> (usize, Option<usize>) {
