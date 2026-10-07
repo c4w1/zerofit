@@ -8,6 +8,12 @@ pub(crate) const fn f64_from_usize(n: usize) -> f64 {
     n as f64
 }
 
+/// `n` as `f64`. Exact below 2^53 (a 2000 W sum over 140 years).
+#[allow(clippy::cast_precision_loss)]
+pub(crate) const fn f64_from_u64(n: u64) -> f64 {
+    n as f64
+}
+
 /// `x` rounded to the nearest integer and clamped to `0..=u16::MAX`;
 /// `NaN` becomes 0.
 #[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]

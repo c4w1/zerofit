@@ -116,6 +116,31 @@ impl Zones {
         false
     }
 
+    /// Seconds spent in each zone: `values` holds one value per second,
+    /// `reference` is FTP or LTHR. The result has [`len`](Self::len)
+    /// entries.
+    ///
+    /// Judgment call: every value passed in counts, so for power the zeros
+    /// of coasting land in Z1 (as in intervals.icu and TrainingPeaks);
+    /// callers skip missing heart-rate seconds rather than counting them.
+    ///
+    /// ```
+    /// use zerofit_analytics::Zones;
+    /// let z = Zones::coggan_power();
+    /// let secs = z.time_in([0.0, 100.0, 200.0, 250.0, 500.0], 250.0);
+    /// assert_eq!(secs, vec![2, 0, 1, 1, 0, 0, 1]);
+    /// ```
+    #[must_use]
+    pub fn time_in(&self, values: impl IntoIterator<Item = f64>, reference: f64) -> Vec<u32> {
+        let mut seconds = alloc::vec![0u32; self.len()];
+        for v in values {
+            if let Some(s) = seconds.get_mut(self.zone_of(v, reference)) {
+                *s = s.saturating_add(1);
+            }
+        }
+        seconds
+    }
+
     /// The 0-based zone of `value` for the given `reference`.
     #[must_use]
     pub fn zone_of(&self, value: f64, reference: f64) -> usize {

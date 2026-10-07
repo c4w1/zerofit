@@ -2,6 +2,9 @@
 
 use alloc::vec::Vec;
 
+/// Default speed threshold for [`ActivityStream::moving_time`], m/s.
+pub const DEFAULT_MOVING_SPEED: f64 = 0.5;
+
 /// Where a sample's values came from.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize))]
@@ -260,6 +263,34 @@ impl ActivityStream {
     #[must_use]
     pub fn elapsed_time(&self) -> u32 {
         self.elapsed.last().map_or(0, |e| e.saturating_add(1))
+    }
+
+    /// Moving time in seconds: samples with speed above `min_speed` m/s.
+    ///
+    /// Samples without a speed value count as moving, so an indoor ride
+    /// with no speed sensor is all moving time, which is also how
+    /// intervals.icu treats activities without a usable velocity stream.
+    /// Judgment call: the threshold. intervals.icu derives moving time from
+    /// the velocity stream but doesn't publish its threshold; the crate
+    /// default [`DEFAULT_MOVING_SPEED`] (0.5 m/s, 1.8 km/h, slower than
+    /// walking) treats only real standstills (traffic lights, café stops
+    /// with the timer running) as stopped.
+    ///
+    /// ```
+    /// use zerofit_analytics::{ActivityStream, stream::Sample};
+    /// let mut s = ActivityStream::new(0);
+    /// for (t, v) in [(0, Some(8.0)), (1, Some(0.0)), (2, None)] {
+    ///     s.push(Sample { speed: v, ..Sample::power(t, 100) })?;
+    /// }
+    /// assert_eq!(s.moving_time(0.5), 2);
+    /// # Ok::<(), zerofit_analytics::stream::NotIncreasing>(())
+    /// ```
+    #[must_use]
+    pub fn moving_time(&self, min_speed: f64) -> usize {
+        self.speed
+            .iter()
+            .filter(|v| v.is_none_or(|v| v > min_speed))
+            .count()
     }
 
     /// Seconds since the first sample, per sample. Strictly increasing.
