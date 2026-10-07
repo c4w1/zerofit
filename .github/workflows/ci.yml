@@ -89,3 +89,21 @@ jobs:
       - run: cargo check -p zerofit --all-features
       - run: cargo check -p zerofit --no-default-features
       - run: cargo check -p zerofit-profile
+
+  fuzz:
+    name: fuzz smoke test (60 s per target)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@nightly
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: fuzz
+      - run: cargo install cargo-fuzz --locked
+      - name: run each target
+        working-directory: fuzz
+        run: |
+          for target in decode differential roundtrip; do
+            mkdir -p corpus/$target && cp seeds/* corpus/$target/
+            cargo fuzz run -O $target -- -max_total_time=60
+          done

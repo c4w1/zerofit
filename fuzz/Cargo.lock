@@ -149,4 +149,12 @@ version = "0.0.0"
 dependencies = [
  "libfuzzer-sys",
  "zerofit",
+ "zerofit-profile",
+]
+
+[[package]]
+name = "zerofit-profile"
+version = "0.1.0"
+dependencies = [
+ "zerofit",
 ]
