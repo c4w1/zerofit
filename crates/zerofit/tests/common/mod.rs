@@ -3,4 +3,4 @@
 #![allow(dead_code, unreachable_pub)]
 
 pub mod builder;
-pub mod summary;
+pub mod expected;

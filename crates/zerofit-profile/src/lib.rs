@@ -84,13 +84,21 @@ pub use types::MesgNum;
 /// The profile name of global message number `global`, for every message in
 /// the profile (not only those with typed views).
 ///
+/// Manufacturer-specific messages (`0xFF00` and up) have no name, even though
+/// the profile's `mesg_num` type labels the ends of that range
+/// (`mfg_range_min`, `mfg_range_max`).
+///
 /// ```
 /// assert_eq!(zerofit_profile::message_name(20), Some("record"));
+/// assert_eq!(zerofit_profile::message_name(0xFF00), None);
 /// assert_eq!(zerofit_profile::message_name(0xFFF0), None);
 /// ```
 #[must_use]
 pub const fn message_name(global: u16) -> Option<&'static str> {
-    MesgNum::from_raw(global).name()
+    match MesgNum::from_raw(global) {
+        MesgNum::MfgRangeMin | MesgNum::MfgRangeMax => None,
+        other => other.name(),
+    }
 }
 
 /// Metadata for the fields of `global`, if this crate covers that message.

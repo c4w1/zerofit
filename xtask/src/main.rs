@@ -5,6 +5,8 @@
 //!   `--check`, fail if the checked-in files differ (used by CI).
 //! - `extract`: rebuild `profile-subset.json` from the FIT SDK's
 //!   `Profile.xlsx` (path in `FIT_PROFILE_XLSX`), then run `codegen`.
+//! - `expected`: write `<name>.expected.json` for every fixture from Garmin's
+//!   FitCSVTool (path to `FitCSVTool.jar` in `FIT_CSV_TOOL`; needs `java`).
 
 // A developer tool: panics abort the tool, not a user's program.
 #![allow(
@@ -12,6 +14,8 @@
     clippy::indexing_slicing,
     clippy::cast_possible_truncation
 )]
+
+mod expected;
 
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
@@ -21,7 +25,9 @@ fn main() -> ExitCode {
     let result = match args.first().map(String::as_str) {
         Some("codegen") => codegen(args.iter().any(|a| a == "--check")),
         Some("extract") => extract().and_then(|()| codegen(false)),
-        _ => Err("usage: cargo xtask <codegen [--check] | extract>".to_owned()),
+        Some("expected") => load_profile()
+            .and_then(|p| expected::run(&root().join("crates/zerofit/tests/fixtures"), &p)),
+        _ => Err("usage: cargo xtask <codegen [--check] | extract | expected>".to_owned()),
     };
     match result {
         Ok(()) => ExitCode::SUCCESS,
@@ -70,10 +76,14 @@ fn sdk_version_from_path(xlsx: &Path) -> Option<String> {
     Some(format!("{}.{}", parts.next()?, parts.next()?))
 }
 
-fn codegen(check: bool) -> Result<(), String> {
+fn load_profile() -> Result<zerofit_codegen::Profile, String> {
     let json = std::fs::read_to_string(subset_path())
         .map_err(|e| format!("cannot read {}: {e}", subset_path().display()))?;
-    let profile = serde_json::from_str(&json).map_err(|e| e.to_string())?;
+    serde_json::from_str(&json).map_err(|e| e.to_string())
+}
+
+fn codegen(check: bool) -> Result<(), String> {
+    let profile = load_profile()?;
     let files = zerofit_codegen::generate(&profile)?;
     let mut stale = Vec::new();
     for file in &files {
