@@ -329,17 +329,22 @@ fn scaled_json(v: &Value<'_>, scale: impl Fn(f64) -> f64) -> Json {
 mod tests {
     use super::*;
 
-    fn fixture(name: &str) -> Vec<u8> {
+    /// The fixture, or `None` outside the repository (the published
+    /// package does not include the fixtures).
+    fn fixture(name: &str) -> Option<Vec<u8>> {
         let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("../zerofit/tests/fixtures")
             .join(name);
-        std::fs::read(path).unwrap()
+        std::fs::read(path).ok()
     }
 
     #[test]
     fn json_output_is_valid_and_scaled() {
+        let Some(bytes) = fixture("icu_short.fit") else {
+            return;
+        };
         let mut out = Vec::new();
-        dump(&fixture("icu_short.fit")[..], &mut out, Format::Json, false).unwrap();
+        dump(&bytes[..], &mut out, Format::Json, false).unwrap();
         let parsed: Json = serde_json::from_slice(&out).unwrap();
         let messages = parsed.as_array().unwrap();
         assert_eq!(messages.len(), 96);
@@ -351,8 +356,11 @@ mod tests {
 
     #[test]
     fn csv_output_has_one_row_per_record() {
+        let Some(bytes) = fixture("icu_short.fit") else {
+            return;
+        };
         let mut out = Vec::new();
-        dump(&fixture("icu_short.fit")[..], &mut out, Format::Csv, false).unwrap();
+        dump(&bytes[..], &mut out, Format::Csv, false).unwrap();
         let text = String::from_utf8(out).unwrap();
         assert_eq!(text.lines().filter(|l| l.starts_with("Data,")).count(), 96);
         assert_eq!(
@@ -366,8 +374,11 @@ mod tests {
 
     #[test]
     fn raw_mode_uses_numbers() {
+        let Some(bytes) = fixture("icu_short.fit") else {
+            return;
+        };
         let mut out = Vec::new();
-        dump(&fixture("icu_short.fit")[..], &mut out, Format::Json, true).unwrap();
+        dump(&bytes[..], &mut out, Format::Json, true).unwrap();
         let parsed: Json = serde_json::from_slice(&out).unwrap();
         let record = parsed
             .as_array()

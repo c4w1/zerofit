@@ -6,11 +6,14 @@ edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 authors.workspace = true
+repository.workspace = true
+documentation = "https://docs.rs/zerofit-profile"
 readme = "README.md"
 keywords = ["fit", "garmin", "fitness", "no_std", "profile"]
 categories = ["parser-implementations", "no-std", "embedded"]
-# The extracted profile subset is the codegen input, not part of the library.
-exclude = ["codegen/"]
+# The extracted profile subset is the codegen input, not part of the library;
+# the fixture test needs files from the zerofit crate in this repository.
+exclude = ["codegen/", "tests/fixtures.rs"]
 
 [features]
 ## Developer field resolution (needs a heap for names and lookup tables).

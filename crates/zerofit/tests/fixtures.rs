@@ -23,9 +23,13 @@ use zerofit::{Decoder, ErrorKind, Record};
 
 #[test]
 fn fixtures_match_fitcsvtool() {
+    let fixtures = load_fixtures();
+    if fixtures.is_empty() {
+        return; // e.g. in the published package, which excludes them
+    }
     let named = profile_message_numbers();
     let mut failures = Vec::new();
-    for f in load_fixtures() {
+    for f in fixtures {
         failures.extend(
             check_raw(&f.bytes, &f.expected, &named)
                 .into_iter()

@@ -6,9 +6,13 @@ edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 authors.workspace = true
+repository.workspace = true
+documentation = "https://docs.rs/zerofit"
 readme = "../../README.md"
 keywords = ["fit", "garmin", "gps", "fitness", "no_std"]
 categories = ["parser-implementations", "no-std", "encoding", "embedded"]
+# Real-file fixtures stay in the repository; the fixture tests skip without them.
+exclude = ["tests/fixtures/"]
 
 [features]
 default = ["std"]
