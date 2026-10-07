@@ -40,8 +40,8 @@
 //!
 //! # Features
 //!
-//! - `std` (default): reserved for the upcoming `std::io::Read`-based
-//!   decoder. Implies `alloc`.
+//! - `std` (default): [`ReadDecoder`], which decodes from any
+//!   `std::io::Read` with a bounded buffer. Implies `alloc`.
 //! - `alloc`: enables the [`encode`] module (a minimal FIT writer).
 //!
 //! With `default-features = false` the crate is `#![no_std]` and allocation
@@ -69,6 +69,8 @@ pub mod encode;
 mod error;
 mod header;
 mod message;
+#[cfg(feature = "std")]
+mod read;
 mod record_header;
 mod value;
 
@@ -85,6 +87,8 @@ pub use definition::{
 pub use error::{Error, ErrorKind};
 pub use header::{FileHeader, ProtocolVersion};
 pub use message::{DataMessage, DeveloperField, DeveloperFields, Field, Fields};
+#[cfg(feature = "std")]
+pub use read::{ReadDecoder, ReadError};
 pub use value::{Array, ArrayIter, FitStr, Value};
 
 #[cfg(test)]

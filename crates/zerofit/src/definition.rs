@@ -197,6 +197,27 @@ impl<'a> Definition<'a> {
         self.developer_fields
     }
 
+    /// The same definition with its field lists taken from `fields` and
+    /// `developer_fields` (which must hold the same bytes), so a streaming
+    /// decoder can keep definitions in its own storage.
+    #[cfg(feature = "std")]
+    pub(crate) const fn rebind<'b>(
+        &self,
+        fields: &'b [u8],
+        developer_fields: &'b [u8],
+    ) -> Definition<'b> {
+        Definition {
+            local_message_type: self.local_message_type,
+            endian: self.endian,
+            global_message_number: self.global_message_number,
+            fields,
+            developer_fields,
+            has_developer_fields: self.has_developer_fields,
+            message_size: self.message_size,
+            timestamp_offset: self.timestamp_offset,
+        }
+    }
+
     /// Byte offset of a 4-byte field 253 (`timestamp`) within each data
     /// message, if the definition has one.
     pub(crate) const fn timestamp_offset(&self) -> Option<usize> {

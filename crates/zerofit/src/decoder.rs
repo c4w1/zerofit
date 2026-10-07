@@ -11,9 +11,9 @@ use crate::message::DataMessage;
 use crate::record_header::RecordHeader;
 
 /// Number of local message types a normal record header can address.
-const LOCAL_TYPES: usize = 16;
+pub(crate) const LOCAL_TYPES: usize = 16;
 /// Size of the CRC that ends every FIT file.
-const FILE_CRC_SIZE: usize = 2;
+pub(crate) const FILE_CRC_SIZE: usize = 2;
 /// Mask for the part of a timestamp a compressed header carries.
 const TIME_OFFSET_MASK: u32 = 0x1F;
 
@@ -57,6 +57,16 @@ impl DecodeOptions {
     pub const fn validate_file_crc(mut self, validate: bool) -> Self {
         self.validate_file_crc = validate;
         self
+    }
+}
+
+impl DecodeOptions {
+    pub(crate) const fn checks_header_crc(self) -> bool {
+        self.validate_header_crc
+    }
+
+    pub(crate) const fn checks_file_crc(self) -> bool {
+        self.validate_file_crc
     }
 }
 
@@ -188,12 +198,12 @@ impl<'a> Decoder<'a> {
             return Ok(None);
         }
         let header =
-            FileHeader::parse_at(rest, to_offset(start), self.options.validate_header_crc)?;
+            FileHeader::parse_at(rest, to_offset(start), self.options.checks_header_crc())?;
         let data_start = start.saturating_add(usize::from(header.size()));
         let data_size = usize::try_from(header.data_size()).unwrap_or(usize::MAX);
         let data_end = data_start.saturating_add(data_size);
 
-        if self.options.validate_file_crc {
+        if self.options.checks_file_crc() {
             self.check_file_crc(start, data_end)?;
         }
 
@@ -249,89 +259,25 @@ impl<'a> Decoder<'a> {
 
     fn record(&mut self) -> Result<Record<'a>, Error> {
         let start = self.pos;
-        let Some((&header, body)) = self.input.get(start..).and_then(<[u8]>::split_first) else {
-            return Err(Error::new(
-                ErrorKind::UnexpectedEof { needed: 1 },
-                to_offset(start),
-            ));
-        };
-        match RecordHeader::from_byte(header) {
-            RecordHeader::Definition {
-                local,
-                has_developer_fields,
-            } => {
-                let (definition, consumed) =
-                    Definition::parse(body, local, has_developer_fields, to_offset(start))?;
-                let end = start.saturating_add(1).saturating_add(consumed);
-                self.check_within_data(start, end)?;
-                if let Some(slot) = self.definitions.get_mut(usize::from(local)) {
-                    *slot = Some(definition);
-                }
-                self.pos = end;
-                Ok(Record::Definition(definition))
-            }
-            RecordHeader::Data { local } => self.data_message(start, body, local, None),
-            RecordHeader::CompressedTimestamp { local, time_offset } => {
-                self.data_message(start, body, local, Some(time_offset))
-            }
-        }
-    }
-
-    fn data_message(
-        &mut self,
-        start: usize,
-        body: &'a [u8],
-        local: u8,
-        time_offset: Option<u8>,
-    ) -> Result<Record<'a>, Error> {
-        let err = |kind| Error::new(kind, to_offset(start));
-        let definition = self
-            .definitions
-            .get(usize::from(local))
-            .copied()
-            .flatten()
-            .ok_or(err(ErrorKind::UndefinedLocalMessage(local)))?;
-        let size = definition.message_size();
-        let end = start.saturating_add(1).saturating_add(size);
-        self.check_within_data(start, end)?;
-        let Some(bytes) = body.get(..size) else {
-            return Err(err(ErrorKind::UnexpectedEof {
-                needed: size.saturating_sub(body.len()),
-            }));
-        };
-
-        let mut timestamp = match (time_offset, self.last_timestamp) {
-            (Some(offset), Some(last)) => Some(expand_timestamp(last, offset)),
-            _ => None,
-        };
-        if let Some(full) = read_timestamp(&definition, bytes) {
-            timestamp = Some(full);
-        }
-        if timestamp.is_some() {
-            self.last_timestamp = timestamp;
-        }
-
-        self.pos = end;
-        Ok(Record::Data(DataMessage::new(
-            definition,
-            bytes,
-            timestamp,
+        let rest = self.input.get(start..).unwrap_or_default();
+        let data_left = to_offset(self.data_end.saturating_sub(start));
+        let definitions = &self.definitions;
+        let parsed = parse_record(
+            rest,
             to_offset(start),
-            time_offset,
-        )))
-    }
-
-    /// Errors if a record spanning `start..end` extends past the data section.
-    fn check_within_data(&self, start: usize, end: usize) -> Result<(), Error> {
-        match end.checked_sub(self.data_end) {
-            Some(overrun) if overrun > 0 => Err(Error::new(
-                ErrorKind::DataSizeOverrun {
-                    overrun: to_offset(overrun),
-                },
-                to_offset(start),
-            )),
-            _ => Ok(()),
+            data_left,
+            self.last_timestamp,
+            |local| definitions.get(usize::from(local)).copied().flatten(),
+        )?;
+        if let Record::Definition(definition) = parsed.record {
+            let local = usize::from(definition.local_message_type());
+            if let Some(slot) = self.definitions.get_mut(local) {
+                *slot = Some(definition);
+            }
         }
+        self.last_timestamp = parsed.last_timestamp;
+        self.pos = start.saturating_add(parsed.len);
+        Ok(parsed.record)
     }
 }
 
@@ -351,6 +297,124 @@ impl<'a> Iterator for Decoder<'a> {
 }
 
 impl FusedIterator for Decoder<'_> {}
+
+/// One record parsed by [`parse_record`].
+pub(crate) struct Parsed<'a> {
+    pub(crate) record: Record<'a>,
+    /// Bytes consumed, including the record header.
+    pub(crate) len: usize,
+    /// The most recent full timestamp after this record.
+    pub(crate) last_timestamp: Option<u32>,
+}
+
+/// Parses the record at the start of `rest`, the core step shared by the
+/// slice and streaming decoders.
+///
+/// `offset` is the absolute offset of `rest`, `data_left` the number of bytes
+/// left in the file's data section, `last_timestamp` the most recent full
+/// timestamp, and `definition_for` looks up the definition of a local
+/// message type. The caller applies the result (stores definitions, advances
+/// by `len`, keeps `last_timestamp`).
+///
+/// If `rest` ends early, the error is [`ErrorKind::UnexpectedEof`] with the
+/// number of bytes still needed, so a streaming caller can read more and
+/// retry.
+pub(crate) fn parse_record<'a>(
+    rest: &'a [u8],
+    offset: u64,
+    data_left: u64,
+    last_timestamp: Option<u32>,
+    definition_for: impl FnOnce(u8) -> Option<Definition<'a>>,
+) -> Result<Parsed<'a>, Error> {
+    let Some((&header, body)) = rest.split_first() else {
+        return Err(Error::new(ErrorKind::UnexpectedEof { needed: 1 }, offset));
+    };
+    match RecordHeader::from_byte(header) {
+        RecordHeader::Definition {
+            local,
+            has_developer_fields,
+        } => {
+            let (definition, consumed) =
+                Definition::parse(body, local, has_developer_fields, offset)?;
+            let len = consumed.saturating_add(1);
+            check_within_data(offset, len, data_left)?;
+            Ok(Parsed {
+                record: Record::Definition(definition),
+                len,
+                last_timestamp,
+            })
+        }
+        RecordHeader::Data { local } => data_message(
+            body,
+            offset,
+            data_left,
+            last_timestamp,
+            local,
+            None,
+            definition_for,
+        ),
+        RecordHeader::CompressedTimestamp { local, time_offset } => data_message(
+            body,
+            offset,
+            data_left,
+            last_timestamp,
+            local,
+            Some(time_offset),
+            definition_for,
+        ),
+    }
+}
+
+fn data_message<'a>(
+    body: &'a [u8],
+    offset: u64,
+    data_left: u64,
+    last_timestamp: Option<u32>,
+    local: u8,
+    time_offset: Option<u8>,
+    definition_for: impl FnOnce(u8) -> Option<Definition<'a>>,
+) -> Result<Parsed<'a>, Error> {
+    let err = |kind| Error::new(kind, offset);
+    let definition = definition_for(local).ok_or(err(ErrorKind::UndefinedLocalMessage(local)))?;
+    let size = definition.message_size();
+    let len = size.saturating_add(1);
+    check_within_data(offset, len, data_left)?;
+    let Some(bytes) = body.get(..size) else {
+        return Err(err(ErrorKind::UnexpectedEof {
+            needed: size.saturating_sub(body.len()),
+        }));
+    };
+
+    let mut timestamp = match (time_offset, last_timestamp) {
+        (Some(t), Some(last)) => Some(expand_timestamp(last, t)),
+        _ => None,
+    };
+    if let Some(full) = read_timestamp(&definition, bytes) {
+        timestamp = Some(full);
+    }
+    Ok(Parsed {
+        record: Record::Data(DataMessage::new(
+            definition,
+            bytes,
+            timestamp,
+            offset,
+            time_offset,
+        )),
+        len,
+        last_timestamp: timestamp.or(last_timestamp),
+    })
+}
+
+/// Errors if a record of `len` bytes at `offset` extends past the data
+/// section, which has `data_left` bytes remaining.
+fn check_within_data(offset: u64, len: usize, data_left: u64) -> Result<(), Error> {
+    match to_offset(len).checked_sub(data_left) {
+        Some(overrun) if overrun > 0 => {
+            Err(Error::new(ErrorKind::DataSizeOverrun { overrun }, offset))
+        }
+        _ => Ok(()),
+    }
+}
 
 /// Reads a valid 4-byte field 253 from a data message, if the definition has
 /// one.
@@ -378,7 +442,7 @@ const fn expand_timestamp(last: u32, offset: u8) -> u32 {
 }
 
 /// Converts a slice position to a stream offset.
-fn to_offset(pos: usize) -> u64 {
+pub(crate) fn to_offset(pos: usize) -> u64 {
     u64::try_from(pos).unwrap_or(u64::MAX)
 }
 
