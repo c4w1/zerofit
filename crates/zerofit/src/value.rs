@@ -75,7 +75,7 @@ impl<'a> Value<'a> {
     // (`Field::value`, `raw_value`, `is_invalid`, `as_i64`, `as_f64`, the
     // field iterators). Without it these non-generic functions cannot be
     // inlined into the caller's crate (no LTO by default), so every field
-    // cost several calls passing a 32-byte `Value` through memory, and the
+    // cost several calls passing a 24-byte `Value` through memory, and the
     // three `match`es on the base type (decode, sentinel check, conversion)
     // could not be fused. Measured: decoding every field went from ~32 to
     // ~10 ns per field, 2-4x the throughput of `zerofit_all_fields` in
