@@ -12,7 +12,7 @@ readme = "../../README.md"
 keywords = ["fit", "garmin", "gps", "fitness", "no_std"]
 categories = ["parser-implementations", "no-std", "encoding", "embedded"]
 # Real-file fixtures stay in the repository; the fixture tests skip without them.
-exclude = ["tests/fixtures/"]
+exclude = ["tests/fixtures/", "tests/fuzz_corpus/"]
 
 [features]
 default = ["std"]
