@@ -116,6 +116,12 @@ pub fn message_info(global: u16) -> Option<&'static MessageInfo> {
 }
 
 /// Profile metadata for one message.
+///
+/// ```
+/// let lap = zerofit_profile::message_info(19).unwrap();
+/// assert_eq!(lap.name(), "lap");
+/// assert!(lap.fields().iter().any(|f| f.name() == "total_distance"));
+/// ```
 #[derive(Debug)]
 pub struct MessageInfo {
     number: u16,
@@ -158,6 +164,12 @@ impl MessageInfo {
 }
 
 /// Profile metadata for one field.
+///
+/// ```
+/// let distance = zerofit_profile::message_info(18).unwrap().field(9).unwrap();
+/// assert_eq!(distance.name(), "total_distance");
+/// assert_eq!((distance.units(), distance.scale()), (Some("m"), 100.0));
+/// ```
 #[derive(Debug)]
 pub struct FieldInfo {
     number: u8,
@@ -255,6 +267,27 @@ impl FieldInfo {
 /// Returned by accessors of array fields, such as
 /// [`Hrv::time`](messages::Hrv::time). A field holding a single element
 /// yields that element.
+///
+/// ```
+/// use zerofit::encode::{Encoder, FileOptions};
+/// use zerofit::{Decoder, Endian, FieldDefinition, Record};
+/// use zerofit_profile::messages::Hrv;
+///
+/// // An hrv message with three beat intervals (s * 1000), one invalid.
+/// let mut enc = Encoder::new();
+/// enc.begin_file(FileOptions::new(2132))?;
+/// enc.write_definition(0, Endian::Little, 78, &[FieldDefinition::new(0, 6, 0x84)], &[])?;
+/// enc.write_data(0, &[0x20, 0x03, 0xFF, 0xFF, 0xE2, 0x04])?; // 800, invalid, 1250
+/// let bytes = enc.finish()?;
+///
+/// for record in Decoder::new(&bytes) {
+///     if let Ok(Record::Data(msg)) = record {
+///         let intervals: Vec<f64> = Hrv::new(msg).unwrap().time().collect();
+///         assert_eq!(intervals, [0.8, 1.25]);
+///     }
+/// }
+/// # Ok::<(), zerofit::encode::EncodeError>(())
+/// ```
 #[derive(Debug, Clone)]
 pub struct Elements<'a> {
     state: ElementsState<'a>,

@@ -51,6 +51,18 @@ impl Error {
 /// The specific reason decoding failed.
 ///
 /// New variants may be added in minor releases.
+///
+/// ```
+/// use zerofit::{Decoder, ErrorKind};
+///
+/// // A file cut off in the middle of its header.
+/// let err = Decoder::new(&[14, 0x20, 0x54]).next().unwrap().unwrap_err();
+/// match err.kind() {
+///     ErrorKind::UnexpectedEof { needed } => assert_eq!(needed, 11),
+///     other => panic!("unexpected {other:?}"),
+/// }
+/// assert_eq!(err.offset(), 0);
+/// ```
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, thiserror::Error)]
 #[non_exhaustive]
 pub enum ErrorKind {

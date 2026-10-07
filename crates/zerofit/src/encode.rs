@@ -59,6 +59,15 @@ const HEADER_CRC_COVERS: usize = 12;
 
 /// An error from the [`Encoder`]. Encoding errors are caller mistakes, so
 /// they carry the offending values rather than a byte offset.
+///
+/// ```
+/// use zerofit::encode::{EncodeError, Encoder, FileOptions};
+///
+/// let mut enc = Encoder::new();
+/// enc.begin_file(FileOptions::new(2132))?;
+/// assert_eq!(enc.write_data(0, &[1]), Err(EncodeError::UndefinedLocalMessage(0)));
+/// # Ok::<(), EncodeError>(())
+/// ```
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, thiserror::Error)]
 #[non_exhaustive]
 pub enum EncodeError {
@@ -168,6 +177,24 @@ impl FileOptions {
 ///
 /// Several files can be written back to back (a chained FIT file) by calling
 /// [`begin_file`](Self::begin_file) and [`end_file`](Self::end_file) for each.
+///
+/// ```
+/// use zerofit::encode::{Encoder, FileOptions};
+/// use zerofit::{DecodeOptions, Decoder};
+///
+/// // Repair a file whose CRC is wrong, keeping everything else.
+/// # let mut damaged = { let mut e = Encoder::new(); e.begin_file(FileOptions::new(2132))?; e.finish()? };
+/// # let n = damaged.len();
+/// # damaged[n - 1] ^= 0xFF;
+/// let lenient = DecodeOptions::new().validate_file_crc(false);
+/// let mut enc = Encoder::new();
+/// for record in Decoder::with_options(&damaged, lenient) {
+///     enc.write_record(&record.unwrap())?;
+/// }
+/// let repaired = enc.finish()?;
+/// assert!(Decoder::new(&repaired).all(|r| r.is_ok()));
+/// # Ok::<(), zerofit::encode::EncodeError>(())
+/// ```
 #[derive(Debug, Clone, Default)]
 pub struct Encoder {
     out: Vec<u8>,

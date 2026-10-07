@@ -135,6 +135,22 @@ impl<'a> DataMessage<'a> {
 }
 
 /// One regular field of a [`DataMessage`].
+///
+/// ```
+/// # let bytes: &[u8] = &[0x0E, 0x20, 0x54, 0x08, 0x12, 0x00, 0x00, 0x00, 0x2E, 0x46, 0x49, 0x54, 0x39, 0x04, 0x40, 0x00, 0x00, 0x14, 0x00, 0x02, 0xFD, 0x04, 0x86, 0x03, 0x01, 0x02, 0x00, 0x00, 0xCA, 0x9A, 0x3B, 0x8E, 0x20, 0xD3];
+/// use zerofit::{BaseType, Decoder, Record, Value};
+///
+/// for record in Decoder::new(bytes) {
+///     if let Record::Data(msg) = record? {
+///         let hr = msg.field(3).unwrap();
+///         assert_eq!(hr.base_type(), BaseType::UInt8);
+///         assert_eq!(hr.bytes(), &[142]);
+///         assert_eq!(hr.offset(), 4); // after the 4-byte timestamp
+///         assert_eq!(hr.value(), Some(Value::UInt8(142)));
+///     }
+/// }
+/// # Ok::<(), zerofit::Error>(())
+/// ```
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Field<'a> {
     definition: FieldDefinition,
@@ -195,7 +211,35 @@ impl<'a> Field<'a> {
 }
 
 /// One developer field of a [`DataMessage`], as raw bytes. Interpreting it
-/// requires the matching `field_description` message.
+/// requires the matching `field_description` message (`zerofit-profile`'s
+/// `DeveloperData` does that).
+///
+/// ```
+/// # #[cfg(feature = "alloc")]
+/// # fn main() -> Result<(), zerofit::encode::EncodeError> {
+/// use zerofit::encode::{Encoder, FileOptions};
+/// use zerofit::{DeveloperFieldDefinition, Decoder, Endian, FieldDefinition, Record};
+///
+/// // A record message with heart rate plus one 2-byte developer field.
+/// let mut enc = Encoder::new();
+/// enc.begin_file(FileOptions::new(2132))?;
+/// enc.write_definition(0, Endian::Little, 20, &[FieldDefinition::new(3, 1, 0x02)],
+///     &[DeveloperFieldDefinition::new(7, 2, 0)])?;
+/// enc.write_data(0, &[150, 0x34, 0x12])?;
+/// let bytes = enc.finish()?;
+///
+/// for record in Decoder::new(&bytes) {
+///     if let Ok(Record::Data(msg)) = record {
+///         let dev = msg.developer_fields().next().unwrap();
+///         assert_eq!((dev.developer_data_index(), dev.number()), (0, 7));
+///         assert_eq!(dev.bytes(), &[0x34, 0x12]);
+///     }
+/// }
+/// # Ok(())
+/// # }
+/// # #[cfg(not(feature = "alloc"))]
+/// # fn main() {}
+/// ```
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct DeveloperField<'a> {
     definition: DeveloperFieldDefinition,

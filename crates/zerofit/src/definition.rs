@@ -31,6 +31,22 @@ const FIELD_DEF_SIZE: usize = 3;
 ///
 /// `Definition` is `Copy`: it is a handful of integers and two slices, so the
 /// decoder can hand out copies without allocating.
+///
+/// ```
+/// # let bytes: &[u8] = &[0x0E, 0x20, 0x54, 0x08, 0x12, 0x00, 0x00, 0x00, 0x2E, 0x46, 0x49, 0x54, 0x39, 0x04, 0x40, 0x00, 0x00, 0x14, 0x00, 0x02, 0xFD, 0x04, 0x86, 0x03, 0x01, 0x02, 0x00, 0x00, 0xCA, 0x9A, 0x3B, 0x8E, 0x20, 0xD3];
+/// use zerofit::{BaseType, Decoder, Endian, Record};
+///
+/// for record in Decoder::new(bytes) {
+///     if let Record::Definition(def) = record? {
+///         assert_eq!(def.global_message_number(), 20);
+///         assert_eq!(def.endian(), Endian::Little);
+///         assert_eq!(def.message_size(), 5); // 4-byte timestamp + 1-byte heart rate
+///         let types: Vec<_> = def.fields().map(|f| (f.number(), f.base_type())).collect();
+///         assert_eq!(types, [(253, BaseType::UInt32), (3, BaseType::UInt8)]);
+///     }
+/// }
+/// # Ok::<(), zerofit::Error>(())
+/// ```
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Definition<'a> {
     local_message_type: u8,

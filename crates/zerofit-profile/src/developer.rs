@@ -32,6 +32,9 @@ const DD_DEVELOPER_DATA_INDEX: u8 = 3;
 const DD_APPLICATION_VERSION: u8 = 4;
 
 /// What a `field_description` message declares about one developer field.
+///
+/// Obtained from [`DeveloperData::description`] or
+/// [`ResolvedField::description`]; see [`ResolvedField`] for an example.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct FieldDescription {
     developer_data_index: u8,
@@ -112,6 +115,41 @@ pub struct Application {
 }
 
 /// A developer field together with its description and decoded value.
+///
+/// Produced by [`DeveloperData::resolve`]:
+///
+/// ```
+/// use zerofit::encode::{Encoder, FileOptions};
+/// use zerofit::{DeveloperFieldDefinition, Decoder, Endian, FieldDefinition, Record};
+/// use zerofit_profile::developer::DeveloperData;
+///
+/// let mut enc = Encoder::new();
+/// enc.begin_file(FileOptions::new(2132))?;
+/// // field_description: app 0, field 1, uint8, named "Wind", scale 10, units "m/s".
+/// enc.write_definition(0, Endian::Little, 206, &[
+///     FieldDefinition::new(0, 1, 0x02), FieldDefinition::new(1, 1, 0x02),
+///     FieldDefinition::new(2, 1, 0x02), FieldDefinition::new(3, 5, 0x07),
+///     FieldDefinition::new(6, 1, 0x02), FieldDefinition::new(8, 4, 0x07),
+/// ], &[])?;
+/// enc.write_data(0, &[0, 1, 0x02, b'W', b'i', b'n', b'd', 0, 10, b'm', b'/', b's', 0])?;
+/// // A record carrying that developer field.
+/// enc.write_definition(1, Endian::Little, 20, &[], &[DeveloperFieldDefinition::new(1, 1, 0)])?;
+/// enc.write_data(1, &[42])?;
+/// let bytes = enc.finish()?;
+///
+/// let mut developer = DeveloperData::new();
+/// for record in Decoder::new(&bytes) {
+///     if let Ok(Record::Data(msg)) = record {
+///         developer.observe(&msg);
+///         for field in developer.resolve(&msg) {
+///             assert_eq!(field.description.name(), Some("Wind"));
+///             assert_eq!(field.scaled(), Some(4.2));
+///             assert_eq!(field.description.units(), Some("m/s"));
+///         }
+///     }
+/// }
+/// # Ok::<(), zerofit::encode::EncodeError>(())
+/// ```
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct ResolvedField<'a, 'd> {
     /// The field's declaration.

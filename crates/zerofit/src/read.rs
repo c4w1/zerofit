@@ -19,6 +19,18 @@ const FIELD_DEF_SIZE: usize = 3;
 
 /// An error from [`ReadDecoder`]: either the input is malformed, or reading
 /// it failed.
+///
+/// ```
+/// use zerofit::{ErrorKind, ReadDecoder, ReadError};
+///
+/// let mut decoder = ReadDecoder::new(&b"not a FIT file"[..]);
+/// match decoder.next_record() {
+///     Some(Err(ReadError::Decode(e))) => {
+///         assert!(matches!(e.kind(), ErrorKind::InvalidHeaderSize(b'n')));
+///     }
+///     other => panic!("unexpected {other:?}"),
+/// }
+/// ```
 #[derive(Debug, thiserror::Error)]
 #[non_exhaustive]
 pub enum ReadError {

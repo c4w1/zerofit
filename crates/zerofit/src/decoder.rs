@@ -77,6 +77,22 @@ impl Default for DecodeOptions {
 }
 
 /// One item produced by the [`Decoder`], in file order.
+///
+/// ```
+/// # let bytes: &[u8] = &[0x0E, 0x20, 0x54, 0x08, 0x12, 0x00, 0x00, 0x00, 0x2E, 0x46, 0x49, 0x54, 0x39, 0x04, 0x40, 0x00, 0x00, 0x14, 0x00, 0x02, 0xFD, 0x04, 0x86, 0x03, 0x01, 0x02, 0x00, 0x00, 0xCA, 0x9A, 0x3B, 0x8E, 0x20, 0xD3];
+/// use zerofit::{Decoder, Record};
+///
+/// let kinds: Vec<&str> = Decoder::new(bytes)
+///     .map(|r| match r {
+///         Ok(Record::Header(_)) => "header",
+///         Ok(Record::Definition(_)) => "definition",
+///         Ok(Record::Data(_)) => "data",
+///         Ok(Record::FileEnd { .. }) => "end",
+///         Err(_) => "error",
+///     })
+///     .collect();
+/// assert_eq!(kinds, ["header", "definition", "data", "end"]);
+/// ```
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Record<'a> {
     /// The start of a FIT file.
