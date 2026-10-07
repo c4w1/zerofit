@@ -51,6 +51,7 @@ mod num;
 pub mod power;
 pub mod resample;
 pub mod stream;
+pub mod wbal;
 
 pub use athlete::{AthleteSettings, DEFAULT_W_PRIME, TrimpCoefficients, Zones};
 pub use stream::{ActivityStream, DEFAULT_MOVING_SPEED, Sample, SampleState};
