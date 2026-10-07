@@ -45,6 +45,7 @@ pub mod athlete;
 #[cfg(feature = "fit")]
 pub mod fit;
 pub mod hr;
+pub mod mmp;
 mod num;
 pub mod power;
 pub mod resample;
