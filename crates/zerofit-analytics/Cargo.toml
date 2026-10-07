@@ -1,0 +1,38 @@
+[package]
+name = "zerofit-analytics"
+description = "Training analytics for 1 Hz activity streams: NP, TSS, hrTSS, mean-maximal power, CP/W', W'bal, CTL/ATL/TSB. no_std + alloc"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+documentation = "https://docs.rs/zerofit-analytics"
+readme = "README.md"
+keywords = ["cycling", "power", "training", "fit", "no_std"]
+categories = ["science", "no-std", "algorithms"]
+# The fixture tests read FIT files from the zerofit crate in this repository.
+exclude = ["tests/fixtures.rs", "tests/fixtures/"]
+
+[features]
+default = ["fit"]
+## Build activity streams from FIT bytes with `zerofit` + `zerofit-profile`.
+## Without it the crate is decoder-agnostic and contains no FIT SDK-derived code.
+fit = ["dep:zerofit", "dep:zerofit-profile"]
+## `Serialize` for the summary and result types.
+serde = ["dep:serde"]
+
+[dependencies]
+libm = "0.2.16"
+serde = { version = "1.0.229", default-features = false, features = ["derive", "alloc"], optional = true }
+zerofit = { workspace = true, optional = true }
+zerofit-profile = { workspace = true, optional = true }
+
+[dev-dependencies]
+proptest = "1.11.0"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.151"
+zerofit = { workspace = true, features = ["std"] }
+
+[lints]
+workspace = true

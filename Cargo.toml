@@ -13,6 +13,8 @@ repository = "https://github.com/ondemous/zerofit"
 
 [workspace.dependencies]
 zerofit = { path = "crates/zerofit", version = "0.1.0", default-features = false }
+zerofit-profile = { path = "crates/zerofit-profile", version = "0.1.0" }
+zerofit-analytics = { path = "crates/zerofit-analytics", version = "0.1.0", default-features = false }
 
 [workspace.lints.rust]
 unsafe_code = "forbid"

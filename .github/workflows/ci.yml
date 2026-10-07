@@ -32,6 +32,7 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - run: cargo clippy --workspace --all-targets --all-features -- -D warnings
       - run: cargo clippy -p zerofit --all-targets --no-default-features -- -D warnings
+      - run: cargo clippy -p zerofit-analytics --all-targets --no-default-features -- -D warnings
 
   test:
     strategy:
@@ -78,6 +79,7 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - run: cargo build -p zerofit --no-default-features --target thumbv7em-none-eabihf
       - run: cargo build -p zerofit-profile --target thumbv7em-none-eabihf
+      - run: cargo build -p zerofit-analytics --no-default-features --target thumbv7em-none-eabihf
 
   msrv:
     name: MSRV (1.85)
@@ -89,6 +91,8 @@ jobs:
       - run: cargo check -p zerofit --all-features
       - run: cargo check -p zerofit --no-default-features
       - run: cargo check -p zerofit-profile
+      - run: cargo check -p zerofit-analytics --all-features
+      - run: cargo check -p zerofit-analytics --no-default-features
 
   fuzz:
     name: fuzz smoke test (60 s per target)
