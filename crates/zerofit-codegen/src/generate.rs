@@ -289,7 +289,7 @@ fn gen_messages(profile: &Profile, types: &TypeTable<'_>) -> Result<String, Stri
         gen_message(&mut out, message, types)?;
     }
     gen_dispatch(&mut out, &profile.messages);
-    gen_info(&mut out, &profile.messages);
+    gen_info(&mut out, &profile.messages)?;
     Ok(out)
 }
 
@@ -457,7 +457,7 @@ fn gen_dispatch(out: &mut String, messages: &[Message]) {
     out.push_str("            Self::Other(m) => m,\n        }\n    }\n}\n\n");
 }
 
-fn gen_info(out: &mut String, messages: &[Message]) {
+fn gen_info(out: &mut String, messages: &[Message]) -> Result<(), String> {
     out.push_str(
         "/// Field metadata for every message this crate covers, in profile order.\n\
          pub static MESSAGES: &[MessageInfo] = &[\n",
@@ -481,9 +481,20 @@ fn gen_info(out: &mut String, messages: &[Message]) {
                 f.array.is_some()
             );
         }
-        out.push_str("    ]),\n");
+        // Field number -> position in the list above (u8::MAX if absent),
+        // so `MessageInfo::field` is one load instead of a linear scan.
+        let mut index = [u8::MAX; 256];
+        for (i, f) in m.fields.iter().enumerate() {
+            index[usize::from(f.number)] = u8::try_from(i)
+                .ok()
+                .filter(|&i| i != u8::MAX)
+                .ok_or_else(|| format!("{} has too many fields for a u8 index", m.name))?;
+        }
+        let index: Vec<String> = index.iter().map(u8::to_string).collect();
+        let _ = writeln!(out, "    ], &[{}]),", index.join(", "));
     }
     out.push_str("];\n");
+    Ok(())
 }
 
 #[cfg(test)]

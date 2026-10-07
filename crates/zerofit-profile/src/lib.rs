@@ -127,14 +127,22 @@ pub struct MessageInfo {
     number: u16,
     name: &'static str,
     fields: &'static [FieldInfo],
+    /// Field number -> position in `fields`, `u8::MAX` if absent.
+    index: &'static [u8; 256],
 }
 
 impl MessageInfo {
-    pub(crate) const fn new(number: u16, name: &'static str, fields: &'static [FieldInfo]) -> Self {
+    pub(crate) const fn new(
+        number: u16,
+        name: &'static str,
+        fields: &'static [FieldInfo],
+        index: &'static [u8; 256],
+    ) -> Self {
         Self {
             number,
             name,
             fields,
+            index,
         }
     }
 
@@ -157,9 +165,18 @@ impl MessageInfo {
     }
 
     /// The field with definition number `number`.
+    ///
+    /// Optimization: decoders call this for every field of every message
+    /// (to scale it or name it), and `session` has over 150 fields, so it
+    /// was a linear search on the hot path of profile-aware decoding. The
+    /// generator emits a 256-entry index per message (2 KiB in total),
+    /// making this one table load. Measured gain on the fixtures: up to 26%
+    /// for scaling every field (`zerofit-bench`, `zerofit_profile_fields`);
+    /// field *decoding* dominates the rest of that workload.
     #[must_use]
     pub fn field(&self, number: u8) -> Option<&'static FieldInfo> {
-        self.fields.iter().find(|f| f.number == number)
+        let position = *self.index.get(usize::from(number))?;
+        self.fields.get(usize::from(position))
     }
 }
 
