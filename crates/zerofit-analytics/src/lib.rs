@@ -44,6 +44,7 @@ extern crate alloc;
 pub mod athlete;
 #[cfg(feature = "fit")]
 pub mod fit;
+pub mod hr;
 mod num;
 pub mod power;
 pub mod resample;

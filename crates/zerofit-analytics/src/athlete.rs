@@ -2,7 +2,8 @@
 
 use alloc::vec::Vec;
 
-/// Which set of Banister TRIMP coefficients to use for hrTSS.
+/// Which set of Banister TRIMP coefficients to use for
+/// [`hr_tss`](crate::hr::hr_tss).
 ///
 /// Banister's TRIMP weights each minute by `a·e^(b·x)`, where `x` is the
 /// heart-rate-reserve fraction. The coefficients were fitted separately to
