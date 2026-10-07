@@ -42,6 +42,7 @@
 extern crate alloc;
 
 pub mod athlete;
+pub mod cp;
 #[cfg(feature = "fit")]
 pub mod fit;
 pub mod hr;

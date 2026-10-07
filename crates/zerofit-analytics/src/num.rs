@@ -30,6 +30,13 @@ pub(crate) fn round_u8(x: f64) -> u8 {
     libm::round(x) as u8
 }
 
+/// `x` rounded to the nearest integer and clamped to `0..=usize::MAX`;
+/// `NaN` becomes 0.
+#[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
+pub(crate) fn round_usize(x: f64) -> usize {
+    libm::round(x) as usize
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
