@@ -1,0 +1,209 @@
+{
+  "generated_by": "cargo xtask expected: FitCSVTool -i -re (FIT SDK profile 21.171)",
+  "header": {
+    "size": 14,
+    "protocol_version": 32,
+    "profile_version": 21176,
+    "data_size": 2557
+  },
+  "header_crc_valid": true,
+  "file_crc_valid": true,
+  "files_in_stream": 1,
+  "definitions": 8,
+  "data_messages": 96,
+  "by_global_message": {
+    "0": 1,
+    "12": 1,
+    "18": 1,
+    "19": 1,
+    "20": 90,
+    "34": 1,
+    "207": 1
+  },
+  "unknown_messages": 0,
+  "spot_checks": [
+    {
+      "global": 0,
+      "message": "file_id",
+      "occurrence": 0,
+      "fields": {
+        "0": 4,
+        "1": 255,
+        "4": 1066148904,
+        "8": "Intervals.icu"
+      }
+    },
+    {
+      "global": 20,
+      "message": "record",
+      "occurrence": 0,
+      "fields": {
+        "0": 0,
+        "1": -1670265100,
+        "2": 3733,
+        "3": 99,
+        "5": 0,
+        "6": 0,
+        "9": 0,
+        "253": 1066136399
+      }
+    },
+    {
+      "global": 20,
+      "message": "record",
+      "occurrence": 89,
+      "fields": {
+        "0": 1274,
+        "1": -1670264736,
+        "2": 3728,
+        "3": 120,
+        "5": 163990,
+        "6": 9865,
+        "9": 110,
+        "253": 1066136573
+      }
+    },
+    {
+      "global": 19,
+      "message": "lap",
+      "occurrence": 0,
+      "fields": {
+        "2": 1066136399,
+        "7": 175000,
+        "8": 175000,
+        "9": 163990,
+        "13": 9371,
+        "14": 11494,
+        "15": 109,
+        "16": 121,
+        "21": 1,
+        "23": 4,
+        "43": 3733,
+        "45": 0,
+        "52": 175000,
+        "61": 1,
+        "62": 3720,
+        "63": 93,
+        "253": 1066136574,
+        "254": 0
+      }
+    },
+    {
+      "global": 18,
+      "message": "session",
+      "occurrence": 0,
+      "fields": {
+        "2": 1066136399,
+        "5": 2,
+        "6": 0,
+        "7": 174000,
+        "8": 173000,
+        "14": 9425,
+        "15": 11494,
+        "16": 110,
+        "17": 121,
+        "22": 2,
+        "25": 0,
+        "26": 1,
+        "35": 10,
+        "45": 250,
+        "49": 3727,
+        "50": 3733,
+        "71": 3720,
+        "253": 1066136573,
+        "254": 0
+      }
+    },
+    {
+      "global": 34,
+      "message": "activity",
+      "occurrence": 0,
+      "fields": {
+        "0": 173000,
+        "1": 1,
+        "5": 1066118573,
+        "253": 1066136573
+      }
+    }
+  ],
+  "profile": {
+    "session": {
+      "avg_altitude": {
+        "value": 245.39999999999998,
+        "tolerance": 0.1
+      },
+      "avg_heart_rate": {
+        "value": 110.0,
+        "tolerance": 0.5
+      },
+      "avg_speed": {
+        "value": 9.425,
+        "tolerance": 0.0005
+      },
+      "first_lap_index": {
+        "value": 0.0,
+        "tolerance": 0.5
+      },
+      "max_altitude": {
+        "value": 246.60000000000002,
+        "tolerance": 0.1
+      },
+      "max_heart_rate": {
+        "value": 121.0,
+        "tolerance": 0.5
+      },
+      "max_speed": {
+        "value": 11.494,
+        "tolerance": 0.0005
+      },
+      "message_index": {
+        "value": 0.0,
+        "tolerance": 0.5
+      },
+      "min_altitude": {
+        "value": 244.0,
+        "tolerance": 0.1
+      },
+      "num_laps": {
+        "value": 1.0,
+        "tolerance": 0.5
+      },
+      "sport": {
+        "value": 2.0,
+        "tolerance": 0.5
+      },
+      "start_time": {
+        "value": 1066136399.0,
+        "tolerance": 0.5
+      },
+      "sub_sport": {
+        "value": 0.0,
+        "tolerance": 0.5
+      },
+      "threshold_power": {
+        "value": 250.0,
+        "tolerance": 0.5
+      },
+      "timestamp": {
+        "value": 1066136573.0,
+        "tolerance": 0.5
+      },
+      "total_ascent": {
+        "value": 2.0,
+        "tolerance": 0.5
+      },
+      "total_elapsed_time": {
+        "value": 174.0,
+        "tolerance": 0.0005
+      },
+      "total_timer_time": {
+        "value": 173.0,
+        "tolerance": 0.0005
+      },
+      "training_stress_score": {
+        "value": 1.0,
+        "tolerance": 0.05
+      }
+    }
+  }
+}

@@ -1,0 +1,281 @@
+{
+  "generated_by": "cargo xtask expected: FitCSVTool -i -re (FIT SDK profile 21.171)",
+  "header": {
+    "size": 14,
+    "protocol_version": 32,
+    "profile_version": 21214,
+    "data_size": 341636
+  },
+  "header_crc_valid": true,
+  "file_crc_valid": true,
+  "files_in_stream": 1,
+  "definitions": 10,
+  "data_messages": 11362,
+  "by_global_message": {
+    "0": 1,
+    "12": 1,
+    "18": 1,
+    "19": 17,
+    "20": 11340,
+    "34": 1,
+    "207": 1
+  },
+  "unknown_messages": 0,
+  "spot_checks": [
+    {
+      "global": 0,
+      "message": "file_id",
+      "occurrence": 0,
+      "fields": {
+        "0": 4,
+        "1": 255,
+        "4": 1156725320,
+        "8": "Intervals.icu"
+      }
+    },
+    {
+      "global": 20,
+      "message": "record",
+      "occurrence": 0,
+      "fields": {
+        "0": 0,
+        "1": -1670265100,
+        "2": 4059,
+        "5": 0,
+        "6": 2624,
+        "253": 1156707534
+      }
+    },
+    {
+      "global": 20,
+      "message": "record",
+      "occurrence": 11339,
+      "fields": {
+        "0": 955,
+        "1": -1670264008,
+        "2": 4050,
+        "4": 15,
+        "5": 8523897,
+        "6": 790,
+        "7": 11,
+        "13": 27,
+        "253": 1156725293
+      }
+    },
+    {
+      "global": 19,
+      "message": "lap",
+      "occurrence": 0,
+      "fields": {
+        "2": 1156707534,
+        "7": 3146000,
+        "8": 3146000,
+        "9": 1972240,
+        "13": 6269,
+        "14": 15798,
+        "17": 70,
+        "18": 107,
+        "19": 151,
+        "20": 568,
+        "21": 158,
+        "23": 4,
+        "33": 181,
+        "34": 52,
+        "41": 395164,
+        "43": 4062,
+        "45": 0,
+        "52": 3146000,
+        "61": 1,
+        "62": 3788,
+        "253": 1156710680,
+        "254": 0
+      }
+    },
+    {
+      "global": 19,
+      "message": "lap",
+      "occurrence": 16,
+      "fields": {
+        "2": 1156725218,
+        "7": 76000,
+        "8": 76000,
+        "9": 29964,
+        "13": 3943,
+        "14": 10233,
+        "17": 62,
+        "18": 110,
+        "19": 237,
+        "20": 987,
+        "21": 16,
+        "23": 4,
+        "33": 346,
+        "34": 51,
+        "41": 17223,
+        "43": 4053,
+        "45": 5,
+        "52": 76000,
+        "61": 17,
+        "62": 3968,
+        "253": 1156725294,
+        "254": 16
+      }
+    },
+    {
+      "global": 18,
+      "message": "session",
+      "occurrence": 0,
+      "fields": {
+        "2": 1156707534,
+        "5": 2,
+        "6": 0,
+        "7": 17759000,
+        "8": 11494000,
+        "9": 8524163,
+        "14": 7517,
+        "15": 15896,
+        "18": 77,
+        "19": 110,
+        "20": 155,
+        "21": 987,
+        "22": 571,
+        "23": 597,
+        "25": 0,
+        "26": 17,
+        "34": 204,
+        "35": 1240,
+        "36": 632,
+        "45": 323,
+        "48": 1778861,
+        "49": 3851,
+        "50": 4062,
+        "71": 3788,
+        "134": 36783,
+        "253": 1156725293,
+        "254": 0
+      }
+    },
+    {
+      "global": 34,
+      "message": "activity",
+      "occurrence": 0,
+      "fields": {
+        "0": 11494000,
+        "1": 1,
+        "5": 1156710893,
+        "253": 1156725293
+      }
+    }
+  ],
+  "profile": {
+    "session": {
+      "avg_altitude": {
+        "value": 270.20000000000005,
+        "tolerance": 0.1
+      },
+      "avg_cadence": {
+        "value": 77.0,
+        "tolerance": 0.5
+      },
+      "avg_power": {
+        "value": 155.0,
+        "tolerance": 0.5
+      },
+      "avg_speed": {
+        "value": 7.517,
+        "tolerance": 0.0005
+      },
+      "avg_step_length": {
+        "value": 3678.3,
+        "tolerance": 0.05
+      },
+      "first_lap_index": {
+        "value": 0.0,
+        "tolerance": 0.5
+      },
+      "intensity_factor": {
+        "value": 0.632,
+        "tolerance": 0.0005
+      },
+      "max_altitude": {
+        "value": 312.4,
+        "tolerance": 0.1
+      },
+      "max_cadence": {
+        "value": 110.0,
+        "tolerance": 0.5
+      },
+      "max_power": {
+        "value": 987.0,
+        "tolerance": 0.5
+      },
+      "max_speed": {
+        "value": 15.896,
+        "tolerance": 0.0005
+      },
+      "message_index": {
+        "value": 0.0,
+        "tolerance": 0.5
+      },
+      "min_altitude": {
+        "value": 257.6,
+        "tolerance": 0.1
+      },
+      "normalized_power": {
+        "value": 204.0,
+        "tolerance": 0.5
+      },
+      "num_laps": {
+        "value": 17.0,
+        "tolerance": 0.5
+      },
+      "sport": {
+        "value": 2.0,
+        "tolerance": 0.5
+      },
+      "start_time": {
+        "value": 1156707534.0,
+        "tolerance": 0.5
+      },
+      "sub_sport": {
+        "value": 0.0,
+        "tolerance": 0.5
+      },
+      "threshold_power": {
+        "value": 323.0,
+        "tolerance": 0.5
+      },
+      "timestamp": {
+        "value": 1156725293.0,
+        "tolerance": 0.5
+      },
+      "total_ascent": {
+        "value": 571.0,
+        "tolerance": 0.5
+      },
+      "total_descent": {
+        "value": 597.0,
+        "tolerance": 0.5
+      },
+      "total_distance": {
+        "value": 85241.63,
+        "tolerance": 0.005
+      },
+      "total_elapsed_time": {
+        "value": 17759.0,
+        "tolerance": 0.0005
+      },
+      "total_timer_time": {
+        "value": 11494.0,
+        "tolerance": 0.0005
+      },
+      "total_work": {
+        "value": 1778861.0,
+        "tolerance": 0.5
+      },
+      "training_stress_score": {
+        "value": 124.0,
+        "tolerance": 0.05
+      }
+    }
+  }
+}

@@ -1,0 +1,363 @@
+{
+  "generated_by": "cargo xtask expected: FitCSVTool -i -re (FIT SDK profile 21.171)",
+  "header": {
+    "size": 14,
+    "protocol_version": 32,
+    "profile_version": 2027,
+    "data_size": 955334
+  },
+  "header_crc_valid": true,
+  "file_crc_valid": true,
+  "files_in_stream": 1,
+  "definitions": 410,
+  "data_messages": 25064,
+  "by_global_message": {
+    "0": 1,
+    "8": 5,
+    "9": 6,
+    "12": 1,
+    "18": 1,
+    "19": 1,
+    "20": 20083,
+    "21": 46,
+    "23": 234,
+    "26": 1,
+    "34": 1,
+    "142": 11,
+    "206": 15,
+    "207": 13
+  },
+  "unknown_messages": 4645,
+  "spot_checks": [
+    {
+      "global": 0,
+      "message": "file_id",
+      "occurrence": 0,
+      "fields": {
+        "0": 4,
+        "1": 32,
+        "2": 43,
+        "4": 1094213699
+      }
+    },
+    {
+      "global": 20,
+      "message": "record",
+      "occurrence": 0,
+      "fields": {
+        "253": 1094213699
+      }
+    },
+    {
+      "global": 20,
+      "message": "record",
+      "occurrence": 20082,
+      "fields": {
+        "0": 11059,
+        "1": -1670249171,
+        "2": 3740,
+        "4": 0,
+        "5": 16118548,
+        "6": 0,
+        "7": 0,
+        "9": 0,
+        "31": 14,
+        "33": 3198,
+        "253": 1094238377
+      }
+    },
+    {
+      "global": 19,
+      "message": "lap",
+      "occurrence": 0,
+      "fields": {
+        "0": 9,
+        "1": 1,
+        "2": 1094213699,
+        "7": 24679000,
+        "8": 20083000,
+        "9": 16118548,
+        "11": 3198,
+        "13": 8026,
+        "14": 18286,
+        "17": 89,
+        "18": 129,
+        "19": 159,
+        "20": 1014,
+        "21": 1055,
+        "22": 1061,
+        "33": 190,
+        "34": 45,
+        "41": 3198225,
+        "42": 3681,
+        "43": 3993,
+        "45": 15,
+        "48": 556,
+        "49": -795,
+        "50": 23,
+        "51": 29,
+        "60": [
+          9132272,
+          6741180,
+          2583925,
+          893115,
+          353321,
+          300795
+        ],
+        "62": 3490,
+        "253": 1094238378
+      }
+    },
+    {
+      "global": 18,
+      "message": "session",
+      "occurrence": 0,
+      "fields": {
+        "0": 8,
+        "1": 1,
+        "2": 1094213699,
+        "5": 2,
+        "6": 0,
+        "7": 24679000,
+        "8": 20083000,
+        "9": 16118548,
+        "11": 3198,
+        "14": 8026,
+        "15": 18286,
+        "18": 89,
+        "19": 129,
+        "20": 159,
+        "21": 1014,
+        "22": 1055,
+        "23": 1061,
+        "26": 1,
+        "34": 190,
+        "35": 2461,
+        "36": 667,
+        "37": 45,
+        "45": 285,
+        "48": 3198225,
+        "49": 3681,
+        "50": 3993,
+        "52": 15,
+        "55": 556,
+        "56": -795,
+        "57": 23,
+        "58": 29,
+        "68": [
+          9132272,
+          6741180,
+          2583925,
+          893115,
+          353321,
+          300795
+        ],
+        "71": 3490,
+        "253": 1094238378
+      }
+    },
+    {
+      "global": 21,
+      "message": "event",
+      "occurrence": 0,
+      "fields": {
+        "0": 0,
+        "1": 0,
+        "3": 0,
+        "253": 1094213699
+      }
+    },
+    {
+      "global": 21,
+      "message": "event",
+      "occurrence": 45,
+      "fields": {
+        "0": 8,
+        "1": 9,
+        "253": 1094238378
+      }
+    },
+    {
+      "global": 23,
+      "message": "device_info",
+      "occurrence": 0,
+      "fields": {
+        "0": 0,
+        "2": 32,
+        "4": 43,
+        "5": 17028,
+        "6": 5,
+        "19": "ELEMNT BOLT 1C07",
+        "27": "ELEMNT BOLT",
+        "253": 1094213699
+      }
+    },
+    {
+      "global": 23,
+      "message": "device_info",
+      "occurrence": 233,
+      "fields": {
+        "0": 5,
+        "1": 11,
+        "2": 263,
+        "4": 12,
+        "5": 4800,
+        "6": 4,
+        "11": 2,
+        "25": 1,
+        "27": "Assioma",
+        "253": 1094237814
+      }
+    },
+    {
+      "global": 34,
+      "message": "activity",
+      "occurrence": 0,
+      "fields": {
+        "0": 24679000,
+        "1": 1,
+        "2": 0,
+        "3": 26,
+        "4": 1,
+        "5": 1094220378,
+        "253": 1094238378
+      }
+    }
+  ],
+  "profile": {
+    "session": {
+      "avg_altitude": {
+        "value": 236.20000000000005,
+        "tolerance": 0.1
+      },
+      "avg_cadence": {
+        "value": 89.0,
+        "tolerance": 0.5
+      },
+      "avg_grade": {
+        "value": 0.15,
+        "tolerance": 0.005
+      },
+      "avg_power": {
+        "value": 159.0,
+        "tolerance": 0.5
+      },
+      "avg_speed": {
+        "value": 8.026,
+        "tolerance": 0.0005
+      },
+      "avg_temperature": {
+        "value": 23.0,
+        "tolerance": 0.5
+      },
+      "event": {
+        "value": 8.0,
+        "tolerance": 0.5
+      },
+      "event_type": {
+        "value": 1.0,
+        "tolerance": 0.5
+      },
+      "intensity_factor": {
+        "value": 0.667,
+        "tolerance": 0.0005
+      },
+      "left_right_balance": {
+        "value": 45.0,
+        "tolerance": 0.5
+      },
+      "max_altitude": {
+        "value": 298.6,
+        "tolerance": 0.1
+      },
+      "max_cadence": {
+        "value": 129.0,
+        "tolerance": 0.5
+      },
+      "max_neg_grade": {
+        "value": -7.95,
+        "tolerance": 0.005
+      },
+      "max_pos_grade": {
+        "value": 5.56,
+        "tolerance": 0.005
+      },
+      "max_power": {
+        "value": 1014.0,
+        "tolerance": 0.5
+      },
+      "max_speed": {
+        "value": 18.286,
+        "tolerance": 0.0005
+      },
+      "max_temperature": {
+        "value": 29.0,
+        "tolerance": 0.5
+      },
+      "min_altitude": {
+        "value": 198.0,
+        "tolerance": 0.1
+      },
+      "normalized_power": {
+        "value": 190.0,
+        "tolerance": 0.5
+      },
+      "num_laps": {
+        "value": 1.0,
+        "tolerance": 0.5
+      },
+      "sport": {
+        "value": 2.0,
+        "tolerance": 0.5
+      },
+      "start_time": {
+        "value": 1094213699.0,
+        "tolerance": 0.5
+      },
+      "sub_sport": {
+        "value": 0.0,
+        "tolerance": 0.5
+      },
+      "threshold_power": {
+        "value": 285.0,
+        "tolerance": 0.5
+      },
+      "timestamp": {
+        "value": 1094238378.0,
+        "tolerance": 0.5
+      },
+      "total_ascent": {
+        "value": 1055.0,
+        "tolerance": 0.5
+      },
+      "total_calories": {
+        "value": 3198.0,
+        "tolerance": 0.5
+      },
+      "total_descent": {
+        "value": 1061.0,
+        "tolerance": 0.5
+      },
+      "total_distance": {
+        "value": 161185.48,
+        "tolerance": 0.005
+      },
+      "total_elapsed_time": {
+        "value": 24679.0,
+        "tolerance": 0.0005
+      },
+      "total_timer_time": {
+        "value": 20083.0,
+        "tolerance": 0.0005
+      },
+      "total_work": {
+        "value": 3198225.0,
+        "tolerance": 0.5
+      },
+      "training_stress_score": {
+        "value": 246.1,
+        "tolerance": 0.05
+      }
+    }
+  }
+}
