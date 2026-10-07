@@ -3,4 +3,4 @@ allow-expect-in-tests = true
 allow-panic-in-tests = true
 allow-indexing-slicing-in-tests = true
 # Project names used in prose; ".." keeps clippy's defaults.
-doc-valid-idents = ["FitCSVTool", "FitSDK", ".."]
+doc-valid-idents = ["FitCSVTool", "FitSDK", "TrainingPeaks", "GoldenCheetah", "WKO", ".."]

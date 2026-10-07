@@ -71,7 +71,7 @@ impl Sample {
 /// a value for every second. The other channels keep `None` for missing
 /// values, and their metrics skip those seconds.
 ///
-/// Build one with the resampler from raw records,
+/// Build one with [`resample`](crate::resample::resample) from raw records,
 /// or directly:
 ///
 /// ```

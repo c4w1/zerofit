@@ -17,7 +17,7 @@
 //!
 //! 1. Raw records (from FIT with the `fit` feature, or from anywhere else)
 //!    become an [`ActivityStream`] with one sample per second of recording
-//!    time. See the `resample` module for exactly how gaps, pauses, dropouts and
+//!    time. See [`resample`] for exactly how gaps, pauses, dropouts and
 //!    duplicate timestamps are treated, because every metric depends on it.
 //! 2. Metric functions take the stream (or plain slices) plus
 //!    [`AthleteSettings`].
@@ -42,6 +42,10 @@
 extern crate alloc;
 
 pub mod athlete;
+#[cfg(feature = "fit")]
+pub mod fit;
+mod num;
+pub mod resample;
 pub mod stream;
 
 pub use athlete::{AthleteSettings, DEFAULT_W_PRIME, TrimpCoefficients, Zones};
