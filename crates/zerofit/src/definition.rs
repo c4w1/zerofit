@@ -38,6 +38,7 @@ pub struct Definition<'a> {
     global_message_number: u16,
     fields: &'a [u8],
     developer_fields: &'a [u8],
+    has_developer_fields: bool,
     message_size: usize,
     timestamp_offset: Option<usize>,
 }
@@ -117,6 +118,7 @@ impl<'a> Definition<'a> {
                 global_message_number,
                 fields,
                 developer_fields,
+                has_developer_fields,
                 message_size,
                 timestamp_offset,
             },
@@ -175,6 +177,26 @@ impl<'a> Definition<'a> {
         DeveloperFieldDefinitions(self.developer_fields.chunks_exact(FIELD_DEF_SIZE))
     }
 
+    /// Whether the record header set the developer data flag. Usually equal
+    /// to `developer_field_count() > 0`, but a writer may set the flag and
+    /// then declare zero developer fields.
+    #[must_use]
+    pub const fn has_developer_data_flag(&self) -> bool {
+        self.has_developer_fields
+    }
+
+    /// The regular field definitions as stored: 3-byte triples.
+    #[cfg(feature = "alloc")]
+    pub(crate) const fn raw_fields(&self) -> &'a [u8] {
+        self.fields
+    }
+
+    /// The developer field definitions as stored: 3-byte triples.
+    #[cfg(feature = "alloc")]
+    pub(crate) const fn raw_developer_fields(&self) -> &'a [u8] {
+        self.developer_fields
+    }
+
     /// Byte offset of a 4-byte field 253 (`timestamp`) within each data
     /// message, if the definition has one.
     pub(crate) const fn timestamp_offset(&self) -> Option<usize> {
@@ -198,6 +220,23 @@ pub struct FieldDefinition {
 }
 
 impl FieldDefinition {
+    /// Creates a field definition, for use with the encoder.
+    ///
+    /// ```
+    /// use zerofit::{BaseType, FieldDefinition};
+    ///
+    /// let heart_rate = FieldDefinition::new(3, 1, BaseType::UInt8.to_byte());
+    /// assert_eq!(heart_rate.base_type(), BaseType::UInt8);
+    /// ```
+    #[must_use]
+    pub const fn new(number: u8, size: u8, base_type_byte: u8) -> Self {
+        Self {
+            number,
+            size,
+            base_type_byte,
+        }
+    }
+
     /// Field definition number from the FIT profile.
     #[must_use]
     pub const fn number(&self) -> u8 {
@@ -237,6 +276,16 @@ pub struct DeveloperFieldDefinition {
 }
 
 impl DeveloperFieldDefinition {
+    /// Creates a developer field definition, for use with the encoder.
+    #[must_use]
+    pub const fn new(number: u8, size: u8, developer_data_index: u8) -> Self {
+        Self {
+            number,
+            size,
+            developer_data_index,
+        }
+    }
+
     /// Developer field number, matching `field_description.field_definition_number`.
     #[must_use]
     pub const fn number(&self) -> u8 {

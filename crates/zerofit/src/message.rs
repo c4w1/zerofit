@@ -30,7 +30,7 @@ pub struct DataMessage<'a> {
     bytes: &'a [u8],
     timestamp: Option<u32>,
     offset: u64,
-    compressed_timestamp: bool,
+    time_offset: Option<u8>,
 }
 
 impl<'a> DataMessage<'a> {
@@ -39,14 +39,14 @@ impl<'a> DataMessage<'a> {
         bytes: &'a [u8],
         timestamp: Option<u32>,
         offset: u64,
-        compressed_timestamp: bool,
+        time_offset: Option<u8>,
     ) -> Self {
         Self {
             definition,
             bytes,
             timestamp,
             offset,
-            compressed_timestamp,
+            time_offset,
         }
     }
 
@@ -83,7 +83,14 @@ impl<'a> DataMessage<'a> {
     /// Whether this message used a compressed timestamp header.
     #[must_use]
     pub const fn has_compressed_timestamp(&self) -> bool {
-        self.compressed_timestamp
+        self.time_offset.is_some()
+    }
+
+    /// The 5-bit time offset from a compressed timestamp header, or `None`
+    /// for a normal record header.
+    #[must_use]
+    pub const fn compressed_time_offset(&self) -> Option<u8> {
+        self.time_offset
     }
 
     /// Absolute byte offset of this message's record header in the input.
@@ -105,6 +112,7 @@ impl<'a> DataMessage<'a> {
             defs: self.definition.fields(),
             endian: self.definition.endian(),
             rest: self.bytes,
+            offset: 0,
         }
     }
 
@@ -131,6 +139,7 @@ pub struct Field<'a> {
     definition: FieldDefinition,
     endian: Endian,
     bytes: &'a [u8],
+    offset: usize,
 }
 
 impl<'a> Field<'a> {
@@ -156,6 +165,18 @@ impl<'a> Field<'a> {
     #[must_use]
     pub const fn bytes(&self) -> &'a [u8] {
         self.bytes
+    }
+
+    /// Byte order of the field's value, from its definition.
+    #[must_use]
+    pub const fn endian(&self) -> Endian {
+        self.endian
+    }
+
+    /// Offset of the field's first byte within [`DataMessage::bytes`].
+    #[must_use]
+    pub const fn offset(&self) -> usize {
+        self.offset
     }
 
     /// The decoded value, or `None` if it is the base type's invalid
@@ -212,6 +233,7 @@ pub struct Fields<'a> {
     defs: FieldDefinitions<'a>,
     endian: Endian,
     rest: &'a [u8],
+    offset: usize,
 }
 
 impl<'a> Iterator for Fields<'a> {
@@ -221,10 +243,14 @@ impl<'a> Iterator for Fields<'a> {
         let definition = self.defs.next()?;
         let (bytes, rest) = self.rest.split_at_checked(usize::from(definition.size()))?;
         self.rest = rest;
+        let offset = self.offset;
+        // Bounded by the message length, which is a `usize` already.
+        self.offset = offset.saturating_add(bytes.len());
         Some(Field {
             definition,
             endian: self.endian,
             bytes,
+            offset,
         })
     }
 

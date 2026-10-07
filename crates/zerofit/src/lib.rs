@@ -42,7 +42,7 @@
 //!
 //! - `std` (default): reserved for the upcoming `std::io::Read`-based
 //!   decoder. Implies `alloc`.
-//! - `alloc`: reserved for APIs that need a heap.
+//! - `alloc`: enables the [`encode`] module (a minimal FIT writer).
 //!
 //! With `default-features = false` the crate is `#![no_std]` and allocation
 //! free, and builds for bare-metal targets such as `thumbv7em-none-eabihf`.
@@ -64,6 +64,8 @@ mod base_type;
 pub mod crc;
 mod decoder;
 mod definition;
+#[cfg(feature = "alloc")]
+pub mod encode;
 mod error;
 mod header;
 mod message;

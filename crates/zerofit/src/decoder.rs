@@ -317,7 +317,7 @@ impl<'a> Decoder<'a> {
             bytes,
             timestamp,
             to_offset(start),
-            time_offset.is_some(),
+            time_offset,
         )))
     }
 
