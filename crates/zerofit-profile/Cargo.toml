@@ -1,0 +1,22 @@
+[package]
+name = "zerofit-profile"
+description = "Typed FIT profile layer (file_id, record, lap, session, ...) for the zerofit decoder"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+readme = "README.md"
+keywords = ["fit", "garmin", "fitness", "no_std", "profile"]
+categories = ["parser-implementations", "no-std", "embedded"]
+# The extracted profile subset is the codegen input, not part of the library.
+exclude = ["codegen/"]
+
+[dependencies]
+zerofit = { workspace = true }
+
+[dev-dependencies]
+zerofit = { workspace = true, features = ["std"] }
+
+[lints]
+workspace = true

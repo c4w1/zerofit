@@ -1,0 +1,7081 @@
+{
+  "sdk_version": "21.171",
+  "mesg_num": [
+    {
+      "name": "file_id",
+      "value": 0
+    },
+    {
+      "name": "capabilities",
+      "value": 1
+    },
+    {
+      "name": "device_settings",
+      "value": 2
+    },
+    {
+      "name": "user_profile",
+      "value": 3
+    },
+    {
+      "name": "hrm_profile",
+      "value": 4
+    },
+    {
+      "name": "sdm_profile",
+      "value": 5
+    },
+    {
+      "name": "bike_profile",
+      "value": 6
+    },
+    {
+      "name": "zones_target",
+      "value": 7
+    },
+    {
+      "name": "hr_zone",
+      "value": 8
+    },
+    {
+      "name": "power_zone",
+      "value": 9
+    },
+    {
+      "name": "met_zone",
+      "value": 10
+    },
+    {
+      "name": "sport",
+      "value": 12
+    },
+    {
+      "name": "training_settings",
+      "value": 13
+    },
+    {
+      "name": "goal",
+      "value": 15
+    },
+    {
+      "name": "session",
+      "value": 18
+    },
+    {
+      "name": "lap",
+      "value": 19
+    },
+    {
+      "name": "record",
+      "value": 20
+    },
+    {
+      "name": "event",
+      "value": 21
+    },
+    {
+      "name": "device_info",
+      "value": 23
+    },
+    {
+      "name": "workout",
+      "value": 26
+    },
+    {
+      "name": "workout_step",
+      "value": 27
+    },
+    {
+      "name": "schedule",
+      "value": 28
+    },
+    {
+      "name": "weight_scale",
+      "value": 30
+    },
+    {
+      "name": "course",
+      "value": 31
+    },
+    {
+      "name": "course_point",
+      "value": 32
+    },
+    {
+      "name": "totals",
+      "value": 33
+    },
+    {
+      "name": "activity",
+      "value": 34
+    },
+    {
+      "name": "software",
+      "value": 35
+    },
+    {
+      "name": "file_capabilities",
+      "value": 37
+    },
+    {
+      "name": "mesg_capabilities",
+      "value": 38
+    },
+    {
+      "name": "field_capabilities",
+      "value": 39
+    },
+    {
+      "name": "file_creator",
+      "value": 49
+    },
+    {
+      "name": "blood_pressure",
+      "value": 51
+    },
+    {
+      "name": "speed_zone",
+      "value": 53
+    },
+    {
+      "name": "monitoring",
+      "value": 55
+    },
+    {
+      "name": "training_file",
+      "value": 72
+    },
+    {
+      "name": "hrv",
+      "value": 78
+    },
+    {
+      "name": "ant_rx",
+      "value": 80
+    },
+    {
+      "name": "ant_tx",
+      "value": 81
+    },
+    {
+      "name": "ant_channel_id",
+      "value": 82
+    },
+    {
+      "name": "length",
+      "value": 101
+    },
+    {
+      "name": "monitoring_info",
+      "value": 103
+    },
+    {
+      "name": "pad",
+      "value": 105
+    },
+    {
+      "name": "slave_device",
+      "value": 106
+    },
+    {
+      "name": "connectivity",
+      "value": 127
+    },
+    {
+      "name": "weather_conditions",
+      "value": 128
+    },
+    {
+      "name": "weather_alert",
+      "value": 129
+    },
+    {
+      "name": "cadence_zone",
+      "value": 131
+    },
+    {
+      "name": "hr",
+      "value": 132
+    },
+    {
+      "name": "segment_lap",
+      "value": 142
+    },
+    {
+      "name": "memo_glob",
+      "value": 145
+    },
+    {
+      "name": "segment_id",
+      "value": 148
+    },
+    {
+      "name": "segment_leaderboard_entry",
+      "value": 149
+    },
+    {
+      "name": "segment_point",
+      "value": 150
+    },
+    {
+      "name": "segment_file",
+      "value": 151
+    },
+    {
+      "name": "workout_session",
+      "value": 158
+    },
+    {
+      "name": "watchface_settings",
+      "value": 159
+    },
+    {
+      "name": "gps_metadata",
+      "value": 160
+    },
+    {
+      "name": "camera_event",
+      "value": 161
+    },
+    {
+      "name": "timestamp_correlation",
+      "value": 162
+    },
+    {
+      "name": "gyroscope_data",
+      "value": 164
+    },
+    {
+      "name": "accelerometer_data",
+      "value": 165
+    },
+    {
+      "name": "three_d_sensor_calibration",
+      "value": 167
+    },
+    {
+      "name": "video_frame",
+      "value": 169
+    },
+    {
+      "name": "obdii_data",
+      "value": 174
+    },
+    {
+      "name": "nmea_sentence",
+      "value": 177
+    },
+    {
+      "name": "aviation_attitude",
+      "value": 178
+    },
+    {
+      "name": "video",
+      "value": 184
+    },
+    {
+      "name": "video_title",
+      "value": 185
+    },
+    {
+      "name": "video_description",
+      "value": 186
+    },
+    {
+      "name": "video_clip",
+      "value": 187
+    },
+    {
+      "name": "ohr_settings",
+      "value": 188
+    },
+    {
+      "name": "exd_screen_configuration",
+      "value": 200
+    },
+    {
+      "name": "exd_data_field_configuration",
+      "value": 201
+    },
+    {
+      "name": "exd_data_concept_configuration",
+      "value": 202
+    },
+    {
+      "name": "field_description",
+      "value": 206
+    },
+    {
+      "name": "developer_data_id",
+      "value": 207
+    },
+    {
+      "name": "magnetometer_data",
+      "value": 208
+    },
+    {
+      "name": "barometer_data",
+      "value": 209
+    },
+    {
+      "name": "one_d_sensor_calibration",
+      "value": 210
+    },
+    {
+      "name": "monitoring_hr_data",
+      "value": 211
+    },
+    {
+      "name": "time_in_zone",
+      "value": 216
+    },
+    {
+      "name": "set",
+      "value": 225
+    },
+    {
+      "name": "stress_level",
+      "value": 227
+    },
+    {
+      "name": "max_met_data",
+      "value": 229
+    },
+    {
+      "name": "dive_settings",
+      "value": 258
+    },
+    {
+      "name": "dive_gas",
+      "value": 259
+    },
+    {
+      "name": "dive_alarm",
+      "value": 262
+    },
+    {
+      "name": "exercise_title",
+      "value": 264
+    },
+    {
+      "name": "dive_summary",
+      "value": 268
+    },
+    {
+      "name": "spo2_data",
+      "value": 269
+    },
+    {
+      "name": "sleep_level",
+      "value": 275
+    },
+    {
+      "name": "jump",
+      "value": 285
+    },
+    {
+      "name": "aad_accel_features",
+      "value": 289
+    },
+    {
+      "name": "beat_intervals",
+      "value": 290
+    },
+    {
+      "name": "respiration_rate",
+      "value": 297
+    },
+    {
+      "name": "hsa_accelerometer_data",
+      "value": 302
+    },
+    {
+      "name": "hsa_step_data",
+      "value": 304
+    },
+    {
+      "name": "hsa_spo2_data",
+      "value": 305
+    },
+    {
+      "name": "hsa_stress_data",
+      "value": 306
+    },
+    {
+      "name": "hsa_respiration_data",
+      "value": 307
+    },
+    {
+      "name": "hsa_heart_rate_data",
+      "value": 308
+    },
+    {
+      "name": "split",
+      "value": 312
+    },
+    {
+      "name": "split_summary",
+      "value": 313
+    },
+    {
+      "name": "hsa_body_battery_data",
+      "value": 314
+    },
+    {
+      "name": "hsa_event",
+      "value": 315
+    },
+    {
+      "name": "climb_pro",
+      "value": 317
+    },
+    {
+      "name": "tank_update",
+      "value": 319
+    },
+    {
+      "name": "tank_summary",
+      "value": 323
+    },
+    {
+      "name": "sleep_assessment",
+      "value": 346
+    },
+    {
+      "name": "hrv_status_summary",
+      "value": 370
+    },
+    {
+      "name": "hrv_value",
+      "value": 371
+    },
+    {
+      "name": "raw_bbi",
+      "value": 372
+    },
+    {
+      "name": "device_aux_battery_info",
+      "value": 375
+    },
+    {
+      "name": "hsa_gyroscope_data",
+      "value": 376
+    },
+    {
+      "name": "chrono_shot_session",
+      "value": 387
+    },
+    {
+      "name": "chrono_shot_data",
+      "value": 388
+    },
+    {
+      "name": "hsa_configuration_data",
+      "value": 389
+    },
+    {
+      "name": "dive_apnea_alarm",
+      "value": 393
+    },
+    {
+      "name": "skin_temp_overnight",
+      "value": 398
+    },
+    {
+      "name": "hsa_wrist_temperature_data",
+      "value": 409,
+      "comment": "Message number for the HSA wrist temperature data message"
+    },
+    {
+      "name": "mfg_range_min",
+      "value": 65280,
+      "comment": "0xFF00 - 0xFFFE reserved for manufacturer specific messages"
+    },
+    {
+      "name": "mfg_range_max",
+      "value": 65534,
+      "comment": "0xFF00 - 0xFFFE reserved for manufacturer specific messages"
+    }
+  ],
+  "types": [
+    {
+      "name": "file",
+      "base_type": "enum",
+      "values": [
+        {
+          "name": "device",
+          "value": 1,
+          "comment": "Read only, single file. Must be in root directory."
+        },
+        {
+          "name": "settings",
+          "value": 2,
+          "comment": "Read/write, single file. Directory=Settings"
+        },
+        {
+          "name": "sport",
+          "value": 3,
+          "comment": "Read/write, multiple files, file number = sport type. Directory=Sports"
+        },
+        {
+          "name": "activity",
+          "value": 4,
+          "comment": "Read/erase, multiple files. Directory=Activities"
+        },
+        {
+          "name": "workout",
+          "value": 5,
+          "comment": "Read/write/erase, multiple files. Directory=Workouts"
+        },
+        {
+          "name": "course",
+          "value": 6,
+          "comment": "Read/write/erase, multiple files. Directory=Courses"
+        },
+        {
+          "name": "schedules",
+          "value": 7,
+          "comment": "Read/write, single file. Directory=Schedules"
+        },
+        {
+          "name": "weight",
+          "value": 9,
+          "comment": "Read only, single file. Circular buffer. All message definitions at start of file. Directory=Weight"
+        },
+        {
+          "name": "totals",
+          "value": 10,
+          "comment": "Read only, single file. Directory=Totals"
+        },
+        {
+          "name": "goals",
+          "value": 11,
+          "comment": "Read/write, single file. Directory=Goals"
+        },
+        {
+          "name": "blood_pressure",
+          "value": 14,
+          "comment": "Read only. Directory=Blood Pressure"
+        },
+        {
+          "name": "monitoring_a",
+          "value": 15,
+          "comment": "Read only. Directory=Monitoring. File number=sub type."
+        },
+        {
+          "name": "activity_summary",
+          "value": 20,
+          "comment": "Read/erase, multiple files. Directory=Activities"
+        },
+        {
+          "name": "monitoring_daily",
+          "value": 28
+        },
+        {
+          "name": "monitoring_b",
+          "value": 32,
+          "comment": "Read only. Directory=Monitoring. File number=identifier"
+        },
+        {
+          "name": "segment",
+          "value": 34,
+          "comment": "Read/write/erase. Multiple Files. Directory=Segments"
+        },
+        {
+          "name": "segment_list",
+          "value": 35,
+          "comment": "Read/write/erase. Single File. Directory=Segments"
+        },
+        {
+          "name": "exd_configuration",
+          "value": 40,
+          "comment": "Read/write/erase. Single File. Directory=Settings"
+        },
+        {
+          "name": "mfg_range_min",
+          "value": 247,
+          "comment": "0xF7 - 0xFE reserved for manufacturer specific file types"
+        },
+        {
+          "name": "mfg_range_max",
+          "value": 254,
+          "comment": "0xF7 - 0xFE reserved for manufacturer specific file types"
+        }
+      ]
+    },
+    {
+      "name": "date_time",
+      "base_type": "uint32",
+      "values": [
+        {
+          "name": "min",
+          "value": 268435456,
+          "comment": "if date_time is < 0x10000000 then it is system time (seconds from device power on)"
+        }
+      ]
+    },
+    {
+      "name": "local_date_time",
+      "base_type": "uint32",
+      "values": [
+        {
+          "name": "min",
+          "value": 268435456,
+          "comment": "if date_time is < 0x10000000 then it is system time (seconds from device power on)"
+        }
+      ]
+    },
+    {
+      "name": "message_index",
+      "base_type": "uint16",
+      "values": [
+        {
+          "name": "selected",
+          "value": 32768,
+          "comment": "message is selected if set"
+        },
+        {
+          "name": "reserved",
+          "value": 28672,
+          "comment": "reserved (default 0)"
+        },
+        {
+          "name": "mask",
+          "value": 4095,
+          "comment": "index"
+        }
+      ]
+    },
+    {
+      "name": "device_index",
+      "base_type": "uint8",
+      "values": [
+        {
+          "name": "creator",
+          "value": 0,
+          "comment": "Creator of the file is always device index 0."
+        }
+      ]
+    },
+    {
+      "name": "display_measure",
+      "base_type": "enum",
+      "values": [
+        {
+          "name": "metric",
+          "value": 0
+        },
+        {
+          "name": "statute",
+          "value": 1
+        },
+        {
+          "name": "nautical",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "name": "sport",
+      "base_type": "enum",
+      "values": [
+        {
+          "name": "generic",
+          "value": 0
+        },
+        {
+          "name": "running",
+          "value": 1
+        },
+        {
+          "name": "cycling",
+          "value": 2
+        },
+        {
+          "name": "transition",
+          "value": 3,
+          "comment": "Mulitsport transition"
+        },
+        {
+          "name": "fitness_equipment",
+          "value": 4
+        },
+        {
+          "name": "swimming",
+          "value": 5
+        },
+        {
+          "name": "basketball",
+          "value": 6
+        },
+        {
+          "name": "soccer",
+          "value": 7
+        },
+        {
+          "name": "tennis",
+          "value": 8
+        },
+        {
+          "name": "american_football",
+          "value": 9
+        },
+        {
+          "name": "training",
+          "value": 10
+        },
+        {
+          "name": "walking",
+          "value": 11
+        },
+        {
+          "name": "cross_country_skiing",
+          "value": 12
+        },
+        {
+          "name": "alpine_skiing",
+          "value": 13
+        },
+        {
+          "name": "snowboarding",
+          "value": 14
+        },
+        {
+          "name": "rowing",
+          "value": 15
+        },
+        {
+          "name": "mountaineering",
+          "value": 16
+        },
+        {
+          "name": "hiking",
+          "value": 17
+        },
+        {
+          "name": "multisport",
+          "value": 18
+        },
+        {
+          "name": "paddling",
+          "value": 19
+        },
+        {
+          "name": "flying",
+          "value": 20
+        },
+        {
+          "name": "e_biking",
+          "value": 21
+        },
+        {
+          "name": "motorcycling",
+          "value": 22
+        },
+        {
+          "name": "boating",
+          "value": 23
+        },
+        {
+          "name": "driving",
+          "value": 24
+        },
+        {
+          "name": "golf",
+          "value": 25
+        },
+        {
+          "name": "hang_gliding",
+          "value": 26
+        },
+        {
+          "name": "horseback_riding",
+          "value": 27
+        },
+        {
+          "name": "hunting",
+          "value": 28
+        },
+        {
+          "name": "fishing",
+          "value": 29
+        },
+        {
+          "name": "inline_skating",
+          "value": 30
+        },
+        {
+          "name": "rock_climbing",
+          "value": 31
+        },
+        {
+          "name": "sailing",
+          "value": 32
+        },
+        {
+          "name": "ice_skating",
+          "value": 33
+        },
+        {
+          "name": "sky_diving",
+          "value": 34
+        },
+        {
+          "name": "snowshoeing",
+          "value": 35
+        },
+        {
+          "name": "snowmobiling",
+          "value": 36
+        },
+        {
+          "name": "stand_up_paddleboarding",
+          "value": 37
+        },
+        {
+          "name": "surfing",
+          "value": 38
+        },
+        {
+          "name": "wakeboarding",
+          "value": 39
+        },
+        {
+          "name": "water_skiing",
+          "value": 40
+        },
+        {
+          "name": "kayaking",
+          "value": 41
+        },
+        {
+          "name": "rafting",
+          "value": 42
+        },
+        {
+          "name": "windsurfing",
+          "value": 43
+        },
+        {
+          "name": "kitesurfing",
+          "value": 44
+        },
+        {
+          "name": "tactical",
+          "value": 45
+        },
+        {
+          "name": "jumpmaster",
+          "value": 46
+        },
+        {
+          "name": "boxing",
+          "value": 47
+        },
+        {
+          "name": "floor_climbing",
+          "value": 48
+        },
+        {
+          "name": "baseball",
+          "value": 49
+        },
+        {
+          "name": "diving",
+          "value": 53
+        },
+        {
+          "name": "hiit",
+          "value": 62
+        },
+        {
+          "name": "racket",
+          "value": 64
+        },
+        {
+          "name": "wheelchair_push_walk",
+          "value": 65
+        },
+        {
+          "name": "wheelchair_push_run",
+          "value": 66
+        },
+        {
+          "name": "meditation",
+          "value": 67
+        },
+        {
+          "name": "disc_golf",
+          "value": 69
+        },
+        {
+          "name": "cricket",
+          "value": 71
+        },
+        {
+          "name": "rugby",
+          "value": 72
+        },
+        {
+          "name": "hockey",
+          "value": 73
+        },
+        {
+          "name": "lacrosse",
+          "value": 74
+        },
+        {
+          "name": "volleyball",
+          "value": 75
+        },
+        {
+          "name": "water_tubing",
+          "value": 76
+        },
+        {
+          "name": "wakesurfing",
+          "value": 77
+        },
+        {
+          "name": "mixed_martial_arts",
+          "value": 80
+        },
+        {
+          "name": "snorkeling",
+          "value": 82
+        },
+        {
+          "name": "dance",
+          "value": 83
+        },
+        {
+          "name": "jump_rope",
+          "value": 84
+        },
+        {
+          "name": "all",
+          "value": 254,
+          "comment": "All is for goals only to include all sports."
+        }
+      ]
+    },
+    {
+      "name": "sub_sport",
+      "base_type": "enum",
+      "values": [
+        {
+          "name": "generic",
+          "value": 0
+        },
+        {
+          "name": "treadmill",
+          "value": 1,
+          "comment": "Run/Fitness Equipment"
+        },
+        {
+          "name": "street",
+          "value": 2,
+          "comment": "Run"
+        },
+        {
+          "name": "trail",
+          "value": 3,
+          "comment": "Run"
+        },
+        {
+          "name": "track",
+          "value": 4,
+          "comment": "Run"
+        },
+        {
+          "name": "spin",
+          "value": 5,
+          "comment": "Cycling"
+        },
+        {
+          "name": "indoor_cycling",
+          "value": 6,
+          "comment": "Cycling/Fitness Equipment"
+        },
+        {
+          "name": "road",
+          "value": 7,
+          "comment": "Cycling"
+        },
+        {
+          "name": "mountain",
+          "value": 8,
+          "comment": "Cycling"
+        },
+        {
+          "name": "downhill",
+          "value": 9,
+          "comment": "Cycling"
+        },
+        {
+          "name": "recumbent",
+          "value": 10,
+          "comment": "Cycling"
+        },
+        {
+          "name": "cyclocross",
+          "value": 11,
+          "comment": "Cycling"
+        },
+        {
+          "name": "hand_cycling",
+          "value": 12,
+          "comment": "Cycling"
+        },
+        {
+          "name": "track_cycling",
+          "value": 13,
+          "comment": "Cycling"
+        },
+        {
+          "name": "indoor_rowing",
+          "value": 14,
+          "comment": "Fitness Equipment"
+        },
+        {
+          "name": "elliptical",
+          "value": 15,
+          "comment": "Fitness Equipment"
+        },
+        {
+          "name": "stair_climbing",
+          "value": 16,
+          "comment": "Fitness Equipment"
+        },
+        {
+          "name": "lap_swimming",
+          "value": 17,
+          "comment": "Swimming"
+        },
+        {
+          "name": "open_water",
+          "value": 18,
+          "comment": "Swimming"
+        },
+        {
+          "name": "flexibility_training",
+          "value": 19,
+          "comment": "Training"
+        },
+        {
+          "name": "strength_training",
+          "value": 20,
+          "comment": "Training"
+        },
+        {
+          "name": "warm_up",
+          "value": 21,
+          "comment": "Tennis"
+        },
+        {
+          "name": "match",
+          "value": 22,
+          "comment": "Tennis"
+        },
+        {
+          "name": "exercise",
+          "value": 23,
+          "comment": "Tennis"
+        },
+        {
+          "name": "challenge",
+          "value": 24
+        },
+        {
+          "name": "indoor_skiing",
+          "value": 25,
+          "comment": "Fitness Equipment"
+        },
+        {
+          "name": "cardio_training",
+          "value": 26,
+          "comment": "Training"
+        },
+        {
+          "name": "indoor_walking",
+          "value": 27,
+          "comment": "Walking/Fitness Equipment"
+        },
+        {
+          "name": "e_bike_fitness",
+          "value": 28,
+          "comment": "E-Biking"
+        },
+        {
+          "name": "bmx",
+          "value": 29,
+          "comment": "Cycling"
+        },
+        {
+          "name": "casual_walking",
+          "value": 30,
+          "comment": "Walking"
+        },
+        {
+          "name": "speed_walking",
+          "value": 31,
+          "comment": "Walking"
+        },
+        {
+          "name": "bike_to_run_transition",
+          "value": 32,
+          "comment": "Transition"
+        },
+        {
+          "name": "run_to_bike_transition",
+          "value": 33,
+          "comment": "Transition"
+        },
+        {
+          "name": "swim_to_bike_transition",
+          "value": 34,
+          "comment": "Transition"
+        },
+        {
+          "name": "atv",
+          "value": 35,
+          "comment": "Motorcycling"
+        },
+        {
+          "name": "motocross",
+          "value": 36,
+          "comment": "Motorcycling"
+        },
+        {
+          "name": "backcountry",
+          "value": 37,
+          "comment": "Alpine Skiing/Snowboarding"
+        },
+        {
+          "name": "resort",
+          "value": 38,
+          "comment": "Alpine Skiing/Snowboarding"
+        },
+        {
+          "name": "rc_drone",
+          "value": 39,
+          "comment": "Flying"
+        },
+        {
+          "name": "wingsuit",
+          "value": 40,
+          "comment": "Flying"
+        },
+        {
+          "name": "whitewater",
+          "value": 41,
+          "comment": "Kayaking/Rafting"
+        },
+        {
+          "name": "skate_skiing",
+          "value": 42,
+          "comment": "Cross Country Skiing"
+        },
+        {
+          "name": "yoga",
+          "value": 43,
+          "comment": "Training"
+        },
+        {
+          "name": "pilates",
+          "value": 44,
+          "comment": "Fitness Equipment"
+        },
+        {
+          "name": "indoor_running",
+          "value": 45,
+          "comment": "Run"
+        },
+        {
+          "name": "gravel_cycling",
+          "value": 46,
+          "comment": "Cycling"
+        },
+        {
+          "name": "e_bike_mountain",
+          "value": 47,
+          "comment": "Cycling"
+        },
+        {
+          "name": "commuting",
+          "value": 48,
+          "comment": "Cycling"
+        },
+        {
+          "name": "mixed_surface",
+          "value": 49,
+          "comment": "Cycling"
+        },
+        {
+          "name": "navigate",
+          "value": 50
+        },
+        {
+          "name": "track_me",
+          "value": 51
+        },
+        {
+          "name": "map",
+          "value": 52
+        },
+        {
+          "name": "single_gas_diving",
+          "value": 53,
+          "comment": "Diving"
+        },
+        {
+          "name": "multi_gas_diving",
+          "value": 54,
+          "comment": "Diving"
+        },
+        {
+          "name": "gauge_diving",
+          "value": 55,
+          "comment": "Diving"
+        },
+        {
+          "name": "apnea_diving",
+          "value": 56,
+          "comment": "Diving"
+        },
+        {
+          "name": "apnea_hunting",
+          "value": 57,
+          "comment": "Diving"
+        },
+        {
+          "name": "virtual_activity",
+          "value": 58
+        },
+        {
+          "name": "obstacle",
+          "value": 59,
+          "comment": "Used for events where participants run, crawl through mud, climb over walls, etc."
+        },
+        {
+          "name": "breathing",
+          "value": 62
+        },
+        {
+          "name": "sail_race",
+          "value": 65,
+          "comment": "Sailing"
+        },
+        {
+          "name": "ultra",
+          "value": 67,
+          "comment": "Ultramarathon"
+        },
+        {
+          "name": "indoor_climbing",
+          "value": 68,
+          "comment": "Climbing"
+        },
+        {
+          "name": "bouldering",
+          "value": 69,
+          "comment": "Climbing"
+        },
+        {
+          "name": "hiit",
+          "value": 70,
+          "comment": "High Intensity Interval Training"
+        },
+        {
+          "name": "amrap",
+          "value": 73,
+          "comment": "HIIT"
+        },
+        {
+          "name": "emom",
+          "value": 74,
+          "comment": "HIIT"
+        },
+        {
+          "name": "tabata",
+          "value": 75,
+          "comment": "HIIT"
+        },
+        {
+          "name": "pickleball",
+          "value": 84,
+          "comment": "Racket"
+        },
+        {
+          "name": "padel",
+          "value": 85,
+          "comment": "Racket"
+        },
+        {
+          "name": "indoor_wheelchair_walk",
+          "value": 86
+        },
+        {
+          "name": "indoor_wheelchair_run",
+          "value": 87
+        },
+        {
+          "name": "indoor_hand_cycling",
+          "value": 88
+        },
+        {
+          "name": "squash",
+          "value": 94
+        },
+        {
+          "name": "badminton",
+          "value": 95
+        },
+        {
+          "name": "racquetball",
+          "value": 96
+        },
+        {
+          "name": "table_tennis",
+          "value": 97
+        },
+        {
+          "name": "fly_canopy",
+          "value": 110,
+          "comment": "Flying"
+        },
+        {
+          "name": "fly_paraglide",
+          "value": 111,
+          "comment": "Flying"
+        },
+        {
+          "name": "fly_paramotor",
+          "value": 112,
+          "comment": "Flying"
+        },
+        {
+          "name": "fly_pressurized",
+          "value": 113,
+          "comment": "Flying"
+        },
+        {
+          "name": "fly_navigate",
+          "value": 114,
+          "comment": "Flying"
+        },
+        {
+          "name": "fly_timer",
+          "value": 115,
+          "comment": "Flying"
+        },
+        {
+          "name": "fly_altimeter",
+          "value": 116,
+          "comment": "Flying"
+        },
+        {
+          "name": "fly_wx",
+          "value": 117,
+          "comment": "Flying"
+        },
+        {
+          "name": "fly_vfr",
+          "value": 118,
+          "comment": "Flying"
+        },
+        {
+          "name": "fly_ifr",
+          "value": 119,
+          "comment": "Flying"
+        },
+        {
+          "name": "all",
+          "value": 254
+        }
+      ]
+    },
+    {
+      "name": "activity",
+      "base_type": "enum",
+      "values": [
+        {
+          "name": "manual",
+          "value": 0
+        },
+        {
+          "name": "auto_multi_sport",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "name": "intensity",
+      "base_type": "enum",
+      "values": [
+        {
+          "name": "active",
+          "value": 0
+        },
+        {
+          "name": "rest",
+          "value": 1
+        },
+        {
+          "name": "warmup",
+          "value": 2
+        },
+        {
+          "name": "cooldown",
+          "value": 3
+        },
+        {
+          "name": "recovery",
+          "value": 4
+        },
+        {
+          "name": "interval",
+          "value": 5
+        },
+        {
+          "name": "other",
+          "value": 6
+        }
+      ]
+    },
+    {
+      "name": "session_trigger",
+      "base_type": "enum",
+      "values": [
+        {
+          "name": "activity_end",
+          "value": 0
+        },
+        {
+          "name": "manual",
+          "value": 1,
+          "comment": "User changed sport."
+        },
+        {
+          "name": "auto_multi_sport",
+          "value": 2,
+          "comment": "Auto multi-sport feature is enabled and user pressed lap button to advance session."
+        },
+        {
+          "name": "fitness_equipment",
+          "value": 3,
+          "comment": "Auto sport change caused by user linking to fitness equipment."
+        }
+      ]
+    },
+    {
+      "name": "lap_trigger",
+      "base_type": "enum",
+      "values": [
+        {
+          "name": "manual",
+          "value": 0
+        },
+        {
+          "name": "time",
+          "value": 1
+        },
+        {
+          "name": "distance",
+          "value": 2
+        },
+        {
+          "name": "position_start",
+          "value": 3
+        },
+        {
+          "name": "position_lap",
+          "value": 4
+        },
+        {
+          "name": "position_waypoint",
+          "value": 5
+        },
+        {
+          "name": "position_marked",
+          "value": 6
+        },
+        {
+          "name": "session_end",
+          "value": 7
+        },
+        {
+          "name": "fitness_equipment",
+          "value": 8
+        }
+      ]
+    },
+    {
+      "name": "event",
+      "base_type": "enum",
+      "values": [
+        {
+          "name": "timer",
+          "value": 0,
+          "comment": "Group 0. Start / stop_all"
+        },
+        {
+          "name": "workout",
+          "value": 3,
+          "comment": "start / stop"
+        },
+        {
+          "name": "workout_step",
+          "value": 4,
+          "comment": "Start at beginning of workout. Stop at end of each step."
+        },
+        {
+          "name": "power_down",
+          "value": 5,
+          "comment": "stop_all group 0"
+        },
+        {
+          "name": "power_up",
+          "value": 6,
+          "comment": "stop_all group 0"
+        },
+        {
+          "name": "off_course",
+          "value": 7,
+          "comment": "start / stop group 0"
+        },
+        {
+          "name": "session",
+          "value": 8,
+          "comment": "Stop at end of each session."
+        },
+        {
+          "name": "lap",
+          "value": 9,
+          "comment": "Stop at end of each lap."
+        },
+        {
+          "name": "course_point",
+          "value": 10,
+          "comment": "marker"
+        },
+        {
+          "name": "battery",
+          "value": 11,
+          "comment": "marker"
+        },
+        {
+          "name": "virtual_partner_pace",
+          "value": 12,
+          "comment": "Group 1. Start at beginning of activity if VP enabled, when VP pace is changed during activity or VP enabled mid activity. stop_disable when VP disabled."
+        },
+        {
+          "name": "hr_high_alert",
+          "value": 13,
+          "comment": "Group 0. Start / stop when in alert condition."
+        },
+        {
+          "name": "hr_low_alert",
+          "value": 14,
+          "comment": "Group 0. Start / stop when in alert condition."
+        },
+        {
+          "name": "speed_high_alert",
+          "value": 15,
+          "comment": "Group 0. Start / stop when in alert condition."
+        },
+        {
+          "name": "speed_low_alert",
+          "value": 16,
+          "comment": "Group 0. Start / stop when in alert condition."
+        },
+        {
+          "name": "cad_high_alert",
+          "value": 17,
+          "comment": "Group 0. Start / stop when in alert condition."
+        },
+        {
+          "name": "cad_low_alert",
+          "value": 18,
+          "comment": "Group 0. Start / stop when in alert condition."
+        },
+        {
+          "name": "power_high_alert",
+          "value": 19,
+          "comment": "Group 0. Start / stop when in alert condition."
+        },
+        {
+          "name": "power_low_alert",
+          "value": 20,
+          "comment": "Group 0. Start / stop when in alert condition."
+        },
+        {
+          "name": "recovery_hr",
+          "value": 21,
+          "comment": "marker"
+        },
+        {
+          "name": "battery_low",
+          "value": 22,
+          "comment": "marker"
+        },
+        {
+          "name": "time_duration_alert",
+          "value": 23,
+          "comment": "Group 1. Start if enabled mid activity (not required at start of activity). Stop when duration is reached. stop_disable if disabled."
+        },
+        {
+          "name": "distance_duration_alert",
+          "value": 24,
+          "comment": "Group 1. Start if enabled mid activity (not required at start of activity). Stop when duration is reached. stop_disable if disabled."
+        },
+        {
+          "name": "calorie_duration_alert",
+          "value": 25,
+          "comment": "Group 1. Start if enabled mid activity (not required at start of activity). Stop when duration is reached. stop_disable if disabled."
+        },
+        {
+          "name": "activity",
+          "value": 26,
+          "comment": "Group 1.. Stop at end of activity."
+        },
+        {
+          "name": "fitness_equipment",
+          "value": 27,
+          "comment": "marker"
+        },
+        {
+          "name": "length",
+          "value": 28,
+          "comment": "Stop at end of each length."
+        },
+        {
+          "name": "user_marker",
+          "value": 32,
+          "comment": "marker"
+        },
+        {
+          "name": "sport_point",
+          "value": 33,
+          "comment": "marker"
+        },
+        {
+          "name": "calibration",
+          "value": 36,
+          "comment": "start/stop/marker"
+        },
+        {
+          "name": "front_gear_change",
+          "value": 42,
+          "comment": "marker"
+        },
+        {
+          "name": "rear_gear_change",
+          "value": 43,
+          "comment": "marker"
+        },
+        {
+          "name": "rider_position_change",
+          "value": 44,
+          "comment": "marker"
+        },
+        {
+          "name": "elev_high_alert",
+          "value": 45,
+          "comment": "Group 0. Start / stop when in alert condition."
+        },
+        {
+          "name": "elev_low_alert",
+          "value": 46,
+          "comment": "Group 0. Start / stop when in alert condition."
+        },
+        {
+          "name": "comm_timeout",
+          "value": 47,
+          "comment": "marker"
+        },
+        {
+          "name": "auto_activity_detect",
+          "value": 54,
+          "comment": "marker"
+        },
+        {
+          "name": "dive_alert",
+          "value": 56,
+          "comment": "marker"
+        },
+        {
+          "name": "dive_gas_switched",
+          "value": 57,
+          "comment": "marker"
+        },
+        {
+          "name": "tank_pressure_reserve",
+          "value": 71,
+          "comment": "marker"
+        },
+        {
+          "name": "tank_pressure_critical",
+          "value": 72,
+          "comment": "marker"
+        },
+        {
+          "name": "tank_lost",
+          "value": 73,
+          "comment": "marker"
+        },
+        {
+          "name": "radar_threat_alert",
+          "value": 75,
+          "comment": "start/stop/marker"
+        },
+        {
+          "name": "tank_battery_low",
+          "value": 76,
+          "comment": "marker"
+        },
+        {
+          "name": "tank_pod_connected",
+          "value": 81,
+          "comment": "marker - tank pod has connected"
+        },
+        {
+          "name": "tank_pod_disconnected",
+          "value": 82,
+          "comment": "marker - tank pod has lost connection"
+        }
+      ]
+    },
+    {
+      "name": "event_type",
+      "base_type": "enum",
+      "values": [
+        {
+          "name": "start",
+          "value": 0
+        },
+        {
+          "name": "stop",
+          "value": 1
+        },
+        {
+          "name": "consecutive_depreciated",
+          "value": 2
+        },
+        {
+          "name": "marker",
+          "value": 3
+        },
+        {
+          "name": "stop_all",
+          "value": 4
+        },
+        {
+          "name": "begin_depreciated",
+          "value": 5
+        },
+        {
+          "name": "end_depreciated",
+          "value": 6
+        },
+        {
+          "name": "end_all_depreciated",
+          "value": 7
+        },
+        {
+          "name": "stop_disable",
+          "value": 8
+        },
+        {
+          "name": "stop_disable_all",
+          "value": 9
+        }
+      ]
+    },
+    {
+      "name": "manufacturer",
+      "base_type": "uint16",
+      "values": [
+        {
+          "name": "garmin",
+          "value": 1
+        },
+        {
+          "name": "garmin_fr405_antfs",
+          "value": 2,
+          "comment": "Do not use. Used by FR405 for ANTFS man id."
+        },
+        {
+          "name": "zephyr",
+          "value": 3
+        },
+        {
+          "name": "dayton",
+          "value": 4
+        },
+        {
+          "name": "idt",
+          "value": 5
+        },
+        {
+          "name": "srm",
+          "value": 6
+        },
+        {
+          "name": "quarq",
+          "value": 7
+        },
+        {
+          "name": "ibike",
+          "value": 8
+        },
+        {
+          "name": "saris",
+          "value": 9
+        },
+        {
+          "name": "spark_hk",
+          "value": 10
+        },
+        {
+          "name": "tanita",
+          "value": 11
+        },
+        {
+          "name": "echowell",
+          "value": 12
+        },
+        {
+          "name": "dynastream_oem",
+          "value": 13
+        },
+        {
+          "name": "nautilus",
+          "value": 14
+        },
+        {
+          "name": "dynastream",
+          "value": 15
+        },
+        {
+          "name": "timex",
+          "value": 16
+        },
+        {
+          "name": "metrigear",
+          "value": 17
+        },
+        {
+          "name": "xelic",
+          "value": 18
+        },
+        {
+          "name": "beurer",
+          "value": 19
+        },
+        {
+          "name": "cardiosport",
+          "value": 20
+        },
+        {
+          "name": "a_and_d",
+          "value": 21
+        },
+        {
+          "name": "hmm",
+          "value": 22
+        },
+        {
+          "name": "suunto",
+          "value": 23
+        },
+        {
+          "name": "thita_elektronik",
+          "value": 24
+        },
+        {
+          "name": "gpulse",
+          "value": 25
+        },
+        {
+          "name": "clean_mobile",
+          "value": 26
+        },
+        {
+          "name": "pedal_brain",
+          "value": 27
+        },
+        {
+          "name": "peaksware",
+          "value": 28
+        },
+        {
+          "name": "saxonar",
+          "value": 29
+        },
+        {
+          "name": "lemond_fitness",
+          "value": 30
+        },
+        {
+          "name": "dexcom",
+          "value": 31
+        },
+        {
+          "name": "wahoo_fitness",
+          "value": 32
+        },
+        {
+          "name": "octane_fitness",
+          "value": 33
+        },
+        {
+          "name": "archinoetics",
+          "value": 34
+        },
+        {
+          "name": "the_hurt_box",
+          "value": 35
+        },
+        {
+          "name": "citizen_systems",
+          "value": 36
+        },
+        {
+          "name": "magellan",
+          "value": 37
+        },
+        {
+          "name": "osynce",
+          "value": 38
+        },
+        {
+          "name": "holux",
+          "value": 39
+        },
+        {
+          "name": "concept2",
+          "value": 40
+        },
+        {
+          "name": "shimano",
+          "value": 41
+        },
+        {
+          "name": "one_giant_leap",
+          "value": 42
+        },
+        {
+          "name": "ace_sensor",
+          "value": 43
+        },
+        {
+          "name": "brim_brothers",
+          "value": 44
+        },
+        {
+          "name": "xplova",
+          "value": 45
+        },
+        {
+          "name": "perception_digital",
+          "value": 46
+        },
+        {
+          "name": "bf1systems",
+          "value": 47
+        },
+        {
+          "name": "pioneer",
+          "value": 48
+        },
+        {
+          "name": "spantec",
+          "value": 49
+        },
+        {
+          "name": "metalogics",
+          "value": 50
+        },
+        {
+          "name": "4iiiis",
+          "value": 51
+        },
+        {
+          "name": "seiko_epson",
+          "value": 52
+        },
+        {
+          "name": "seiko_epson_oem",
+          "value": 53
+        },
+        {
+          "name": "ifor_powell",
+          "value": 54
+        },
+        {
+          "name": "maxwell_guider",
+          "value": 55
+        },
+        {
+          "name": "star_trac",
+          "value": 56
+        },
+        {
+          "name": "breakaway",
+          "value": 57
+        },
+        {
+          "name": "alatech_technology_ltd",
+          "value": 58
+        },
+        {
+          "name": "mio_technology_europe",
+          "value": 59
+        },
+        {
+          "name": "rotor",
+          "value": 60
+        },
+        {
+          "name": "geonaute",
+          "value": 61
+        },
+        {
+          "name": "id_bike",
+          "value": 62
+        },
+        {
+          "name": "specialized",
+          "value": 63
+        },
+        {
+          "name": "wtek",
+          "value": 64
+        },
+        {
+          "name": "physical_enterprises",
+          "value": 65
+        },
+        {
+          "name": "north_pole_engineering",
+          "value": 66
+        },
+        {
+          "name": "bkool",
+          "value": 67
+        },
+        {
+          "name": "cateye",
+          "value": 68
+        },
+        {
+          "name": "stages_cycling",
+          "value": 69
+        },
+        {
+          "name": "sigmasport",
+          "value": 70
+        },
+        {
+          "name": "tomtom",
+          "value": 71
+        },
+        {
+          "name": "peripedal",
+          "value": 72
+        },
+        {
+          "name": "wattbike",
+          "value": 73
+        },
+        {
+          "name": "moxy",
+          "value": 76
+        },
+        {
+          "name": "ciclosport",
+          "value": 77
+        },
+        {
+          "name": "powerbahn",
+          "value": 78
+        },
+        {
+          "name": "acorn_projects_aps",
+          "value": 79
+        },
+        {
+          "name": "lifebeam",
+          "value": 80
+        },
+        {
+          "name": "bontrager",
+          "value": 81
+        },
+        {
+          "name": "wellgo",
+          "value": 82
+        },
+        {
+          "name": "scosche",
+          "value": 83
+        },
+        {
+          "name": "magura",
+          "value": 84
+        },
+        {
+          "name": "woodway",
+          "value": 85
+        },
+        {
+          "name": "elite",
+          "value": 86
+        },
+        {
+          "name": "nielsen_kellerman",
+          "value": 87
+        },
+        {
+          "name": "dk_city",
+          "value": 88
+        },
+        {
+          "name": "tacx",
+          "value": 89
+        },
+        {
+          "name": "direction_technology",
+          "value": 90
+        },
+        {
+          "name": "magtonic",
+          "value": 91
+        },
+        {
+          "name": "1partcarbon",
+          "value": 92
+        },
+        {
+          "name": "inside_ride_technologies",
+          "value": 93
+        },
+        {
+          "name": "sound_of_motion",
+          "value": 94
+        },
+        {
+          "name": "stryd",
+          "value": 95
+        },
+        {
+          "name": "icg",
+          "value": 96,
+          "comment": "Indoorcycling Group"
+        },
+        {
+          "name": "MiPulse",
+          "value": 97
+        },
+        {
+          "name": "bsx_athletics",
+          "value": 98
+        },
+        {
+          "name": "look",
+          "value": 99
+        },
+        {
+          "name": "campagnolo_srl",
+          "value": 100
+        },
+        {
+          "name": "body_bike_smart",
+          "value": 101
+        },
+        {
+          "name": "praxisworks",
+          "value": 102
+        },
+        {
+          "name": "limits_technology",
+          "value": 103,
+          "comment": "Limits Technology Ltd."
+        },
+        {
+          "name": "topaction_technology",
+          "value": 104,
+          "comment": "TopAction Technology Inc."
+        },
+        {
+          "name": "cosinuss",
+          "value": 105
+        },
+        {
+          "name": "fitcare",
+          "value": 106
+        },
+        {
+          "name": "magene",
+          "value": 107
+        },
+        {
+          "name": "giant_manufacturing_co",
+          "value": 108
+        },
+        {
+          "name": "tigrasport",
+          "value": 109,
+          "comment": "Tigrasport"
+        },
+        {
+          "name": "salutron",
+          "value": 110
+        },
+        {
+          "name": "technogym",
+          "value": 111
+        },
+        {
+          "name": "bryton_sensors",
+          "value": 112
+        },
+        {
+          "name": "latitude_limited",
+          "value": 113
+        },
+        {
+          "name": "soaring_technology",
+          "value": 114
+        },
+        {
+          "name": "igpsport",
+          "value": 115
+        },
+        {
+          "name": "thinkrider",
+          "value": 116
+        },
+        {
+          "name": "gopher_sport",
+          "value": 117
+        },
+        {
+          "name": "waterrower",
+          "value": 118
+        },
+        {
+          "name": "orangetheory",
+          "value": 119
+        },
+        {
+          "name": "inpeak",
+          "value": 120
+        },
+        {
+          "name": "kinetic",
+          "value": 121
+        },
+        {
+          "name": "johnson_health_tech",
+          "value": 122
+        },
+        {
+          "name": "polar_electro",
+          "value": 123
+        },
+        {
+          "name": "seesense",
+          "value": 124
+        },
+        {
+          "name": "nci_technology",
+          "value": 125
+        },
+        {
+          "name": "iqsquare",
+          "value": 126
+        },
+        {
+          "name": "leomo",
+          "value": 127
+        },
+        {
+          "name": "ifit_com",
+          "value": 128
+        },
+        {
+          "name": "coros_byte",
+          "value": 129
+        },
+        {
+          "name": "versa_design",
+          "value": 130
+        },
+        {
+          "name": "chileaf",
+          "value": 131
+        },
+        {
+          "name": "cycplus",
+          "value": 132
+        },
+        {
+          "name": "gravaa_byte",
+          "value": 133
+        },
+        {
+          "name": "sigeyi",
+          "value": 134
+        },
+        {
+          "name": "coospo",
+          "value": 135
+        },
+        {
+          "name": "geoid",
+          "value": 136
+        },
+        {
+          "name": "bosch",
+          "value": 137
+        },
+        {
+          "name": "kyto",
+          "value": 138
+        },
+        {
+          "name": "kinetic_sports",
+          "value": 139
+        },
+        {
+          "name": "decathlon_byte",
+          "value": 140
+        },
+        {
+          "name": "tq_systems",
+          "value": 141
+        },
+        {
+          "name": "tag_heuer",
+          "value": 142
+        },
+        {
+          "name": "keiser_fitness",
+          "value": 143
+        },
+        {
+          "name": "zwift_byte",
+          "value": 144
+        },
+        {
+          "name": "porsche_ep",
+          "value": 145
+        },
+        {
+          "name": "blackbird",
+          "value": 146
+        },
+        {
+          "name": "meilan_byte",
+          "value": 147
+        },
+        {
+          "name": "ezon",
+          "value": 148
+        },
+        {
+          "name": "laisi",
+          "value": 149
+        },
+        {
+          "name": "myzone",
+          "value": 150
+        },
+        {
+          "name": "abawo",
+          "value": 151
+        },
+        {
+          "name": "bafang",
+          "value": 152
+        },
+        {
+          "name": "luhong_technology",
+          "value": 153
+        },
+        {
+          "name": "development",
+          "value": 255
+        },
+        {
+          "name": "healthandlife",
+          "value": 257
+        },
+        {
+          "name": "lezyne",
+          "value": 258
+        },
+        {
+          "name": "scribe_labs",
+          "value": 259
+        },
+        {
+          "name": "zwift",
+          "value": 260
+        },
+        {
+          "name": "watteam",
+          "value": 261
+        },
+        {
+          "name": "recon",
+          "value": 262
+        },
+        {
+          "name": "favero_electronics",
+          "value": 263
+        },
+        {
+          "name": "dynovelo",
+          "value": 264
+        },
+        {
+          "name": "strava",
+          "value": 265
+        },
+        {
+          "name": "precor",
+          "value": 266,
+          "comment": "Amer Sports"
+        },
+        {
+          "name": "bryton",
+          "value": 267
+        },
+        {
+          "name": "sram",
+          "value": 268
+        },
+        {
+          "name": "navman",
+          "value": 269,
+          "comment": "MiTAC Global Corporation (Mio Technology)"
+        },
+        {
+          "name": "cobi",
+          "value": 270,
+          "comment": "COBI GmbH"
+        },
+        {
+          "name": "spivi",
+          "value": 271
+        },
+        {
+          "name": "mio_magellan",
+          "value": 272
+        },
+        {
+          "name": "evesports",
+          "value": 273
+        },
+        {
+          "name": "sensitivus_gauge",
+          "value": 274
+        },
+        {
+          "name": "podoon",
+          "value": 275
+        },
+        {
+          "name": "life_time_fitness",
+          "value": 276
+        },
+        {
+          "name": "falco_e_motors",
+          "value": 277,
+          "comment": "Falco eMotors Inc."
+        },
+        {
+          "name": "minoura",
+          "value": 278
+        },
+        {
+          "name": "cycliq",
+          "value": 279
+        },
+        {
+          "name": "luxottica",
+          "value": 280
+        },
+        {
+          "name": "trainer_road",
+          "value": 281
+        },
+        {
+          "name": "the_sufferfest",
+          "value": 282
+        },
+        {
+          "name": "fullspeedahead",
+          "value": 283
+        },
+        {
+          "name": "virtualtraining",
+          "value": 284
+        },
+        {
+          "name": "feedbacksports",
+          "value": 285
+        },
+        {
+          "name": "omata",
+          "value": 286
+        },
+        {
+          "name": "vdo",
+          "value": 287
+        },
+        {
+          "name": "magneticdays",
+          "value": 288
+        },
+        {
+          "name": "hammerhead",
+          "value": 289
+        },
+        {
+          "name": "kinetic_by_kurt",
+          "value": 290
+        },
+        {
+          "name": "shapelog",
+          "value": 291
+        },
+        {
+          "name": "dabuziduo",
+          "value": 292
+        },
+        {
+          "name": "jetblack",
+          "value": 293
+        },
+        {
+          "name": "coros",
+          "value": 294
+        },
+        {
+          "name": "virtugo",
+          "value": 295
+        },
+        {
+          "name": "velosense",
+          "value": 296
+        },
+        {
+          "name": "cycligentinc",
+          "value": 297
+        },
+        {
+          "name": "trailforks",
+          "value": 298
+        },
+        {
+          "name": "mahle_ebikemotion",
+          "value": 299
+        },
+        {
+          "name": "nurvv",
+          "value": 300
+        },
+        {
+          "name": "microprogram",
+          "value": 301
+        },
+        {
+          "name": "zone5cloud",
+          "value": 302
+        },
+        {
+          "name": "greenteg",
+          "value": 303
+        },
+        {
+          "name": "yamaha_motors",
+          "value": 304
+        },
+        {
+          "name": "whoop",
+          "value": 305
+        },
+        {
+          "name": "gravaa",
+          "value": 306
+        },
+        {
+          "name": "onelap",
+          "value": 307
+        },
+        {
+          "name": "monark_exercise",
+          "value": 308
+        },
+        {
+          "name": "form",
+          "value": 309
+        },
+        {
+          "name": "decathlon",
+          "value": 310
+        },
+        {
+          "name": "syncros",
+          "value": 311
+        },
+        {
+          "name": "heatup",
+          "value": 312
+        },
+        {
+          "name": "cannondale",
+          "value": 313
+        },
+        {
+          "name": "true_fitness",
+          "value": 314
+        },
+        {
+          "name": "RGT_cycling",
+          "value": 315
+        },
+        {
+          "name": "vasa",
+          "value": 316
+        },
+        {
+          "name": "race_republic",
+          "value": 317
+        },
+        {
+          "name": "fazua",
+          "value": 318
+        },
+        {
+          "name": "oreka_training",
+          "value": 319
+        },
+        {
+          "name": "lsec",
+          "value": 320,
+          "comment": "Lishun Electric & Communication"
+        },
+        {
+          "name": "lululemon_studio",
+          "value": 321
+        },
+        {
+          "name": "shanyue",
+          "value": 322
+        },
+        {
+          "name": "spinning_mda",
+          "value": 323
+        },
+        {
+          "name": "hilldating",
+          "value": 324
+        },
+        {
+          "name": "aero_sensor",
+          "value": 325
+        },
+        {
+          "name": "nike",
+          "value": 326
+        },
+        {
+          "name": "magicshine",
+          "value": 327
+        },
+        {
+          "name": "ictrainer",
+          "value": 328
+        },
+        {
+          "name": "absolute_cycling",
+          "value": 329
+        },
+        {
+          "name": "eo_swimbetter",
+          "value": 330
+        },
+        {
+          "name": "mywhoosh",
+          "value": 331
+        },
+        {
+          "name": "ravemen",
+          "value": 332
+        },
+        {
+          "name": "tektro_racing_products",
+          "value": 333
+        },
+        {
+          "name": "darad_innovation_corporation",
+          "value": 334
+        },
+        {
+          "name": "cycloptim",
+          "value": 335
+        },
+        {
+          "name": "actigraphcorp",
+          "value": 5759
+        }
+      ]
+    },
+    {
+      "name": "ant_network",
+      "base_type": "enum",
+      "values": [
+        {
+          "name": "public",
+          "value": 0
+        },
+        {
+          "name": "antplus",
+          "value": 1
+        },
+        {
+          "name": "antfs",
+          "value": 2
+        },
+        {
+          "name": "private",
+          "value": 3
+        }
+      ]
+    },
+    {
+      "name": "battery_status",
+      "base_type": "uint8",
+      "values": [
+        {
+          "name": "new",
+          "value": 1
+        },
+        {
+          "name": "good",
+          "value": 2
+        },
+        {
+          "name": "ok",
+          "value": 3
+        },
+        {
+          "name": "low",
+          "value": 4
+        },
+        {
+          "name": "critical",
+          "value": 5
+        },
+        {
+          "name": "charging",
+          "value": 6
+        },
+        {
+          "name": "unknown",
+          "value": 7
+        }
+      ]
+    },
+    {
+      "name": "swim_stroke",
+      "base_type": "enum",
+      "values": [
+        {
+          "name": "freestyle",
+          "value": 0
+        },
+        {
+          "name": "backstroke",
+          "value": 1
+        },
+        {
+          "name": "breaststroke",
+          "value": 2
+        },
+        {
+          "name": "butterfly",
+          "value": 3
+        },
+        {
+          "name": "drill",
+          "value": 4
+        },
+        {
+          "name": "mixed",
+          "value": 5
+        },
+        {
+          "name": "im",
+          "value": 6,
+          "comment": "IM is a mixed interval containing the same number of lengths for each of: Butterfly, Backstroke, Breaststroke, Freestyle, swam in that order."
+        },
+        {
+          "name": "im_by_round",
+          "value": 7,
+          "comment": "For repeated workout steps, a new individual medly stroke is used for each round."
+        },
+        {
+          "name": "rimo",
+          "value": 8,
+          "comment": "Reverse IM Order"
+        }
+      ]
+    },
+    {
+      "name": "activity_type",
+      "base_type": "enum",
+      "values": [
+        {
+          "name": "generic",
+          "value": 0
+        },
+        {
+          "name": "running",
+          "value": 1
+        },
+        {
+          "name": "cycling",
+          "value": 2
+        },
+        {
+          "name": "transition",
+          "value": 3,
+          "comment": "Mulitsport transition"
+        },
+        {
+          "name": "fitness_equipment",
+          "value": 4
+        },
+        {
+          "name": "swimming",
+          "value": 5
+        },
+        {
+          "name": "walking",
+          "value": 6
+        },
+        {
+          "name": "sedentary",
+          "value": 8
+        },
+        {
+          "name": "all",
+          "value": 254,
+          "comment": "All is for goals only to include all sports."
+        }
+      ]
+    },
+    {
+      "name": "left_right_balance",
+      "base_type": "uint8",
+      "values": [
+        {
+          "name": "mask",
+          "value": 127,
+          "comment": "% contribution"
+        },
+        {
+          "name": "right",
+          "value": 128,
+          "comment": "data corresponds to right if set, otherwise unknown"
+        }
+      ]
+    },
+    {
+      "name": "left_right_balance_100",
+      "base_type": "uint16",
+      "values": [
+        {
+          "name": "mask",
+          "value": 16383,
+          "comment": "% contribution scaled by 100"
+        },
+        {
+          "name": "right",
+          "value": 32768,
+          "comment": "data corresponds to right if set, otherwise unknown"
+        }
+      ]
+    },
+    {
+      "name": "stroke_type",
+      "base_type": "enum",
+      "values": [
+        {
+          "name": "no_event",
+          "value": 0
+        },
+        {
+          "name": "other",
+          "value": 1,
+          "comment": "stroke was detected but cannot be identified"
+        },
+        {
+          "name": "serve",
+          "value": 2
+        },
+        {
+          "name": "forehand",
+          "value": 3
+        },
+        {
+          "name": "backhand",
+          "value": 4
+        },
+        {
+          "name": "smash",
+          "value": 5
+        }
+      ]
+    },
+    {
+      "name": "body_location",
+      "base_type": "enum",
+      "values": [
+        {
+          "name": "left_leg",
+          "value": 0
+        },
+        {
+          "name": "left_calf",
+          "value": 1
+        },
+        {
+          "name": "left_shin",
+          "value": 2
+        },
+        {
+          "name": "left_hamstring",
+          "value": 3
+        },
+        {
+          "name": "left_quad",
+          "value": 4
+        },
+        {
+          "name": "left_glute",
+          "value": 5
+        },
+        {
+          "name": "right_leg",
+          "value": 6
+        },
+        {
+          "name": "right_calf",
+          "value": 7
+        },
+        {
+          "name": "right_shin",
+          "value": 8
+        },
+        {
+          "name": "right_hamstring",
+          "value": 9
+        },
+        {
+          "name": "right_quad",
+          "value": 10
+        },
+        {
+          "name": "right_glute",
+          "value": 11
+        },
+        {
+          "name": "torso_back",
+          "value": 12
+        },
+        {
+          "name": "left_lower_back",
+          "value": 13
+        },
+        {
+          "name": "left_upper_back",
+          "value": 14
+        },
+        {
+          "name": "right_lower_back",
+          "value": 15
+        },
+        {
+          "name": "right_upper_back",
+          "value": 16
+        },
+        {
+          "name": "torso_front",
+          "value": 17
+        },
+        {
+          "name": "left_abdomen",
+          "value": 18
+        },
+        {
+          "name": "left_chest",
+          "value": 19
+        },
+        {
+          "name": "right_abdomen",
+          "value": 20
+        },
+        {
+          "name": "right_chest",
+          "value": 21
+        },
+        {
+          "name": "left_arm",
+          "value": 22
+        },
+        {
+          "name": "left_shoulder",
+          "value": 23
+        },
+        {
+          "name": "left_bicep",
+          "value": 24
+        },
+        {
+          "name": "left_tricep",
+          "value": 25
+        },
+        {
+          "name": "left_brachioradialis",
+          "value": 26,
+          "comment": "Left anterior forearm"
+        },
+        {
+          "name": "left_forearm_extensors",
+          "value": 27,
+          "comment": "Left posterior forearm"
+        },
+        {
+          "name": "right_arm",
+          "value": 28
+        },
+        {
+          "name": "right_shoulder",
+          "value": 29
+        },
+        {
+          "name": "right_bicep",
+          "value": 30
+        },
+        {
+          "name": "right_tricep",
+          "value": 31
+        },
+        {
+          "name": "right_brachioradialis",
+          "value": 32,
+          "comment": "Right anterior forearm"
+        },
+        {
+          "name": "right_forearm_extensors",
+          "value": 33,
+          "comment": "Right posterior forearm"
+        },
+        {
+          "name": "neck",
+          "value": 34
+        },
+        {
+          "name": "throat",
+          "value": 35
+        },
+        {
+          "name": "waist_mid_back",
+          "value": 36
+        },
+        {
+          "name": "waist_front",
+          "value": 37
+        },
+        {
+          "name": "waist_left",
+          "value": 38
+        },
+        {
+          "name": "waist_right",
+          "value": 39
+        }
+      ]
+    },
+    {
+      "name": "source_type",
+      "base_type": "enum",
+      "values": [
+        {
+          "name": "ant",
+          "value": 0,
+          "comment": "External device connected with ANT"
+        },
+        {
+          "name": "antplus",
+          "value": 1,
+          "comment": "External device connected with ANT+"
+        },
+        {
+          "name": "bluetooth",
+          "value": 2,
+          "comment": "External device connected with BT"
+        },
+        {
+          "name": "bluetooth_low_energy",
+          "value": 3,
+          "comment": "External device connected with BLE"
+        },
+        {
+          "name": "wifi",
+          "value": 4,
+          "comment": "External device connected with Wifi"
+        },
+        {
+          "name": "local",
+          "value": 5,
+          "comment": "Onboard device"
+        }
+      ]
+    },
+    {
+      "name": "radar_threat_level_type",
+      "base_type": "enum",
+      "values": [
+        {
+          "name": "threat_unknown",
+          "value": 0
+        },
+        {
+          "name": "threat_none",
+          "value": 1
+        },
+        {
+          "name": "threat_approaching",
+          "value": 2
+        },
+        {
+          "name": "threat_approaching_fast",
+          "value": 3
+        }
+      ]
+    }
+  ],
+  "messages": [
+    {
+      "name": "file_id",
+      "number": 0,
+      "fields": [
+        {
+          "number": 0,
+          "name": "type",
+          "field_type": "file"
+        },
+        {
+          "number": 1,
+          "name": "manufacturer",
+          "field_type": "manufacturer"
+        },
+        {
+          "number": 2,
+          "name": "product",
+          "field_type": "uint16",
+          "subfields": [
+            {
+              "name": "favero_product",
+              "field_type": "favero_product",
+              "references": [
+                [
+                  "manufacturer",
+                  "favero_electronics"
+                ]
+              ]
+            },
+            {
+              "name": "garmin_product",
+              "field_type": "garmin_product",
+              "references": [
+                [
+                  "manufacturer",
+                  "garmin"
+                ],
+                [
+                  "manufacturer",
+                  "dynastream"
+                ],
+                [
+                  "manufacturer",
+                  "dynastream_oem"
+                ],
+                [
+                  "manufacturer",
+                  "tacx"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "name": "serial_number",
+          "field_type": "uint32z"
+        },
+        {
+          "number": 4,
+          "name": "time_created",
+          "field_type": "date_time",
+          "comment": "Only set for files that are can be created/erased."
+        },
+        {
+          "number": 5,
+          "name": "number",
+          "field_type": "uint16",
+          "comment": "Only set for files that are not created/erased."
+        },
+        {
+          "number": 8,
+          "name": "product_name",
+          "field_type": "string",
+          "comment": "Optional free form string to indicate the devices name or model"
+        }
+      ]
+    },
+    {
+      "name": "activity",
+      "number": 34,
+      "fields": [
+        {
+          "number": 253,
+          "name": "timestamp",
+          "field_type": "date_time"
+        },
+        {
+          "number": 0,
+          "name": "total_timer_time",
+          "field_type": "uint32",
+          "scale": [
+            1000.0
+          ],
+          "units": "s",
+          "comment": "Exclude pauses"
+        },
+        {
+          "number": 1,
+          "name": "num_sessions",
+          "field_type": "uint16"
+        },
+        {
+          "number": 2,
+          "name": "type",
+          "field_type": "activity"
+        },
+        {
+          "number": 3,
+          "name": "event",
+          "field_type": "event"
+        },
+        {
+          "number": 4,
+          "name": "event_type",
+          "field_type": "event_type"
+        },
+        {
+          "number": 5,
+          "name": "local_timestamp",
+          "field_type": "local_date_time",
+          "comment": "timestamp epoch expressed in local time, used to convert activity timestamps to local time"
+        },
+        {
+          "number": 6,
+          "name": "event_group",
+          "field_type": "uint8"
+        }
+      ]
+    },
+    {
+      "name": "session",
+      "number": 18,
+      "fields": [
+        {
+          "number": 254,
+          "name": "message_index",
+          "field_type": "message_index",
+          "comment": "Selected bit is set for the current session."
+        },
+        {
+          "number": 253,
+          "name": "timestamp",
+          "field_type": "date_time",
+          "units": "s",
+          "comment": "Sesson end time."
+        },
+        {
+          "number": 0,
+          "name": "event",
+          "field_type": "event",
+          "comment": "session"
+        },
+        {
+          "number": 1,
+          "name": "event_type",
+          "field_type": "event_type",
+          "comment": "stop"
+        },
+        {
+          "number": 2,
+          "name": "start_time",
+          "field_type": "date_time"
+        },
+        {
+          "number": 3,
+          "name": "start_position_lat",
+          "field_type": "sint32",
+          "units": "semicircles"
+        },
+        {
+          "number": 4,
+          "name": "start_position_long",
+          "field_type": "sint32",
+          "units": "semicircles"
+        },
+        {
+          "number": 5,
+          "name": "sport",
+          "field_type": "sport"
+        },
+        {
+          "number": 6,
+          "name": "sub_sport",
+          "field_type": "sub_sport"
+        },
+        {
+          "number": 7,
+          "name": "total_elapsed_time",
+          "field_type": "uint32",
+          "scale": [
+            1000.0
+          ],
+          "units": "s",
+          "comment": "Time (includes pauses)"
+        },
+        {
+          "number": 8,
+          "name": "total_timer_time",
+          "field_type": "uint32",
+          "scale": [
+            1000.0
+          ],
+          "units": "s",
+          "comment": "Timer Time (excludes pauses)"
+        },
+        {
+          "number": 9,
+          "name": "total_distance",
+          "field_type": "uint32",
+          "scale": [
+            100.0
+          ],
+          "units": "m"
+        },
+        {
+          "number": 10,
+          "name": "total_cycles",
+          "field_type": "uint32",
+          "units": "cycles",
+          "subfields": [
+            {
+              "name": "total_strides",
+              "field_type": "uint32",
+              "units": "strides",
+              "references": [
+                [
+                  "sport",
+                  "running"
+                ],
+                [
+                  "sport",
+                  "walking"
+                ]
+              ]
+            },
+            {
+              "name": "total_strokes",
+              "field_type": "uint32",
+              "units": "strokes",
+              "references": [
+                [
+                  "sport",
+                  "cycling"
+                ],
+                [
+                  "sport",
+                  "swimming"
+                ],
+                [
+                  "sport",
+                  "rowing"
+                ],
+                [
+                  "sport",
+                  "stand_up_paddleboarding"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "number": 11,
+          "name": "total_calories",
+          "field_type": "uint16",
+          "units": "kcal"
+        },
+        {
+          "number": 13,
+          "name": "total_fat_calories",
+          "field_type": "uint16",
+          "units": "kcal"
+        },
+        {
+          "number": 14,
+          "name": "avg_speed",
+          "field_type": "uint16",
+          "components": [
+            "enhanced_avg_speed"
+          ],
+          "scale": [
+            1000.0
+          ],
+          "units": "m/s",
+          "comment": "total_distance / total_timer_time"
+        },
+        {
+          "number": 15,
+          "name": "max_speed",
+          "field_type": "uint16",
+          "components": [
+            "enhanced_max_speed"
+          ],
+          "scale": [
+            1000.0
+          ],
+          "units": "m/s"
+        },
+        {
+          "number": 16,
+          "name": "avg_heart_rate",
+          "field_type": "uint8",
+          "units": "bpm",
+          "comment": "average heart rate (excludes pause time)"
+        },
+        {
+          "number": 17,
+          "name": "max_heart_rate",
+          "field_type": "uint8",
+          "units": "bpm"
+        },
+        {
+          "number": 18,
+          "name": "avg_cadence",
+          "field_type": "uint8",
+          "units": "rpm",
+          "comment": "total_cycles / total_timer_time if non_zero_avg_cadence otherwise total_cycles / total_elapsed_time",
+          "subfields": [
+            {
+              "name": "avg_running_cadence",
+              "field_type": "uint8",
+              "units": "strides/min",
+              "references": [
+                [
+                  "sport",
+                  "running"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "number": 19,
+          "name": "max_cadence",
+          "field_type": "uint8",
+          "units": "rpm",
+          "subfields": [
+            {
+              "name": "max_running_cadence",
+              "field_type": "uint8",
+              "units": "strides/min",
+              "references": [
+                [
+                  "sport",
+                  "running"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "number": 20,
+          "name": "avg_power",
+          "field_type": "uint16",
+          "units": "watts",
+          "comment": "total_power / total_timer_time if non_zero_avg_power otherwise total_power / total_elapsed_time"
+        },
+        {
+          "number": 21,
+          "name": "max_power",
+          "field_type": "uint16",
+          "units": "watts"
+        },
+        {
+          "number": 22,
+          "name": "total_ascent",
+          "field_type": "uint16",
+          "units": "m"
+        },
+        {
+          "number": 23,
+          "name": "total_descent",
+          "field_type": "uint16",
+          "units": "m"
+        },
+        {
+          "number": 24,
+          "name": "total_training_effect",
+          "field_type": "uint8",
+          "scale": [
+            10.0
+          ]
+        },
+        {
+          "number": 25,
+          "name": "first_lap_index",
+          "field_type": "uint16"
+        },
+        {
+          "number": 26,
+          "name": "num_laps",
+          "field_type": "uint16"
+        },
+        {
+          "number": 27,
+          "name": "event_group",
+          "field_type": "uint8"
+        },
+        {
+          "number": 28,
+          "name": "trigger",
+          "field_type": "session_trigger"
+        },
+        {
+          "number": 29,
+          "name": "nec_lat",
+          "field_type": "sint32",
+          "units": "semicircles",
+          "comment": "North east corner latitude"
+        },
+        {
+          "number": 30,
+          "name": "nec_long",
+          "field_type": "sint32",
+          "units": "semicircles",
+          "comment": "North east corner longitude"
+        },
+        {
+          "number": 31,
+          "name": "swc_lat",
+          "field_type": "sint32",
+          "units": "semicircles",
+          "comment": "South west corner latitude"
+        },
+        {
+          "number": 32,
+          "name": "swc_long",
+          "field_type": "sint32",
+          "units": "semicircles",
+          "comment": "South west corner longitude"
+        },
+        {
+          "number": 33,
+          "name": "num_lengths",
+          "field_type": "uint16",
+          "units": "lengths",
+          "comment": "# of lengths of swim pool"
+        },
+        {
+          "number": 34,
+          "name": "normalized_power",
+          "field_type": "uint16",
+          "units": "watts"
+        },
+        {
+          "number": 35,
+          "name": "training_stress_score",
+          "field_type": "uint16",
+          "scale": [
+            10.0
+          ],
+          "units": "tss"
+        },
+        {
+          "number": 36,
+          "name": "intensity_factor",
+          "field_type": "uint16",
+          "scale": [
+            1000.0
+          ],
+          "units": "if"
+        },
+        {
+          "number": 37,
+          "name": "left_right_balance",
+          "field_type": "left_right_balance_100"
+        },
+        {
+          "number": 38,
+          "name": "end_position_lat",
+          "field_type": "sint32",
+          "units": "semicircles"
+        },
+        {
+          "number": 39,
+          "name": "end_position_long",
+          "field_type": "sint32",
+          "units": "semicircles"
+        },
+        {
+          "number": 41,
+          "name": "avg_stroke_count",
+          "field_type": "uint32",
+          "scale": [
+            10.0
+          ],
+          "units": "strokes/lap"
+        },
+        {
+          "number": 42,
+          "name": "avg_stroke_distance",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "m"
+        },
+        {
+          "number": 43,
+          "name": "swim_stroke",
+          "field_type": "swim_stroke",
+          "units": "swim_stroke"
+        },
+        {
+          "number": 44,
+          "name": "pool_length",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "m"
+        },
+        {
+          "number": 45,
+          "name": "threshold_power",
+          "field_type": "uint16",
+          "units": "watts"
+        },
+        {
+          "number": 46,
+          "name": "pool_length_unit",
+          "field_type": "display_measure"
+        },
+        {
+          "number": 47,
+          "name": "num_active_lengths",
+          "field_type": "uint16",
+          "units": "lengths",
+          "comment": "# of active lengths of swim pool"
+        },
+        {
+          "number": 48,
+          "name": "total_work",
+          "field_type": "uint32",
+          "units": "J"
+        },
+        {
+          "number": 49,
+          "name": "avg_altitude",
+          "field_type": "uint16",
+          "components": [
+            "enhanced_avg_altitude"
+          ],
+          "scale": [
+            5.0
+          ],
+          "offset": [
+            500.0
+          ],
+          "units": "m"
+        },
+        {
+          "number": 50,
+          "name": "max_altitude",
+          "field_type": "uint16",
+          "components": [
+            "enhanced_max_altitude"
+          ],
+          "scale": [
+            5.0
+          ],
+          "offset": [
+            500.0
+          ],
+          "units": "m"
+        },
+        {
+          "number": 51,
+          "name": "gps_accuracy",
+          "field_type": "uint8",
+          "units": "m"
+        },
+        {
+          "number": 52,
+          "name": "avg_grade",
+          "field_type": "sint16",
+          "scale": [
+            100.0
+          ],
+          "units": "%"
+        },
+        {
+          "number": 53,
+          "name": "avg_pos_grade",
+          "field_type": "sint16",
+          "scale": [
+            100.0
+          ],
+          "units": "%"
+        },
+        {
+          "number": 54,
+          "name": "avg_neg_grade",
+          "field_type": "sint16",
+          "scale": [
+            100.0
+          ],
+          "units": "%"
+        },
+        {
+          "number": 55,
+          "name": "max_pos_grade",
+          "field_type": "sint16",
+          "scale": [
+            100.0
+          ],
+          "units": "%"
+        },
+        {
+          "number": 56,
+          "name": "max_neg_grade",
+          "field_type": "sint16",
+          "scale": [
+            100.0
+          ],
+          "units": "%"
+        },
+        {
+          "number": 57,
+          "name": "avg_temperature",
+          "field_type": "sint8",
+          "units": "C"
+        },
+        {
+          "number": 58,
+          "name": "max_temperature",
+          "field_type": "sint8",
+          "units": "C"
+        },
+        {
+          "number": 59,
+          "name": "total_moving_time",
+          "field_type": "uint32",
+          "scale": [
+            1000.0
+          ],
+          "units": "s"
+        },
+        {
+          "number": 60,
+          "name": "avg_pos_vertical_speed",
+          "field_type": "sint16",
+          "scale": [
+            1000.0
+          ],
+          "units": "m/s"
+        },
+        {
+          "number": 61,
+          "name": "avg_neg_vertical_speed",
+          "field_type": "sint16",
+          "scale": [
+            1000.0
+          ],
+          "units": "m/s"
+        },
+        {
+          "number": 62,
+          "name": "max_pos_vertical_speed",
+          "field_type": "sint16",
+          "scale": [
+            1000.0
+          ],
+          "units": "m/s"
+        },
+        {
+          "number": 63,
+          "name": "max_neg_vertical_speed",
+          "field_type": "sint16",
+          "scale": [
+            1000.0
+          ],
+          "units": "m/s"
+        },
+        {
+          "number": 64,
+          "name": "min_heart_rate",
+          "field_type": "uint8",
+          "units": "bpm"
+        },
+        {
+          "number": 65,
+          "name": "time_in_hr_zone",
+          "field_type": "uint32",
+          "array": "[N]",
+          "scale": [
+            1000.0
+          ],
+          "units": "s"
+        },
+        {
+          "number": 66,
+          "name": "time_in_speed_zone",
+          "field_type": "uint32",
+          "array": "[N]",
+          "scale": [
+            1000.0
+          ],
+          "units": "s"
+        },
+        {
+          "number": 67,
+          "name": "time_in_cadence_zone",
+          "field_type": "uint32",
+          "array": "[N]",
+          "scale": [
+            1000.0
+          ],
+          "units": "s"
+        },
+        {
+          "number": 68,
+          "name": "time_in_power_zone",
+          "field_type": "uint32",
+          "array": "[N]",
+          "scale": [
+            1000.0
+          ],
+          "units": "s"
+        },
+        {
+          "number": 69,
+          "name": "avg_lap_time",
+          "field_type": "uint32",
+          "scale": [
+            1000.0
+          ],
+          "units": "s"
+        },
+        {
+          "number": 70,
+          "name": "best_lap_index",
+          "field_type": "uint16"
+        },
+        {
+          "number": 71,
+          "name": "min_altitude",
+          "field_type": "uint16",
+          "components": [
+            "enhanced_min_altitude"
+          ],
+          "scale": [
+            5.0
+          ],
+          "offset": [
+            500.0
+          ],
+          "units": "m"
+        },
+        {
+          "number": 82,
+          "name": "player_score",
+          "field_type": "uint16"
+        },
+        {
+          "number": 83,
+          "name": "opponent_score",
+          "field_type": "uint16"
+        },
+        {
+          "number": 84,
+          "name": "opponent_name",
+          "field_type": "string"
+        },
+        {
+          "number": 85,
+          "name": "stroke_count",
+          "field_type": "uint16",
+          "array": "[N]",
+          "units": "counts",
+          "comment": "stroke_type enum used as the index"
+        },
+        {
+          "number": 86,
+          "name": "zone_count",
+          "field_type": "uint16",
+          "array": "[N]",
+          "units": "counts",
+          "comment": "zone number used as the index"
+        },
+        {
+          "number": 87,
+          "name": "max_ball_speed",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "m/s"
+        },
+        {
+          "number": 88,
+          "name": "avg_ball_speed",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "m/s"
+        },
+        {
+          "number": 89,
+          "name": "avg_vertical_oscillation",
+          "field_type": "uint16",
+          "scale": [
+            10.0
+          ],
+          "units": "mm"
+        },
+        {
+          "number": 90,
+          "name": "avg_stance_time_percent",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "percent"
+        },
+        {
+          "number": 91,
+          "name": "avg_stance_time",
+          "field_type": "uint16",
+          "scale": [
+            10.0
+          ],
+          "units": "ms"
+        },
+        {
+          "number": 92,
+          "name": "avg_fractional_cadence",
+          "field_type": "uint8",
+          "scale": [
+            128.0
+          ],
+          "units": "rpm",
+          "comment": "fractional part of the avg_cadence"
+        },
+        {
+          "number": 93,
+          "name": "max_fractional_cadence",
+          "field_type": "uint8",
+          "scale": [
+            128.0
+          ],
+          "units": "rpm",
+          "comment": "fractional part of the max_cadence"
+        },
+        {
+          "number": 94,
+          "name": "total_fractional_cycles",
+          "field_type": "uint8",
+          "scale": [
+            128.0
+          ],
+          "units": "cycles",
+          "comment": "fractional part of the total_cycles"
+        },
+        {
+          "number": 95,
+          "name": "avg_total_hemoglobin_conc",
+          "field_type": "uint16",
+          "array": "[N]",
+          "scale": [
+            100.0
+          ],
+          "units": "g/dL",
+          "comment": "Avg saturated and unsaturated hemoglobin"
+        },
+        {
+          "number": 96,
+          "name": "min_total_hemoglobin_conc",
+          "field_type": "uint16",
+          "array": "[N]",
+          "scale": [
+            100.0
+          ],
+          "units": "g/dL",
+          "comment": "Min saturated and unsaturated hemoglobin"
+        },
+        {
+          "number": 97,
+          "name": "max_total_hemoglobin_conc",
+          "field_type": "uint16",
+          "array": "[N]",
+          "scale": [
+            100.0
+          ],
+          "units": "g/dL",
+          "comment": "Max saturated and unsaturated hemoglobin"
+        },
+        {
+          "number": 98,
+          "name": "avg_saturated_hemoglobin_percent",
+          "field_type": "uint16",
+          "array": "[N]",
+          "scale": [
+            10.0
+          ],
+          "units": "%",
+          "comment": "Avg percentage of hemoglobin saturated with oxygen"
+        },
+        {
+          "number": 99,
+          "name": "min_saturated_hemoglobin_percent",
+          "field_type": "uint16",
+          "array": "[N]",
+          "scale": [
+            10.0
+          ],
+          "units": "%",
+          "comment": "Min percentage of hemoglobin saturated with oxygen"
+        },
+        {
+          "number": 100,
+          "name": "max_saturated_hemoglobin_percent",
+          "field_type": "uint16",
+          "array": "[N]",
+          "scale": [
+            10.0
+          ],
+          "units": "%",
+          "comment": "Max percentage of hemoglobin saturated with oxygen"
+        },
+        {
+          "number": 101,
+          "name": "avg_left_torque_effectiveness",
+          "field_type": "uint8",
+          "scale": [
+            2.0
+          ],
+          "units": "percent"
+        },
+        {
+          "number": 102,
+          "name": "avg_right_torque_effectiveness",
+          "field_type": "uint8",
+          "scale": [
+            2.0
+          ],
+          "units": "percent"
+        },
+        {
+          "number": 103,
+          "name": "avg_left_pedal_smoothness",
+          "field_type": "uint8",
+          "scale": [
+            2.0
+          ],
+          "units": "percent"
+        },
+        {
+          "number": 104,
+          "name": "avg_right_pedal_smoothness",
+          "field_type": "uint8",
+          "scale": [
+            2.0
+          ],
+          "units": "percent"
+        },
+        {
+          "number": 105,
+          "name": "avg_combined_pedal_smoothness",
+          "field_type": "uint8",
+          "scale": [
+            2.0
+          ],
+          "units": "percent"
+        },
+        {
+          "number": 110,
+          "name": "sport_profile_name",
+          "field_type": "string",
+          "comment": "Sport name from associated sport mesg"
+        },
+        {
+          "number": 111,
+          "name": "sport_index",
+          "field_type": "uint8"
+        },
+        {
+          "number": 112,
+          "name": "time_standing",
+          "field_type": "uint32",
+          "scale": [
+            1000.0
+          ],
+          "units": "s",
+          "comment": "Total time spend in the standing position"
+        },
+        {
+          "number": 113,
+          "name": "stand_count",
+          "field_type": "uint16",
+          "comment": "Number of transitions to the standing state"
+        },
+        {
+          "number": 114,
+          "name": "avg_left_pco",
+          "field_type": "sint8",
+          "units": "mm",
+          "comment": "Average platform center offset Left"
+        },
+        {
+          "number": 115,
+          "name": "avg_right_pco",
+          "field_type": "sint8",
+          "units": "mm",
+          "comment": "Average platform center offset Right"
+        },
+        {
+          "number": 116,
+          "name": "avg_left_power_phase",
+          "field_type": "uint8",
+          "array": "[N]",
+          "scale": [
+            0.7111111
+          ],
+          "units": "degrees",
+          "comment": "Average left power phase angles. Indexes defined by power_phase_type."
+        },
+        {
+          "number": 117,
+          "name": "avg_left_power_phase_peak",
+          "field_type": "uint8",
+          "array": "[N]",
+          "scale": [
+            0.7111111
+          ],
+          "units": "degrees",
+          "comment": "Average left power phase peak angles. Data value indexes defined by power_phase_type."
+        },
+        {
+          "number": 118,
+          "name": "avg_right_power_phase",
+          "field_type": "uint8",
+          "array": "[N]",
+          "scale": [
+            0.7111111
+          ],
+          "units": "degrees",
+          "comment": "Average right power phase angles. Data value indexes defined by power_phase_type."
+        },
+        {
+          "number": 119,
+          "name": "avg_right_power_phase_peak",
+          "field_type": "uint8",
+          "array": "[N]",
+          "scale": [
+            0.7111111
+          ],
+          "units": "degrees",
+          "comment": "Average right power phase peak angles data value indexes defined by power_phase_type."
+        },
+        {
+          "number": 120,
+          "name": "avg_power_position",
+          "field_type": "uint16",
+          "array": "[N]",
+          "units": "watts",
+          "comment": "Average power by position. Data value indexes defined by rider_position_type."
+        },
+        {
+          "number": 121,
+          "name": "max_power_position",
+          "field_type": "uint16",
+          "array": "[N]",
+          "units": "watts",
+          "comment": "Maximum power by position. Data value indexes defined by rider_position_type."
+        },
+        {
+          "number": 122,
+          "name": "avg_cadence_position",
+          "field_type": "uint8",
+          "array": "[N]",
+          "units": "rpm",
+          "comment": "Average cadence by position. Data value indexes defined by rider_position_type."
+        },
+        {
+          "number": 123,
+          "name": "max_cadence_position",
+          "field_type": "uint8",
+          "array": "[N]",
+          "units": "rpm",
+          "comment": "Maximum cadence by position. Data value indexes defined by rider_position_type."
+        },
+        {
+          "number": 124,
+          "name": "enhanced_avg_speed",
+          "field_type": "uint32",
+          "scale": [
+            1000.0
+          ],
+          "units": "m/s",
+          "comment": "total_distance / total_timer_time"
+        },
+        {
+          "number": 125,
+          "name": "enhanced_max_speed",
+          "field_type": "uint32",
+          "scale": [
+            1000.0
+          ],
+          "units": "m/s"
+        },
+        {
+          "number": 126,
+          "name": "enhanced_avg_altitude",
+          "field_type": "uint32",
+          "scale": [
+            5.0
+          ],
+          "offset": [
+            500.0
+          ],
+          "units": "m"
+        },
+        {
+          "number": 127,
+          "name": "enhanced_min_altitude",
+          "field_type": "uint32",
+          "scale": [
+            5.0
+          ],
+          "offset": [
+            500.0
+          ],
+          "units": "m"
+        },
+        {
+          "number": 128,
+          "name": "enhanced_max_altitude",
+          "field_type": "uint32",
+          "scale": [
+            5.0
+          ],
+          "offset": [
+            500.0
+          ],
+          "units": "m"
+        },
+        {
+          "number": 129,
+          "name": "avg_lev_motor_power",
+          "field_type": "uint16",
+          "units": "watts",
+          "comment": "lev average motor power during session"
+        },
+        {
+          "number": 130,
+          "name": "max_lev_motor_power",
+          "field_type": "uint16",
+          "units": "watts",
+          "comment": "lev maximum motor power during session"
+        },
+        {
+          "number": 131,
+          "name": "lev_battery_consumption",
+          "field_type": "uint8",
+          "scale": [
+            2.0
+          ],
+          "units": "percent",
+          "comment": "lev battery consumption during session"
+        },
+        {
+          "number": 132,
+          "name": "avg_vertical_ratio",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "percent"
+        },
+        {
+          "number": 133,
+          "name": "avg_stance_time_balance",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "percent"
+        },
+        {
+          "number": 134,
+          "name": "avg_step_length",
+          "field_type": "uint16",
+          "scale": [
+            10.0
+          ],
+          "units": "mm"
+        },
+        {
+          "number": 137,
+          "name": "total_anaerobic_training_effect",
+          "field_type": "uint8",
+          "scale": [
+            10.0
+          ]
+        },
+        {
+          "number": 139,
+          "name": "avg_vam",
+          "field_type": "uint16",
+          "scale": [
+            1000.0
+          ],
+          "units": "m/s"
+        },
+        {
+          "number": 140,
+          "name": "avg_depth",
+          "field_type": "uint32",
+          "scale": [
+            1000.0
+          ],
+          "units": "m",
+          "comment": "0 if above water"
+        },
+        {
+          "number": 141,
+          "name": "max_depth",
+          "field_type": "uint32",
+          "scale": [
+            1000.0
+          ],
+          "units": "m",
+          "comment": "0 if above water"
+        },
+        {
+          "number": 142,
+          "name": "surface_interval",
+          "field_type": "uint32",
+          "scale": [
+            1.0
+          ],
+          "units": "s",
+          "comment": "Time since end of last dive"
+        },
+        {
+          "number": 143,
+          "name": "start_cns",
+          "field_type": "uint8",
+          "scale": [
+            1.0
+          ],
+          "units": "percent"
+        },
+        {
+          "number": 144,
+          "name": "end_cns",
+          "field_type": "uint8",
+          "scale": [
+            1.0
+          ],
+          "units": "percent"
+        },
+        {
+          "number": 145,
+          "name": "start_n2",
+          "field_type": "uint16",
+          "scale": [
+            1.0
+          ],
+          "units": "percent"
+        },
+        {
+          "number": 146,
+          "name": "end_n2",
+          "field_type": "uint16",
+          "scale": [
+            1.0
+          ],
+          "units": "percent"
+        },
+        {
+          "number": 147,
+          "name": "avg_respiration_rate",
+          "field_type": "uint8",
+          "components": [
+            "enhanced_avg_respiration_rate"
+          ]
+        },
+        {
+          "number": 148,
+          "name": "max_respiration_rate",
+          "field_type": "uint8",
+          "components": [
+            "enhanced_max_respiration_rate"
+          ]
+        },
+        {
+          "number": 149,
+          "name": "min_respiration_rate",
+          "field_type": "uint8",
+          "components": [
+            "enhanced_min_respiration_rate"
+          ]
+        },
+        {
+          "number": 150,
+          "name": "min_temperature",
+          "field_type": "sint8",
+          "units": "C"
+        },
+        {
+          "number": 155,
+          "name": "o2_toxicity",
+          "field_type": "uint16",
+          "units": "OTUs"
+        },
+        {
+          "number": 156,
+          "name": "dive_number",
+          "field_type": "uint32"
+        },
+        {
+          "number": 168,
+          "name": "training_load_peak",
+          "field_type": "sint32",
+          "scale": [
+            65536.0
+          ]
+        },
+        {
+          "number": 169,
+          "name": "enhanced_avg_respiration_rate",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "Breaths/min"
+        },
+        {
+          "number": 170,
+          "name": "enhanced_max_respiration_rate",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "Breaths/min"
+        },
+        {
+          "number": 180,
+          "name": "enhanced_min_respiration_rate",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ]
+        },
+        {
+          "number": 181,
+          "name": "total_grit",
+          "field_type": "float32",
+          "units": "kGrit",
+          "comment": "The grit score estimates how challenging a route could be for a cyclist in terms of time spent going over sharp turns or large grade slopes."
+        },
+        {
+          "number": 182,
+          "name": "total_flow",
+          "field_type": "float32",
+          "units": "Flow",
+          "comment": "The flow score estimates how long distance wise a cyclist deaccelerates over intervals where deacceleration is unnecessary such as smooth turns or small grade angle intervals."
+        },
+        {
+          "number": 183,
+          "name": "jump_count",
+          "field_type": "uint16"
+        },
+        {
+          "number": 186,
+          "name": "avg_grit",
+          "field_type": "float32",
+          "units": "kGrit",
+          "comment": "The grit score estimates how challenging a route could be for a cyclist in terms of time spent going over sharp turns or large grade slopes."
+        },
+        {
+          "number": 187,
+          "name": "avg_flow",
+          "field_type": "float32",
+          "units": "Flow",
+          "comment": "The flow score estimates how long distance wise a cyclist deaccelerates over intervals where deacceleration is unnecessary such as smooth turns or small grade angle intervals."
+        },
+        {
+          "number": 192,
+          "name": "workout_feel",
+          "field_type": "uint8",
+          "comment": "A 0-100 scale representing how a user felt while performing a workout. Low values are considered feeling bad, while high values are good."
+        },
+        {
+          "number": 193,
+          "name": "workout_rpe",
+          "field_type": "uint8",
+          "comment": "Common Borg CR10 / 0-10 RPE scale, multiplied 10x.. Aggregate score for all workouts in a single session."
+        },
+        {
+          "number": 194,
+          "name": "avg_spo2",
+          "field_type": "uint8",
+          "units": "percent",
+          "comment": "Average SPO2 for the monitoring session"
+        },
+        {
+          "number": 195,
+          "name": "avg_stress",
+          "field_type": "uint8",
+          "units": "percent",
+          "comment": "Average stress for the monitoring session"
+        },
+        {
+          "number": 197,
+          "name": "sdrr_hrv",
+          "field_type": "uint8",
+          "units": "mS",
+          "comment": "Standard deviation of R-R interval (SDRR) - Heart rate variability measure most useful for wellness users."
+        },
+        {
+          "number": 198,
+          "name": "rmssd_hrv",
+          "field_type": "uint8",
+          "units": "mS",
+          "comment": "Root mean square successive difference (RMSSD) - Heart rate variability measure most useful for athletes"
+        },
+        {
+          "number": 199,
+          "name": "total_fractional_ascent",
+          "field_type": "uint8",
+          "scale": [
+            100.0
+          ],
+          "units": "m",
+          "comment": "fractional part of total_ascent"
+        },
+        {
+          "number": 200,
+          "name": "total_fractional_descent",
+          "field_type": "uint8",
+          "scale": [
+            100.0
+          ],
+          "units": "m",
+          "comment": "fractional part of total_descent"
+        },
+        {
+          "number": 208,
+          "name": "avg_core_temperature",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "C"
+        },
+        {
+          "number": 209,
+          "name": "min_core_temperature",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "C"
+        },
+        {
+          "number": 210,
+          "name": "max_core_temperature",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "C"
+        }
+      ]
+    },
+    {
+      "name": "lap",
+      "number": 19,
+      "fields": [
+        {
+          "number": 254,
+          "name": "message_index",
+          "field_type": "message_index"
+        },
+        {
+          "number": 253,
+          "name": "timestamp",
+          "field_type": "date_time",
+          "units": "s",
+          "comment": "Lap end time."
+        },
+        {
+          "number": 0,
+          "name": "event",
+          "field_type": "event"
+        },
+        {
+          "number": 1,
+          "name": "event_type",
+          "field_type": "event_type"
+        },
+        {
+          "number": 2,
+          "name": "start_time",
+          "field_type": "date_time"
+        },
+        {
+          "number": 3,
+          "name": "start_position_lat",
+          "field_type": "sint32",
+          "units": "semicircles"
+        },
+        {
+          "number": 4,
+          "name": "start_position_long",
+          "field_type": "sint32",
+          "units": "semicircles"
+        },
+        {
+          "number": 5,
+          "name": "end_position_lat",
+          "field_type": "sint32",
+          "units": "semicircles"
+        },
+        {
+          "number": 6,
+          "name": "end_position_long",
+          "field_type": "sint32",
+          "units": "semicircles"
+        },
+        {
+          "number": 7,
+          "name": "total_elapsed_time",
+          "field_type": "uint32",
+          "scale": [
+            1000.0
+          ],
+          "units": "s",
+          "comment": "Time (includes pauses)"
+        },
+        {
+          "number": 8,
+          "name": "total_timer_time",
+          "field_type": "uint32",
+          "scale": [
+            1000.0
+          ],
+          "units": "s",
+          "comment": "Timer Time (excludes pauses)"
+        },
+        {
+          "number": 9,
+          "name": "total_distance",
+          "field_type": "uint32",
+          "scale": [
+            100.0
+          ],
+          "units": "m"
+        },
+        {
+          "number": 10,
+          "name": "total_cycles",
+          "field_type": "uint32",
+          "units": "cycles",
+          "subfields": [
+            {
+              "name": "total_strides",
+              "field_type": "uint32",
+              "units": "strides",
+              "references": [
+                [
+                  "sport",
+                  "running"
+                ],
+                [
+                  "sport",
+                  "walking"
+                ]
+              ]
+            },
+            {
+              "name": "total_strokes",
+              "field_type": "uint32",
+              "units": "strokes",
+              "references": [
+                [
+                  "sport",
+                  "cycling"
+                ],
+                [
+                  "sport",
+                  "swimming"
+                ],
+                [
+                  "sport",
+                  "rowing"
+                ],
+                [
+                  "sport",
+                  "stand_up_paddleboarding"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "number": 11,
+          "name": "total_calories",
+          "field_type": "uint16",
+          "units": "kcal"
+        },
+        {
+          "number": 12,
+          "name": "total_fat_calories",
+          "field_type": "uint16",
+          "units": "kcal",
+          "comment": "If New Leaf"
+        },
+        {
+          "number": 13,
+          "name": "avg_speed",
+          "field_type": "uint16",
+          "components": [
+            "enhanced_avg_speed"
+          ],
+          "scale": [
+            1000.0
+          ],
+          "units": "m/s"
+        },
+        {
+          "number": 14,
+          "name": "max_speed",
+          "field_type": "uint16",
+          "components": [
+            "enhanced_max_speed"
+          ],
+          "scale": [
+            1000.0
+          ],
+          "units": "m/s"
+        },
+        {
+          "number": 15,
+          "name": "avg_heart_rate",
+          "field_type": "uint8",
+          "units": "bpm"
+        },
+        {
+          "number": 16,
+          "name": "max_heart_rate",
+          "field_type": "uint8",
+          "units": "bpm"
+        },
+        {
+          "number": 17,
+          "name": "avg_cadence",
+          "field_type": "uint8",
+          "units": "rpm",
+          "comment": "total_cycles / total_timer_time if non_zero_avg_cadence otherwise total_cycles / total_elapsed_time",
+          "subfields": [
+            {
+              "name": "avg_running_cadence",
+              "field_type": "uint8",
+              "units": "strides/min",
+              "references": [
+                [
+                  "sport",
+                  "running"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "number": 18,
+          "name": "max_cadence",
+          "field_type": "uint8",
+          "units": "rpm",
+          "subfields": [
+            {
+              "name": "max_running_cadence",
+              "field_type": "uint8",
+              "units": "strides/min",
+              "references": [
+                [
+                  "sport",
+                  "running"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "number": 19,
+          "name": "avg_power",
+          "field_type": "uint16",
+          "units": "watts",
+          "comment": "total_power / total_timer_time if non_zero_avg_power otherwise total_power / total_elapsed_time"
+        },
+        {
+          "number": 20,
+          "name": "max_power",
+          "field_type": "uint16",
+          "units": "watts"
+        },
+        {
+          "number": 21,
+          "name": "total_ascent",
+          "field_type": "uint16",
+          "units": "m"
+        },
+        {
+          "number": 22,
+          "name": "total_descent",
+          "field_type": "uint16",
+          "units": "m"
+        },
+        {
+          "number": 23,
+          "name": "intensity",
+          "field_type": "intensity"
+        },
+        {
+          "number": 24,
+          "name": "lap_trigger",
+          "field_type": "lap_trigger"
+        },
+        {
+          "number": 25,
+          "name": "sport",
+          "field_type": "sport"
+        },
+        {
+          "number": 26,
+          "name": "event_group",
+          "field_type": "uint8"
+        },
+        {
+          "number": 32,
+          "name": "num_lengths",
+          "field_type": "uint16",
+          "units": "lengths",
+          "comment": "# of lengths of swim pool"
+        },
+        {
+          "number": 33,
+          "name": "normalized_power",
+          "field_type": "uint16",
+          "units": "watts"
+        },
+        {
+          "number": 34,
+          "name": "left_right_balance",
+          "field_type": "left_right_balance_100"
+        },
+        {
+          "number": 35,
+          "name": "first_length_index",
+          "field_type": "uint16"
+        },
+        {
+          "number": 37,
+          "name": "avg_stroke_distance",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "m"
+        },
+        {
+          "number": 38,
+          "name": "swim_stroke",
+          "field_type": "swim_stroke"
+        },
+        {
+          "number": 39,
+          "name": "sub_sport",
+          "field_type": "sub_sport"
+        },
+        {
+          "number": 40,
+          "name": "num_active_lengths",
+          "field_type": "uint16",
+          "units": "lengths",
+          "comment": "# of active lengths of swim pool"
+        },
+        {
+          "number": 41,
+          "name": "total_work",
+          "field_type": "uint32",
+          "units": "J"
+        },
+        {
+          "number": 42,
+          "name": "avg_altitude",
+          "field_type": "uint16",
+          "components": [
+            "enhanced_avg_altitude"
+          ],
+          "scale": [
+            5.0
+          ],
+          "offset": [
+            500.0
+          ],
+          "units": "m"
+        },
+        {
+          "number": 43,
+          "name": "max_altitude",
+          "field_type": "uint16",
+          "components": [
+            "enhanced_max_altitude"
+          ],
+          "scale": [
+            5.0
+          ],
+          "offset": [
+            500.0
+          ],
+          "units": "m"
+        },
+        {
+          "number": 44,
+          "name": "gps_accuracy",
+          "field_type": "uint8",
+          "units": "m"
+        },
+        {
+          "number": 45,
+          "name": "avg_grade",
+          "field_type": "sint16",
+          "scale": [
+            100.0
+          ],
+          "units": "%"
+        },
+        {
+          "number": 46,
+          "name": "avg_pos_grade",
+          "field_type": "sint16",
+          "scale": [
+            100.0
+          ],
+          "units": "%"
+        },
+        {
+          "number": 47,
+          "name": "avg_neg_grade",
+          "field_type": "sint16",
+          "scale": [
+            100.0
+          ],
+          "units": "%"
+        },
+        {
+          "number": 48,
+          "name": "max_pos_grade",
+          "field_type": "sint16",
+          "scale": [
+            100.0
+          ],
+          "units": "%"
+        },
+        {
+          "number": 49,
+          "name": "max_neg_grade",
+          "field_type": "sint16",
+          "scale": [
+            100.0
+          ],
+          "units": "%"
+        },
+        {
+          "number": 50,
+          "name": "avg_temperature",
+          "field_type": "sint8",
+          "units": "C"
+        },
+        {
+          "number": 51,
+          "name": "max_temperature",
+          "field_type": "sint8",
+          "units": "C"
+        },
+        {
+          "number": 52,
+          "name": "total_moving_time",
+          "field_type": "uint32",
+          "scale": [
+            1000.0
+          ],
+          "units": "s"
+        },
+        {
+          "number": 53,
+          "name": "avg_pos_vertical_speed",
+          "field_type": "sint16",
+          "scale": [
+            1000.0
+          ],
+          "units": "m/s"
+        },
+        {
+          "number": 54,
+          "name": "avg_neg_vertical_speed",
+          "field_type": "sint16",
+          "scale": [
+            1000.0
+          ],
+          "units": "m/s"
+        },
+        {
+          "number": 55,
+          "name": "max_pos_vertical_speed",
+          "field_type": "sint16",
+          "scale": [
+            1000.0
+          ],
+          "units": "m/s"
+        },
+        {
+          "number": 56,
+          "name": "max_neg_vertical_speed",
+          "field_type": "sint16",
+          "scale": [
+            1000.0
+          ],
+          "units": "m/s"
+        },
+        {
+          "number": 57,
+          "name": "time_in_hr_zone",
+          "field_type": "uint32",
+          "array": "[N]",
+          "scale": [
+            1000.0
+          ],
+          "units": "s"
+        },
+        {
+          "number": 58,
+          "name": "time_in_speed_zone",
+          "field_type": "uint32",
+          "array": "[N]",
+          "scale": [
+            1000.0
+          ],
+          "units": "s"
+        },
+        {
+          "number": 59,
+          "name": "time_in_cadence_zone",
+          "field_type": "uint32",
+          "array": "[N]",
+          "scale": [
+            1000.0
+          ],
+          "units": "s"
+        },
+        {
+          "number": 60,
+          "name": "time_in_power_zone",
+          "field_type": "uint32",
+          "array": "[N]",
+          "scale": [
+            1000.0
+          ],
+          "units": "s"
+        },
+        {
+          "number": 61,
+          "name": "repetition_num",
+          "field_type": "uint16"
+        },
+        {
+          "number": 62,
+          "name": "min_altitude",
+          "field_type": "uint16",
+          "components": [
+            "enhanced_min_altitude"
+          ],
+          "scale": [
+            5.0
+          ],
+          "offset": [
+            500.0
+          ],
+          "units": "m"
+        },
+        {
+          "number": 63,
+          "name": "min_heart_rate",
+          "field_type": "uint8",
+          "units": "bpm"
+        },
+        {
+          "number": 71,
+          "name": "wkt_step_index",
+          "field_type": "message_index"
+        },
+        {
+          "number": 74,
+          "name": "opponent_score",
+          "field_type": "uint16"
+        },
+        {
+          "number": 75,
+          "name": "stroke_count",
+          "field_type": "uint16",
+          "array": "[N]",
+          "units": "counts",
+          "comment": "stroke_type enum used as the index"
+        },
+        {
+          "number": 76,
+          "name": "zone_count",
+          "field_type": "uint16",
+          "array": "[N]",
+          "units": "counts",
+          "comment": "zone number used as the index"
+        },
+        {
+          "number": 77,
+          "name": "avg_vertical_oscillation",
+          "field_type": "uint16",
+          "scale": [
+            10.0
+          ],
+          "units": "mm"
+        },
+        {
+          "number": 78,
+          "name": "avg_stance_time_percent",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "percent"
+        },
+        {
+          "number": 79,
+          "name": "avg_stance_time",
+          "field_type": "uint16",
+          "scale": [
+            10.0
+          ],
+          "units": "ms"
+        },
+        {
+          "number": 80,
+          "name": "avg_fractional_cadence",
+          "field_type": "uint8",
+          "scale": [
+            128.0
+          ],
+          "units": "rpm",
+          "comment": "fractional part of the avg_cadence"
+        },
+        {
+          "number": 81,
+          "name": "max_fractional_cadence",
+          "field_type": "uint8",
+          "scale": [
+            128.0
+          ],
+          "units": "rpm",
+          "comment": "fractional part of the max_cadence"
+        },
+        {
+          "number": 82,
+          "name": "total_fractional_cycles",
+          "field_type": "uint8",
+          "scale": [
+            128.0
+          ],
+          "units": "cycles",
+          "comment": "fractional part of the total_cycles"
+        },
+        {
+          "number": 83,
+          "name": "player_score",
+          "field_type": "uint16"
+        },
+        {
+          "number": 84,
+          "name": "avg_total_hemoglobin_conc",
+          "field_type": "uint16",
+          "array": "[N]",
+          "scale": [
+            100.0
+          ],
+          "units": "g/dL",
+          "comment": "Avg saturated and unsaturated hemoglobin"
+        },
+        {
+          "number": 85,
+          "name": "min_total_hemoglobin_conc",
+          "field_type": "uint16",
+          "array": "[N]",
+          "scale": [
+            100.0
+          ],
+          "units": "g/dL",
+          "comment": "Min saturated and unsaturated hemoglobin"
+        },
+        {
+          "number": 86,
+          "name": "max_total_hemoglobin_conc",
+          "field_type": "uint16",
+          "array": "[N]",
+          "scale": [
+            100.0
+          ],
+          "units": "g/dL",
+          "comment": "Max saturated and unsaturated hemoglobin"
+        },
+        {
+          "number": 87,
+          "name": "avg_saturated_hemoglobin_percent",
+          "field_type": "uint16",
+          "array": "[N]",
+          "scale": [
+            10.0
+          ],
+          "units": "%",
+          "comment": "Avg percentage of hemoglobin saturated with oxygen"
+        },
+        {
+          "number": 88,
+          "name": "min_saturated_hemoglobin_percent",
+          "field_type": "uint16",
+          "array": "[N]",
+          "scale": [
+            10.0
+          ],
+          "units": "%",
+          "comment": "Min percentage of hemoglobin saturated with oxygen"
+        },
+        {
+          "number": 89,
+          "name": "max_saturated_hemoglobin_percent",
+          "field_type": "uint16",
+          "array": "[N]",
+          "scale": [
+            10.0
+          ],
+          "units": "%",
+          "comment": "Max percentage of hemoglobin saturated with oxygen"
+        },
+        {
+          "number": 91,
+          "name": "avg_left_torque_effectiveness",
+          "field_type": "uint8",
+          "scale": [
+            2.0
+          ],
+          "units": "percent"
+        },
+        {
+          "number": 92,
+          "name": "avg_right_torque_effectiveness",
+          "field_type": "uint8",
+          "scale": [
+            2.0
+          ],
+          "units": "percent"
+        },
+        {
+          "number": 93,
+          "name": "avg_left_pedal_smoothness",
+          "field_type": "uint8",
+          "scale": [
+            2.0
+          ],
+          "units": "percent"
+        },
+        {
+          "number": 94,
+          "name": "avg_right_pedal_smoothness",
+          "field_type": "uint8",
+          "scale": [
+            2.0
+          ],
+          "units": "percent"
+        },
+        {
+          "number": 95,
+          "name": "avg_combined_pedal_smoothness",
+          "field_type": "uint8",
+          "scale": [
+            2.0
+          ],
+          "units": "percent"
+        },
+        {
+          "number": 98,
+          "name": "time_standing",
+          "field_type": "uint32",
+          "scale": [
+            1000.0
+          ],
+          "units": "s",
+          "comment": "Total time spent in the standing position"
+        },
+        {
+          "number": 99,
+          "name": "stand_count",
+          "field_type": "uint16",
+          "comment": "Number of transitions to the standing state"
+        },
+        {
+          "number": 100,
+          "name": "avg_left_pco",
+          "field_type": "sint8",
+          "units": "mm",
+          "comment": "Average left platform center offset"
+        },
+        {
+          "number": 101,
+          "name": "avg_right_pco",
+          "field_type": "sint8",
+          "units": "mm",
+          "comment": "Average right platform center offset"
+        },
+        {
+          "number": 102,
+          "name": "avg_left_power_phase",
+          "field_type": "uint8",
+          "array": "[N]",
+          "scale": [
+            0.7111111
+          ],
+          "units": "degrees",
+          "comment": "Average left power phase angles. Data value indexes defined by power_phase_type."
+        },
+        {
+          "number": 103,
+          "name": "avg_left_power_phase_peak",
+          "field_type": "uint8",
+          "array": "[N]",
+          "scale": [
+            0.7111111
+          ],
+          "units": "degrees",
+          "comment": "Average left power phase peak angles. Data value indexes defined by power_phase_type."
+        },
+        {
+          "number": 104,
+          "name": "avg_right_power_phase",
+          "field_type": "uint8",
+          "array": "[N]",
+          "scale": [
+            0.7111111
+          ],
+          "units": "degrees",
+          "comment": "Average right power phase angles. Data value indexes defined by power_phase_type."
+        },
+        {
+          "number": 105,
+          "name": "avg_right_power_phase_peak",
+          "field_type": "uint8",
+          "array": "[N]",
+          "scale": [
+            0.7111111
+          ],
+          "units": "degrees",
+          "comment": "Average right power phase peak angles. Data value indexes defined by power_phase_type."
+        },
+        {
+          "number": 106,
+          "name": "avg_power_position",
+          "field_type": "uint16",
+          "array": "[N]",
+          "units": "watts",
+          "comment": "Average power by position. Data value indexes defined by rider_position_type."
+        },
+        {
+          "number": 107,
+          "name": "max_power_position",
+          "field_type": "uint16",
+          "array": "[N]",
+          "units": "watts",
+          "comment": "Maximum power by position. Data value indexes defined by rider_position_type."
+        },
+        {
+          "number": 108,
+          "name": "avg_cadence_position",
+          "field_type": "uint8",
+          "array": "[N]",
+          "units": "rpm",
+          "comment": "Average cadence by position. Data value indexes defined by rider_position_type."
+        },
+        {
+          "number": 109,
+          "name": "max_cadence_position",
+          "field_type": "uint8",
+          "array": "[N]",
+          "units": "rpm",
+          "comment": "Maximum cadence by position. Data value indexes defined by rider_position_type."
+        },
+        {
+          "number": 110,
+          "name": "enhanced_avg_speed",
+          "field_type": "uint32",
+          "scale": [
+            1000.0
+          ],
+          "units": "m/s"
+        },
+        {
+          "number": 111,
+          "name": "enhanced_max_speed",
+          "field_type": "uint32",
+          "scale": [
+            1000.0
+          ],
+          "units": "m/s"
+        },
+        {
+          "number": 112,
+          "name": "enhanced_avg_altitude",
+          "field_type": "uint32",
+          "scale": [
+            5.0
+          ],
+          "offset": [
+            500.0
+          ],
+          "units": "m"
+        },
+        {
+          "number": 113,
+          "name": "enhanced_min_altitude",
+          "field_type": "uint32",
+          "scale": [
+            5.0
+          ],
+          "offset": [
+            500.0
+          ],
+          "units": "m"
+        },
+        {
+          "number": 114,
+          "name": "enhanced_max_altitude",
+          "field_type": "uint32",
+          "scale": [
+            5.0
+          ],
+          "offset": [
+            500.0
+          ],
+          "units": "m"
+        },
+        {
+          "number": 115,
+          "name": "avg_lev_motor_power",
+          "field_type": "uint16",
+          "units": "watts",
+          "comment": "lev average motor power during lap"
+        },
+        {
+          "number": 116,
+          "name": "max_lev_motor_power",
+          "field_type": "uint16",
+          "units": "watts",
+          "comment": "lev maximum motor power during lap"
+        },
+        {
+          "number": 117,
+          "name": "lev_battery_consumption",
+          "field_type": "uint8",
+          "scale": [
+            2.0
+          ],
+          "units": "percent",
+          "comment": "lev battery consumption during lap"
+        },
+        {
+          "number": 118,
+          "name": "avg_vertical_ratio",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "percent"
+        },
+        {
+          "number": 119,
+          "name": "avg_stance_time_balance",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "percent"
+        },
+        {
+          "number": 120,
+          "name": "avg_step_length",
+          "field_type": "uint16",
+          "scale": [
+            10.0
+          ],
+          "units": "mm"
+        },
+        {
+          "number": 121,
+          "name": "avg_vam",
+          "field_type": "uint16",
+          "scale": [
+            1000.0
+          ],
+          "units": "m/s"
+        },
+        {
+          "number": 122,
+          "name": "avg_depth",
+          "field_type": "uint32",
+          "scale": [
+            1000.0
+          ],
+          "units": "m",
+          "comment": "0 if above water"
+        },
+        {
+          "number": 123,
+          "name": "max_depth",
+          "field_type": "uint32",
+          "scale": [
+            1000.0
+          ],
+          "units": "m",
+          "comment": "0 if above water"
+        },
+        {
+          "number": 124,
+          "name": "min_temperature",
+          "field_type": "sint8",
+          "units": "C"
+        },
+        {
+          "number": 136,
+          "name": "enhanced_avg_respiration_rate",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "Breaths/min"
+        },
+        {
+          "number": 137,
+          "name": "enhanced_max_respiration_rate",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "Breaths/min"
+        },
+        {
+          "number": 147,
+          "name": "avg_respiration_rate",
+          "field_type": "uint8",
+          "components": [
+            "enhanced_avg_respiration_rate"
+          ]
+        },
+        {
+          "number": 148,
+          "name": "max_respiration_rate",
+          "field_type": "uint8",
+          "components": [
+            "enhanced_max_respiration_rate"
+          ]
+        },
+        {
+          "number": 149,
+          "name": "total_grit",
+          "field_type": "float32",
+          "units": "kGrit",
+          "comment": "The grit score estimates how challenging a route could be for a cyclist in terms of time spent going over sharp turns or large grade slopes."
+        },
+        {
+          "number": 150,
+          "name": "total_flow",
+          "field_type": "float32",
+          "units": "Flow",
+          "comment": "The flow score estimates how long distance wise a cyclist deaccelerates over intervals where deacceleration is unnecessary such as smooth turns or small grade angle intervals."
+        },
+        {
+          "number": 151,
+          "name": "jump_count",
+          "field_type": "uint16"
+        },
+        {
+          "number": 153,
+          "name": "avg_grit",
+          "field_type": "float32",
+          "units": "kGrit",
+          "comment": "The grit score estimates how challenging a route could be for a cyclist in terms of time spent going over sharp turns or large grade slopes."
+        },
+        {
+          "number": 154,
+          "name": "avg_flow",
+          "field_type": "float32",
+          "units": "Flow",
+          "comment": "The flow score estimates how long distance wise a cyclist deaccelerates over intervals where deacceleration is unnecessary such as smooth turns or small grade angle intervals."
+        },
+        {
+          "number": 156,
+          "name": "total_fractional_ascent",
+          "field_type": "uint8",
+          "scale": [
+            100.0
+          ],
+          "units": "m",
+          "comment": "fractional part of total_ascent"
+        },
+        {
+          "number": 157,
+          "name": "total_fractional_descent",
+          "field_type": "uint8",
+          "scale": [
+            100.0
+          ],
+          "units": "m",
+          "comment": "fractional part of total_descent"
+        },
+        {
+          "number": 158,
+          "name": "avg_core_temperature",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "C"
+        },
+        {
+          "number": 159,
+          "name": "min_core_temperature",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "C"
+        },
+        {
+          "number": 160,
+          "name": "max_core_temperature",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "C"
+        }
+      ]
+    },
+    {
+      "name": "record",
+      "number": 20,
+      "fields": [
+        {
+          "number": 253,
+          "name": "timestamp",
+          "field_type": "date_time",
+          "units": "s"
+        },
+        {
+          "number": 0,
+          "name": "position_lat",
+          "field_type": "sint32",
+          "units": "semicircles"
+        },
+        {
+          "number": 1,
+          "name": "position_long",
+          "field_type": "sint32",
+          "units": "semicircles"
+        },
+        {
+          "number": 2,
+          "name": "altitude",
+          "field_type": "uint16",
+          "components": [
+            "enhanced_altitude"
+          ],
+          "scale": [
+            5.0
+          ],
+          "offset": [
+            500.0
+          ],
+          "units": "m"
+        },
+        {
+          "number": 3,
+          "name": "heart_rate",
+          "field_type": "uint8",
+          "units": "bpm"
+        },
+        {
+          "number": 4,
+          "name": "cadence",
+          "field_type": "uint8",
+          "units": "rpm"
+        },
+        {
+          "number": 5,
+          "name": "distance",
+          "field_type": "uint32",
+          "scale": [
+            100.0
+          ],
+          "units": "m"
+        },
+        {
+          "number": 6,
+          "name": "speed",
+          "field_type": "uint16",
+          "components": [
+            "enhanced_speed"
+          ],
+          "scale": [
+            1000.0
+          ],
+          "units": "m/s"
+        },
+        {
+          "number": 7,
+          "name": "power",
+          "field_type": "uint16",
+          "units": "watts"
+        },
+        {
+          "number": 8,
+          "name": "compressed_speed_distance",
+          "field_type": "byte",
+          "array": "[3]",
+          "components": [
+            "speed",
+            "distance"
+          ],
+          "scale": [
+            100.0,
+            16.0
+          ],
+          "units": "m/s,m"
+        },
+        {
+          "number": 9,
+          "name": "grade",
+          "field_type": "sint16",
+          "scale": [
+            100.0
+          ],
+          "units": "%"
+        },
+        {
+          "number": 10,
+          "name": "resistance",
+          "field_type": "uint8",
+          "comment": "Relative. 0 is none 254 is Max."
+        },
+        {
+          "number": 11,
+          "name": "time_from_course",
+          "field_type": "sint32",
+          "scale": [
+            1000.0
+          ],
+          "units": "s"
+        },
+        {
+          "number": 12,
+          "name": "cycle_length",
+          "field_type": "uint8",
+          "scale": [
+            100.0
+          ],
+          "units": "m"
+        },
+        {
+          "number": 13,
+          "name": "temperature",
+          "field_type": "sint8",
+          "units": "C"
+        },
+        {
+          "number": 17,
+          "name": "speed_1s",
+          "field_type": "uint8",
+          "array": "[N]",
+          "scale": [
+            16.0
+          ],
+          "units": "m/s",
+          "comment": "Speed at 1s intervals. Timestamp field indicates time of last array element."
+        },
+        {
+          "number": 18,
+          "name": "cycles",
+          "field_type": "uint8",
+          "components": [
+            "total_cycles"
+          ],
+          "units": "cycles"
+        },
+        {
+          "number": 19,
+          "name": "total_cycles",
+          "field_type": "uint32",
+          "units": "cycles"
+        },
+        {
+          "number": 28,
+          "name": "compressed_accumulated_power",
+          "field_type": "uint16",
+          "components": [
+            "accumulated_power"
+          ],
+          "units": "watts"
+        },
+        {
+          "number": 29,
+          "name": "accumulated_power",
+          "field_type": "uint32",
+          "units": "watts"
+        },
+        {
+          "number": 30,
+          "name": "left_right_balance",
+          "field_type": "left_right_balance"
+        },
+        {
+          "number": 31,
+          "name": "gps_accuracy",
+          "field_type": "uint8",
+          "units": "m"
+        },
+        {
+          "number": 32,
+          "name": "vertical_speed",
+          "field_type": "sint16",
+          "scale": [
+            1000.0
+          ],
+          "units": "m/s"
+        },
+        {
+          "number": 33,
+          "name": "calories",
+          "field_type": "uint16",
+          "units": "kcal"
+        },
+        {
+          "number": 39,
+          "name": "vertical_oscillation",
+          "field_type": "uint16",
+          "scale": [
+            10.0
+          ],
+          "units": "mm"
+        },
+        {
+          "number": 40,
+          "name": "stance_time_percent",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "percent"
+        },
+        {
+          "number": 41,
+          "name": "stance_time",
+          "field_type": "uint16",
+          "scale": [
+            10.0
+          ],
+          "units": "ms"
+        },
+        {
+          "number": 42,
+          "name": "activity_type",
+          "field_type": "activity_type"
+        },
+        {
+          "number": 43,
+          "name": "left_torque_effectiveness",
+          "field_type": "uint8",
+          "scale": [
+            2.0
+          ],
+          "units": "percent"
+        },
+        {
+          "number": 44,
+          "name": "right_torque_effectiveness",
+          "field_type": "uint8",
+          "scale": [
+            2.0
+          ],
+          "units": "percent"
+        },
+        {
+          "number": 45,
+          "name": "left_pedal_smoothness",
+          "field_type": "uint8",
+          "scale": [
+            2.0
+          ],
+          "units": "percent"
+        },
+        {
+          "number": 46,
+          "name": "right_pedal_smoothness",
+          "field_type": "uint8",
+          "scale": [
+            2.0
+          ],
+          "units": "percent"
+        },
+        {
+          "number": 47,
+          "name": "combined_pedal_smoothness",
+          "field_type": "uint8",
+          "scale": [
+            2.0
+          ],
+          "units": "percent"
+        },
+        {
+          "number": 48,
+          "name": "time128",
+          "field_type": "uint8",
+          "scale": [
+            128.0
+          ],
+          "units": "s"
+        },
+        {
+          "number": 49,
+          "name": "stroke_type",
+          "field_type": "stroke_type"
+        },
+        {
+          "number": 50,
+          "name": "zone",
+          "field_type": "uint8"
+        },
+        {
+          "number": 51,
+          "name": "ball_speed",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "m/s"
+        },
+        {
+          "number": 52,
+          "name": "cadence256",
+          "field_type": "uint16",
+          "scale": [
+            256.0
+          ],
+          "units": "rpm",
+          "comment": "Log cadence and fractional cadence for backwards compatability"
+        },
+        {
+          "number": 53,
+          "name": "fractional_cadence",
+          "field_type": "uint8",
+          "scale": [
+            128.0
+          ],
+          "units": "rpm"
+        },
+        {
+          "number": 54,
+          "name": "total_hemoglobin_conc",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "g/dL",
+          "comment": "Total saturated and unsaturated hemoglobin"
+        },
+        {
+          "number": 55,
+          "name": "total_hemoglobin_conc_min",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "g/dL",
+          "comment": "Min saturated and unsaturated hemoglobin"
+        },
+        {
+          "number": 56,
+          "name": "total_hemoglobin_conc_max",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "g/dL",
+          "comment": "Max saturated and unsaturated hemoglobin"
+        },
+        {
+          "number": 57,
+          "name": "saturated_hemoglobin_percent",
+          "field_type": "uint16",
+          "scale": [
+            10.0
+          ],
+          "units": "%",
+          "comment": "Percentage of hemoglobin saturated with oxygen"
+        },
+        {
+          "number": 58,
+          "name": "saturated_hemoglobin_percent_min",
+          "field_type": "uint16",
+          "scale": [
+            10.0
+          ],
+          "units": "%",
+          "comment": "Min percentage of hemoglobin saturated with oxygen"
+        },
+        {
+          "number": 59,
+          "name": "saturated_hemoglobin_percent_max",
+          "field_type": "uint16",
+          "scale": [
+            10.0
+          ],
+          "units": "%",
+          "comment": "Max percentage of hemoglobin saturated with oxygen"
+        },
+        {
+          "number": 62,
+          "name": "device_index",
+          "field_type": "device_index"
+        },
+        {
+          "number": 67,
+          "name": "left_pco",
+          "field_type": "sint8",
+          "units": "mm",
+          "comment": "Left platform center offset"
+        },
+        {
+          "number": 68,
+          "name": "right_pco",
+          "field_type": "sint8",
+          "units": "mm",
+          "comment": "Right platform center offset"
+        },
+        {
+          "number": 69,
+          "name": "left_power_phase",
+          "field_type": "uint8",
+          "array": "[N]",
+          "scale": [
+            0.7111111
+          ],
+          "units": "degrees",
+          "comment": "Left power phase angles. Data value indexes defined by power_phase_type."
+        },
+        {
+          "number": 70,
+          "name": "left_power_phase_peak",
+          "field_type": "uint8",
+          "array": "[N]",
+          "scale": [
+            0.7111111
+          ],
+          "units": "degrees",
+          "comment": "Left power phase peak angles. Data value indexes defined by power_phase_type."
+        },
+        {
+          "number": 71,
+          "name": "right_power_phase",
+          "field_type": "uint8",
+          "array": "[N]",
+          "scale": [
+            0.7111111
+          ],
+          "units": "degrees",
+          "comment": "Right power phase angles. Data value indexes defined by power_phase_type."
+        },
+        {
+          "number": 72,
+          "name": "right_power_phase_peak",
+          "field_type": "uint8",
+          "array": "[N]",
+          "scale": [
+            0.7111111
+          ],
+          "units": "degrees",
+          "comment": "Right power phase peak angles. Data value indexes defined by power_phase_type."
+        },
+        {
+          "number": 73,
+          "name": "enhanced_speed",
+          "field_type": "uint32",
+          "scale": [
+            1000.0
+          ],
+          "units": "m/s"
+        },
+        {
+          "number": 78,
+          "name": "enhanced_altitude",
+          "field_type": "uint32",
+          "scale": [
+            5.0
+          ],
+          "offset": [
+            500.0
+          ],
+          "units": "m"
+        },
+        {
+          "number": 81,
+          "name": "battery_soc",
+          "field_type": "uint8",
+          "scale": [
+            2.0
+          ],
+          "units": "percent",
+          "comment": "lev battery state of charge"
+        },
+        {
+          "number": 82,
+          "name": "motor_power",
+          "field_type": "uint16",
+          "units": "watts",
+          "comment": "lev motor power"
+        },
+        {
+          "number": 83,
+          "name": "vertical_ratio",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "percent"
+        },
+        {
+          "number": 84,
+          "name": "stance_time_balance",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "percent"
+        },
+        {
+          "number": 85,
+          "name": "step_length",
+          "field_type": "uint16",
+          "scale": [
+            10.0
+          ],
+          "units": "mm"
+        },
+        {
+          "number": 87,
+          "name": "cycle_length16",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "m",
+          "comment": "Supports larger cycle sizes needed for paddlesports. Max cycle size: 655.35"
+        },
+        {
+          "number": 91,
+          "name": "absolute_pressure",
+          "field_type": "uint32",
+          "units": "Pa",
+          "comment": "Includes atmospheric pressure"
+        },
+        {
+          "number": 92,
+          "name": "depth",
+          "field_type": "uint32",
+          "scale": [
+            1000.0
+          ],
+          "units": "m",
+          "comment": "0 if above water"
+        },
+        {
+          "number": 93,
+          "name": "next_stop_depth",
+          "field_type": "uint32",
+          "scale": [
+            1000.0
+          ],
+          "units": "m",
+          "comment": "0 if above water"
+        },
+        {
+          "number": 94,
+          "name": "next_stop_time",
+          "field_type": "uint32",
+          "scale": [
+            1.0
+          ],
+          "units": "s"
+        },
+        {
+          "number": 95,
+          "name": "time_to_surface",
+          "field_type": "uint32",
+          "scale": [
+            1.0
+          ],
+          "units": "s"
+        },
+        {
+          "number": 96,
+          "name": "ndl_time",
+          "field_type": "uint32",
+          "scale": [
+            1.0
+          ],
+          "units": "s"
+        },
+        {
+          "number": 97,
+          "name": "cns_load",
+          "field_type": "uint8",
+          "units": "percent"
+        },
+        {
+          "number": 98,
+          "name": "n2_load",
+          "field_type": "uint16",
+          "scale": [
+            1.0
+          ],
+          "units": "percent"
+        },
+        {
+          "number": 99,
+          "name": "respiration_rate",
+          "field_type": "uint8",
+          "components": [
+            "enhanced_respiration_rate"
+          ],
+          "scale": [
+            1.0
+          ],
+          "units": "s"
+        },
+        {
+          "number": 108,
+          "name": "enhanced_respiration_rate",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "Breaths/min"
+        },
+        {
+          "number": 114,
+          "name": "grit",
+          "field_type": "float32",
+          "comment": "The grit score estimates how challenging a route could be for a cyclist in terms of time spent going over sharp turns or large grade slopes."
+        },
+        {
+          "number": 115,
+          "name": "flow",
+          "field_type": "float32",
+          "comment": "The flow score estimates how long distance wise a cyclist deaccelerates over intervals where deacceleration is unnecessary such as smooth turns or small grade angle intervals."
+        },
+        {
+          "number": 116,
+          "name": "current_stress",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "comment": "Current Stress value"
+        },
+        {
+          "number": 117,
+          "name": "ebike_travel_range",
+          "field_type": "uint16",
+          "units": "km"
+        },
+        {
+          "number": 118,
+          "name": "ebike_battery_level",
+          "field_type": "uint8",
+          "units": "percent"
+        },
+        {
+          "number": 119,
+          "name": "ebike_assist_mode",
+          "field_type": "uint8",
+          "units": "depends on sensor"
+        },
+        {
+          "number": 120,
+          "name": "ebike_assist_level_percent",
+          "field_type": "uint8",
+          "units": "percent"
+        },
+        {
+          "number": 123,
+          "name": "air_time_remaining",
+          "field_type": "uint32",
+          "units": "s"
+        },
+        {
+          "number": 124,
+          "name": "pressure_sac",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "bar/min",
+          "comment": "Pressure-based surface air consumption"
+        },
+        {
+          "number": 125,
+          "name": "volume_sac",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "L/min",
+          "comment": "Volumetric surface air consumption"
+        },
+        {
+          "number": 126,
+          "name": "rmv",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "L/min",
+          "comment": "Respiratory minute volume"
+        },
+        {
+          "number": 127,
+          "name": "ascent_rate",
+          "field_type": "sint32",
+          "scale": [
+            1000.0
+          ],
+          "units": "m/s"
+        },
+        {
+          "number": 129,
+          "name": "po2",
+          "field_type": "uint8",
+          "scale": [
+            100.0
+          ],
+          "units": "percent",
+          "comment": "Current partial pressure of oxygen"
+        },
+        {
+          "number": 139,
+          "name": "core_temperature",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ],
+          "units": "C"
+        }
+      ]
+    },
+    {
+      "name": "event",
+      "number": 21,
+      "fields": [
+        {
+          "number": 253,
+          "name": "timestamp",
+          "field_type": "date_time",
+          "units": "s"
+        },
+        {
+          "number": 0,
+          "name": "event",
+          "field_type": "event"
+        },
+        {
+          "number": 1,
+          "name": "event_type",
+          "field_type": "event_type"
+        },
+        {
+          "number": 2,
+          "name": "data16",
+          "field_type": "uint16",
+          "components": [
+            "data"
+          ]
+        },
+        {
+          "number": 3,
+          "name": "data",
+          "field_type": "uint32",
+          "subfields": [
+            {
+              "name": "timer_trigger",
+              "field_type": "timer_trigger",
+              "references": [
+                [
+                  "event",
+                  "timer"
+                ]
+              ]
+            },
+            {
+              "name": "course_point_index",
+              "field_type": "message_index",
+              "references": [
+                [
+                  "event",
+                  "course_point"
+                ]
+              ]
+            },
+            {
+              "name": "battery_level",
+              "field_type": "uint16",
+              "scale": [
+                1000.0
+              ],
+              "units": "V",
+              "references": [
+                [
+                  "event",
+                  "battery"
+                ]
+              ]
+            },
+            {
+              "name": "virtual_partner_speed",
+              "field_type": "uint16",
+              "scale": [
+                1000.0
+              ],
+              "units": "m/s",
+              "references": [
+                [
+                  "event",
+                  "virtual_partner_pace"
+                ]
+              ]
+            },
+            {
+              "name": "hr_high_alert",
+              "field_type": "uint8",
+              "units": "bpm",
+              "references": [
+                [
+                  "event",
+                  "hr_high_alert"
+                ]
+              ]
+            },
+            {
+              "name": "hr_low_alert",
+              "field_type": "uint8",
+              "units": "bpm",
+              "references": [
+                [
+                  "event",
+                  "hr_low_alert"
+                ]
+              ]
+            },
+            {
+              "name": "speed_high_alert",
+              "field_type": "uint32",
+              "scale": [
+                1000.0
+              ],
+              "units": "m/s",
+              "references": [
+                [
+                  "event",
+                  "speed_high_alert"
+                ]
+              ]
+            },
+            {
+              "name": "speed_low_alert",
+              "field_type": "uint32",
+              "scale": [
+                1000.0
+              ],
+              "units": "m/s",
+              "references": [
+                [
+                  "event",
+                  "speed_low_alert"
+                ]
+              ]
+            },
+            {
+              "name": "cad_high_alert",
+              "field_type": "uint16",
+              "units": "rpm",
+              "references": [
+                [
+                  "event",
+                  "cad_high_alert"
+                ]
+              ]
+            },
+            {
+              "name": "cad_low_alert",
+              "field_type": "uint16",
+              "units": "rpm",
+              "references": [
+                [
+                  "event",
+                  "cad_low_alert"
+                ]
+              ]
+            },
+            {
+              "name": "power_high_alert",
+              "field_type": "uint16",
+              "units": "watts",
+              "references": [
+                [
+                  "event",
+                  "power_high_alert"
+                ]
+              ]
+            },
+            {
+              "name": "power_low_alert",
+              "field_type": "uint16",
+              "units": "watts",
+              "references": [
+                [
+                  "event",
+                  "power_low_alert"
+                ]
+              ]
+            },
+            {
+              "name": "time_duration_alert",
+              "field_type": "uint32",
+              "scale": [
+                1000.0
+              ],
+              "units": "s",
+              "references": [
+                [
+                  "event",
+                  "time_duration_alert"
+                ]
+              ]
+            },
+            {
+              "name": "distance_duration_alert",
+              "field_type": "uint32",
+              "scale": [
+                100.0
+              ],
+              "units": "m",
+              "references": [
+                [
+                  "event",
+                  "distance_duration_alert"
+                ]
+              ]
+            },
+            {
+              "name": "calorie_duration_alert",
+              "field_type": "uint32",
+              "units": "calories",
+              "references": [
+                [
+                  "event",
+                  "calorie_duration_alert"
+                ]
+              ]
+            },
+            {
+              "name": "fitness_equipment_state",
+              "field_type": "fitness_equipment_state",
+              "references": [
+                [
+                  "event",
+                  "fitness_equipment"
+                ]
+              ]
+            },
+            {
+              "name": "sport_point",
+              "field_type": "uint32",
+              "scale": [
+                1.0,
+                1.0
+              ],
+              "references": [
+                [
+                  "event",
+                  "sport_point"
+                ]
+              ]
+            },
+            {
+              "name": "gear_change_data",
+              "field_type": "uint32",
+              "scale": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "references": [
+                [
+                  "event",
+                  "front_gear_change"
+                ],
+                [
+                  "event",
+                  "rear_gear_change"
+                ]
+              ]
+            },
+            {
+              "name": "rider_position",
+              "field_type": "rider_position_type",
+              "references": [
+                [
+                  "event",
+                  "rider_position_change"
+                ]
+              ]
+            },
+            {
+              "name": "comm_timeout",
+              "field_type": "comm_timeout_type",
+              "references": [
+                [
+                  "event",
+                  "comm_timeout"
+                ]
+              ]
+            },
+            {
+              "name": "dive_alert",
+              "field_type": "dive_alert",
+              "references": [
+                [
+                  "event",
+                  "dive_alert"
+                ]
+              ]
+            },
+            {
+              "name": "auto_activity_detect_duration",
+              "field_type": "uint16",
+              "units": "min",
+              "references": [
+                [
+                  "event",
+                  "auto_activity_detect"
+                ]
+              ]
+            },
+            {
+              "name": "radar_threat_alert",
+              "field_type": "uint32",
+              "scale": [
+                1.0,
+                1.0,
+                10.0,
+                10.0
+              ],
+              "references": [
+                [
+                  "event",
+                  "radar_threat_alert"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "number": 4,
+          "name": "event_group",
+          "field_type": "uint8"
+        },
+        {
+          "number": 7,
+          "name": "score",
+          "field_type": "uint16",
+          "comment": "Do not populate directly. Autogenerated by decoder for sport_point subfield components"
+        },
+        {
+          "number": 8,
+          "name": "opponent_score",
+          "field_type": "uint16",
+          "comment": "Do not populate directly. Autogenerated by decoder for sport_point subfield components"
+        },
+        {
+          "number": 9,
+          "name": "front_gear_num",
+          "field_type": "uint8z",
+          "comment": "Do not populate directly. Autogenerated by decoder for gear_change subfield components. Front gear number. 1 is innermost."
+        },
+        {
+          "number": 10,
+          "name": "front_gear",
+          "field_type": "uint8z",
+          "comment": "Do not populate directly. Autogenerated by decoder for gear_change subfield components. Number of front teeth."
+        },
+        {
+          "number": 11,
+          "name": "rear_gear_num",
+          "field_type": "uint8z",
+          "comment": "Do not populate directly. Autogenerated by decoder for gear_change subfield components. Rear gear number. 1 is innermost."
+        },
+        {
+          "number": 12,
+          "name": "rear_gear",
+          "field_type": "uint8z",
+          "comment": "Do not populate directly. Autogenerated by decoder for gear_change subfield components. Number of rear teeth."
+        },
+        {
+          "number": 13,
+          "name": "device_index",
+          "field_type": "device_index"
+        },
+        {
+          "number": 14,
+          "name": "activity_type",
+          "field_type": "activity_type",
+          "comment": "Activity Type associated with an auto_activity_detect event"
+        },
+        {
+          "number": 15,
+          "name": "start_timestamp",
+          "field_type": "date_time",
+          "units": "s",
+          "comment": "Timestamp of when the event started",
+          "subfields": [
+            {
+              "name": "auto_activity_detect_start_timestamp",
+              "field_type": "date_time",
+              "units": "s",
+              "references": [
+                [
+                  "event",
+                  "auto_activity_detect"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "number": 21,
+          "name": "radar_threat_level_max",
+          "field_type": "radar_threat_level_type",
+          "comment": "Do not populate directly. Autogenerated by decoder for threat_alert subfield components."
+        },
+        {
+          "number": 22,
+          "name": "radar_threat_count",
+          "field_type": "uint8",
+          "comment": "Do not populate directly. Autogenerated by decoder for threat_alert subfield components."
+        },
+        {
+          "number": 23,
+          "name": "radar_threat_avg_approach_speed",
+          "field_type": "uint8",
+          "scale": [
+            10.0
+          ],
+          "units": "m/s",
+          "comment": "Do not populate directly. Autogenerated by decoder for radar_threat_alert subfield components"
+        },
+        {
+          "number": 24,
+          "name": "radar_threat_max_approach_speed",
+          "field_type": "uint8",
+          "scale": [
+            10.0
+          ],
+          "units": "m/s",
+          "comment": "Do not populate directly. Autogenerated by decoder for radar_threat_alert subfield components"
+        }
+      ]
+    },
+    {
+      "name": "device_info",
+      "number": 23,
+      "fields": [
+        {
+          "number": 253,
+          "name": "timestamp",
+          "field_type": "date_time",
+          "units": "s"
+        },
+        {
+          "number": 0,
+          "name": "device_index",
+          "field_type": "device_index"
+        },
+        {
+          "number": 1,
+          "name": "device_type",
+          "field_type": "uint8",
+          "subfields": [
+            {
+              "name": "ble_device_type",
+              "field_type": "ble_device_type",
+              "references": [
+                [
+                  "source_type",
+                  "bluetooth_low_energy"
+                ]
+              ]
+            },
+            {
+              "name": "antplus_device_type",
+              "field_type": "antplus_device_type",
+              "references": [
+                [
+                  "source_type",
+                  "antplus"
+                ]
+              ]
+            },
+            {
+              "name": "ant_device_type",
+              "field_type": "uint8",
+              "references": [
+                [
+                  "source_type",
+                  "ant"
+                ]
+              ]
+            },
+            {
+              "name": "local_device_type",
+              "field_type": "local_device_type",
+              "references": [
+                [
+                  "source_type",
+                  "local"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "name": "manufacturer",
+          "field_type": "manufacturer"
+        },
+        {
+          "number": 3,
+          "name": "serial_number",
+          "field_type": "uint32z"
+        },
+        {
+          "number": 4,
+          "name": "product",
+          "field_type": "uint16",
+          "subfields": [
+            {
+              "name": "favero_product",
+              "field_type": "favero_product",
+              "references": [
+                [
+                  "manufacturer",
+                  "favero_electronics"
+                ]
+              ]
+            },
+            {
+              "name": "garmin_product",
+              "field_type": "garmin_product",
+              "references": [
+                [
+                  "manufacturer",
+                  "garmin"
+                ],
+                [
+                  "manufacturer",
+                  "dynastream"
+                ],
+                [
+                  "manufacturer",
+                  "dynastream_oem"
+                ],
+                [
+                  "manufacturer",
+                  "tacx"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "number": 5,
+          "name": "software_version",
+          "field_type": "uint16",
+          "scale": [
+            100.0
+          ]
+        },
+        {
+          "number": 6,
+          "name": "hardware_version",
+          "field_type": "uint8"
+        },
+        {
+          "number": 7,
+          "name": "cum_operating_time",
+          "field_type": "uint32",
+          "units": "s",
+          "comment": "Reset by new battery or charge."
+        },
+        {
+          "number": 10,
+          "name": "battery_voltage",
+          "field_type": "uint16",
+          "scale": [
+            256.0
+          ],
+          "units": "V"
+        },
+        {
+          "number": 11,
+          "name": "battery_status",
+          "field_type": "battery_status"
+        },
+        {
+          "number": 18,
+          "name": "sensor_position",
+          "field_type": "body_location",
+          "comment": "Indicates the location of the sensor"
+        },
+        {
+          "number": 19,
+          "name": "descriptor",
+          "field_type": "string",
+          "comment": "Used to describe the sensor or location"
+        },
+        {
+          "number": 20,
+          "name": "ant_transmission_type",
+          "field_type": "uint8z"
+        },
+        {
+          "number": 21,
+          "name": "ant_device_number",
+          "field_type": "uint16z"
+        },
+        {
+          "number": 22,
+          "name": "ant_network",
+          "field_type": "ant_network"
+        },
+        {
+          "number": 25,
+          "name": "source_type",
+          "field_type": "source_type"
+        },
+        {
+          "number": 27,
+          "name": "product_name",
+          "field_type": "string",
+          "comment": "Optional free form string to indicate the devices name or model"
+        },
+        {
+          "number": 32,
+          "name": "battery_level",
+          "field_type": "uint8",
+          "units": "%"
+        }
+      ]
+    },
+    {
+      "name": "hrv",
+      "number": 78,
+      "fields": [
+        {
+          "number": 0,
+          "name": "time",
+          "field_type": "uint16",
+          "array": "[N]",
+          "scale": [
+            1000.0
+          ],
+          "units": "s",
+          "comment": "Time between beats"
+        }
+      ]
+    }
+  ]
+}
