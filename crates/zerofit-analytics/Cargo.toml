@@ -36,3 +36,8 @@ zerofit = { workspace = true, features = ["std"] }
 
 [lints]
 workspace = true
+
+[[example]]
+name = "ride-report"
+required-features = ["fit"]
+test = true
