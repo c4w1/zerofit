@@ -1209,6 +1209,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "zerofit-fueling"
+version = "0.1.0"
+dependencies = [
+ "proptest",
+ "serde",
+]
+
+[[package]]
 name = "zerofit-profile"
 version = "0.1.0"
 dependencies = [

@@ -15,9 +15,11 @@ than feature count.
   `fit-dump` and `fit-anonymize` examples, publish-ready metadata.
 - **Not published.** The maintainer publishes after reviewing the FIT SDK
   license. Never run `cargo publish` without `--dry-run`.
-- **In progress:** `zerofit-analytics` (training metrics on 1 Hz streams)
-  and its WASM wrapper `zerofit-analytics-wasm`.
-- **Out of scope for now:** web app / frontend. Do not start it.
+- **Also done:** `zerofit-analytics` (training metrics on 1 Hz streams).
+- **In progress:** `zerofit-fueling` (rules-based carbohydrate/protein
+  periodization), the combined WASM crate, and the client-side web app in
+  `web/` (SvelteKit, static, no backend).
+- **Out of scope:** any server, accounts, tracking or analytics in the app.
 
 ## Crate map
 
@@ -26,6 +28,7 @@ crates/zerofit/          raw protocol decoder + encoder, #![no_std], features: a
 crates/zerofit-profile/  typed profile layer; src/generated/ is codegen output (checked in)
 crates/zerofit-analytics/ training metrics (NP, TSS, MMP, CP, W'bal, CTL...), #![no_std] + alloc,
                          features: fit (default; zerofit + zerofit-profile), serde
+crates/zerofit-fueling/  fueling day plans from planned sessions, #![no_std] + alloc, no deps, feature: serde
 crates/zerofit-analytics-wasm/ publish = false; wasm-bindgen `analyze(bytes, settings_json)`; node smoke test
 crates/zerofit-codegen/  publish = false; Profile.xlsx -> profile-subset.json -> Rust
 crates/zerofit-bench/    publish = false; criterion + allocation-count benches vs fitparser
@@ -90,7 +93,8 @@ docs/INTERVIEW.md        design walkthrough and Q&A
   example for types and functions users call directly.
 - **The cores must build for `thumbv7em-none-eabihf`**: `zerofit` with
   `--no-default-features`, `zerofit-profile` without features,
-  `zerofit-analytics` with `--no-default-features` (needs only `alloc`).
+  `zerofit-analytics` with `--no-default-features` (needs only `alloc`),
+  `zerofit-fueling` without features.
   Never use `std::` in core code; use `core::` or `alloc::` behind the feature.
 - **Expected fixture values never come from zerofit.** They come from
   FitCSVTool via `cargo xtask expected`; `xtask` must not depend on
@@ -107,7 +111,7 @@ docs/INTERVIEW.md        design walkthrough and Q&A
   before every commit, then report what changed and what's next.
 - **Ask before adding any dependency.** Approved: `thiserror` (no_std,
   `default-features = false`), `libm` (zerofit-analytics), `serde` (optional,
-  no_std, zerofit-analytics), `wasm-bindgen` + `serde`/`serde_json`
+  no_std, zerofit-analytics, zerofit-fueling), `wasm-bindgen` + `serde`/`serde_json`
   (zerofit-analytics-wasm), `proptest` (dev), `serde` + `serde_json` (dev,
   fixtures; normal deps of xtask/codegen; dev-dep for examples), `calamine`
   (codegen only), `criterion` + `fitparser` (zerofit-bench), `libfuzzer-sys`
@@ -115,8 +119,8 @@ docs/INTERVIEW.md        design walkthrough and Q&A
 - **Never commit Garmin SDK files:** no `Profile.xlsx`, no SDK sample `.fit`
   files, no FIT SDK source. Fixtures must be the user's own recordings, run
   through `fit-anonymize` and privacy-checked before committing.
-- MSRV is **1.85** (edition 2024) for `zerofit`, `zerofit-profile` and
-  `zerofit-analytics`. Don't use newer std APIs there without checking. Tools may use stable.
+- MSRV is **1.85** (edition 2024) for `zerofit`, `zerofit-profile`,
+  `zerofit-analytics` and `zerofit-fueling`. Don't use newer std APIs there without checking. Tools may use stable.
 - Tests: unit tests next to the code (`#[cfg(test)] mod tests`); integration
   tests in `crates/*/tests/`. Synthetic FIT files are built with the dev-only
   writer in `crates/zerofit/tests/common/builder.rs` or with `encode::Encoder`.
@@ -134,9 +138,11 @@ RUSTDOCFLAGS="-D warnings" cargo doc --workspace --no-deps --all-features
 cargo build -p zerofit --no-default-features --target thumbv7em-none-eabihf
 cargo build -p zerofit-profile --target thumbv7em-none-eabihf
 cargo build -p zerofit-analytics --no-default-features --target thumbv7em-none-eabihf
+cargo build -p zerofit-fueling --target thumbv7em-none-eabihf
 cargo +1.85 check -p zerofit --all-features            # MSRV
 cargo +1.85 check -p zerofit-profile
 cargo +1.85 check -p zerofit-analytics --all-features
+cargo +1.85 check -p zerofit-fueling --all-features
 cargo xtask codegen --check                            # generated code up to date
 # WebAssembly (wasm-bindgen-cli 0.2.129, matching the pinned crate):
 cargo build -p zerofit-analytics-wasm --release --target wasm32-unknown-unknown

@@ -1,0 +1,7 @@
+# Seeds for failure cases proptest has generated in the past. It is
+# automatically read and these particular cases re-run before any
+# novel cases are generated.
+#
+# It is recommended to check this file in to source control so that
+# everyone who runs the test benefits from these saved cases.
+cc 8575f48234225fb7e4e2f28cf5959314994c7c45aee71085344ac82c3c55cd3d # shrinks to athlete = Athlete { body_mass_kg: 88.32078065029741, ftp_w: None }, sessions = [(0, 296, 0.3), (372, 1, 0.7424632532167442)], next = None

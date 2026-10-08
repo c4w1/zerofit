@@ -1,0 +1,26 @@
+[package]
+name = "zerofit-fueling"
+description = "Rules-based carbohydrate and protein periodization for endurance training, from sports-nutrition consensus (ACSM/IOC, Burke et al.). no_std + alloc"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+documentation = "https://docs.rs/zerofit-fueling"
+readme = "README.md"
+keywords = ["nutrition", "cycling", "training", "carbohydrate", "no_std"]
+categories = ["science", "no-std"]
+
+[features]
+## `Serialize` for the plan types.
+serde = ["dep:serde"]
+
+[dependencies]
+serde = { version = "1.0.229", default-features = false, features = ["derive", "alloc"], optional = true }
+
+[dev-dependencies]
+proptest = "1.11.0"
+
+[lints]
+workspace = true

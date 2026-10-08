@@ -80,6 +80,7 @@ jobs:
       - run: cargo build -p zerofit --no-default-features --target thumbv7em-none-eabihf
       - run: cargo build -p zerofit-profile --target thumbv7em-none-eabihf
       - run: cargo build -p zerofit-analytics --no-default-features --target thumbv7em-none-eabihf
+      - run: cargo build -p zerofit-fueling --target thumbv7em-none-eabihf
 
   wasm:
     name: WebAssembly build + node smoke test
@@ -115,6 +116,7 @@ jobs:
       - run: cargo check -p zerofit-profile
       - run: cargo check -p zerofit-analytics --all-features
       - run: cargo check -p zerofit-analytics --no-default-features
+      - run: cargo check -p zerofit-fueling --all-features
 
   fuzz:
     name: fuzz smoke test (60 s per target)
