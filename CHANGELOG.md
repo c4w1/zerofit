@@ -25,6 +25,9 @@ crates follow [Semantic Versioning](https://semver.org/).
 - `wbal`: Skiba's differential W' balance, with recovery during pauses.
 - `load`: CTL/ATL/TSB (intervals.icu and TrainingPeaks conventions),
   `SeasonCurve`, `estimate_ftp`.
+- `workout`: structured workouts (steady and ramp steps in % FTP), planned
+  NP/IF/TSS/kJ from the same code as recorded rides, Zwift `.zwo` export
+  and FIT workout export (feature `fit`), checked with FitCSVTool.
 - `analyze_stream` / `analyze_records` / `analyze_fit` (feature `fit`):
   every metric in one `ActivitySummary` (`Serialize` with feature
   `serde`).

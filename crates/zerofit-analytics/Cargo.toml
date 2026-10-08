@@ -18,7 +18,7 @@ exclude = ["tests/fixtures.rs", "tests/fixtures/"]
 default = ["fit"]
 ## Build activity streams from FIT bytes with `zerofit` + `zerofit-profile`.
 ## Without it the crate is decoder-agnostic and contains no FIT SDK-derived code.
-fit = ["dep:zerofit", "dep:zerofit-profile"]
+fit = ["dep:zerofit", "zerofit/alloc", "dep:zerofit-profile"]
 ## `Serialize` for the summary and result types.
 serde = ["dep:serde"]
 

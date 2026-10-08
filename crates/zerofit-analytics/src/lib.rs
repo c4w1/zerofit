@@ -5,7 +5,8 @@
 //! variability index, work, hrTSS, efficiency factor, Pa:HR decoupling,
 //! time in zones, the mean-maximal power curve, critical power and W'
 //! fits, W' balance, and across activities CTL/ATL/TSB, the season power
-//! curve and estimated FTP.
+//! curve and estimated FTP; plus structured workouts with their planned
+//! load and `.zwo`/FIT export ([`workout`]).
 //!
 //! Every metric's documentation gives its formula, its source, and the
 //! judgment calls an implementation has to make (how zeros, pauses and
@@ -72,6 +73,7 @@ pub mod resample;
 pub mod stream;
 pub mod summary;
 pub mod wbal;
+pub mod workout;
 
 pub use athlete::{AthleteSettings, DEFAULT_W_PRIME, TrimpCoefficients, Zones};
 pub use stream::{ActivityStream, DEFAULT_MOVING_SPEED, Sample, SampleState};
