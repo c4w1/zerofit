@@ -133,9 +133,9 @@ export async function loadDemo(): Promise<void> {
   }
   const files = await Promise.all(
     DEMO_RIDES.map(async (r) => {
-      const res = await fetch(`${base}/demo/${r.file}`);
+      const res = await fetch(`${base}/demo/${r.file}.gz`);
       if (!res.ok) throw new Error(`could not load ${r.file}`);
-      return { name: `${r.name}.fit`, bytes: await res.arrayBuffer(), daysAgo: r.daysAgo };
+      return { name: `${r.name}.fit`, bytes: await gunzipIfNeeded(await res.arrayBuffer()), daysAgo: r.daysAgo };
     }),
   );
   await addFiles(files, true);
@@ -143,6 +143,19 @@ export async function loadDemo(): Promise<void> {
   app.plan = [...app.plan.filter((p) => !p.id.startsWith("demo-")), ...week];
   await db.setKv("plan", $state.snapshot(app.plan));
   app.status = "";
+}
+
+/**
+ * The demo files are stored gzipped. Some servers send them with
+ * `Content-Encoding: gzip`, so the browser has already decompressed them;
+ * others send the raw `.gz`. Decompress only if the gzip magic bytes are
+ * still there (FIT files start with a header-size byte, never 0x1f 0x8b).
+ */
+async function gunzipIfNeeded(bytes: ArrayBuffer): Promise<ArrayBuffer> {
+  const head = new Uint8Array(bytes, 0, Math.min(2, bytes.byteLength));
+  if (head[0] !== 0x1f || head[1] !== 0x8b) return bytes;
+  const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"));
+  return new Response(stream).arrayBuffer();
 }
 
 /** Saves settings and re-analyzes every activity with them. */

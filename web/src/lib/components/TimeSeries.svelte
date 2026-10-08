@@ -21,7 +21,6 @@
 
 <script lang="ts">
   import { onMount } from "svelte";
-  import UPlot from "uplot";
   import "uplot/dist/uPlot.min.css";
   import { cssVar, theme } from "$lib/theme.svelte";
 
@@ -43,6 +42,9 @@
 
   let el: HTMLDivElement;
   let plot: uPlot | null = null;
+  // uPlot touches `window` when imported, so it is loaded in the browser
+  // only (pages are prerendered), on mount.
+  let UPlotCtor = $state.raw<typeof uPlot | null>(null);
   let readout = $state("");
   let cursorIdx = 0;
 
@@ -119,11 +121,12 @@
   }
 
   function build() {
+    if (!UPlotCtor) return;
     if (plot) {
       if (group) groups.get(group)?.delete(plot);
       plot.destroy();
     }
-    plot = new UPlot(options(Math.max(el.clientWidth, 200)), data, el);
+    plot = new UPlotCtor(options(Math.max(el.clientWidth, 200)), data, el);
     if (group) {
       if (!groups.has(group)) groups.set(group, new Set());
       groups.get(group)?.add(plot);
@@ -169,7 +172,7 @@
   }
 
   onMount(() => {
-    build();
+    void import("uplot").then((m) => (UPlotCtor = m.default));
     const ro = new ResizeObserver(() => plot?.setSize({ width: Math.max(el.clientWidth, 200), height }));
     ro.observe(el);
     return () => {
@@ -180,16 +183,18 @@
     };
   });
 
-  // Rebuild when the data, series or theme change.
+  // (Re)build when uPlot has loaded and when the data, series or theme change.
   $effect(() => {
     void theme.version;
     void data;
     void series;
-    if (el && plot) build();
+    if (el && UPlotCtor) build();
   });
 </script>
 
-<figure class="ts">
+<!-- The reserved height (plot + legend) keeps the page from shifting while
+     uPlot loads. -->
+<figure class="ts" style:min-height="{height + 40}px">
   <figcaption class="visually-hidden">{title}</figcaption>
   <!-- role="application" is the ARIA role for a custom keyboard widget: the
        chart handles arrow/zoom keys itself (see onKey). Svelte's checker

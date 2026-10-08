@@ -78,10 +78,14 @@
 
 {#if error}
   <p class="error" role="alert">{error}</p>
-{:else if app.activities.length === 0}
+{:else if app.ready && app.activities.length === 0}
   <p>No activities yet. <a href="{base}/upload/">Upload FIT files</a> or load the demo.</p>
 {:else if !fitness}
-  <p class="muted">Computing…</p>
+  <!-- Placeholders at the final sections' heights, so nothing jumps. -->
+  <p class="visually-hidden" role="status">Computing fitness…</p>
+  <div class="card skeleton" style:height="520px"></div>
+  <div class="card skeleton" style:height="440px"></div>
+  <div class="card skeleton" style:height="360px"></div>
 {:else}
   <section class="card" aria-labelledby="pmc-h">
     <h2 id="pmc-h">Fitness, fatigue and form</h2>
@@ -169,5 +173,8 @@
   }
   .error {
     color: var(--danger);
+  }
+  .skeleton {
+    background: var(--surface);
   }
 </style>

@@ -11,6 +11,17 @@
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "moduleResolution": "bundler",
-    "lib": ["es2022", "dom", "dom.iterable", "webworker"]
-  }
+    "lib": [
+      "es2022",
+      "dom",
+      "dom.iterable",
+      "webworker"
+    ]
+  },
+  "exclude": [
+    "node_modules/**",
+    "src/service-worker.ts",
+    "tests/**",
+    "playwright.config.ts"
+  ]
 }

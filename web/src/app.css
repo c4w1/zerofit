@@ -214,8 +214,12 @@ label {
   padding: 0.75rem 1rem;
 }
 
+/* position: relative makes the wrapper the containing block of absolutely
+   positioned descendants (.visually-hidden labels in a wide table), so the
+   scroll container clips them instead of the page growing sideways. */
 .table-wrap {
   overflow-x: auto;
+  position: relative;
 }
 table {
   border-collapse: collapse;

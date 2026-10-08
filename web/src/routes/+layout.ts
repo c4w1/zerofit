@@ -1,6 +1,6 @@
-// Every page is a static shell that runs entirely in the browser: no
-// server rendering (the data lives in this browser's IndexedDB), and every
-// route is prerendered so GitHub Pages can serve it as a file.
+// Every route is prerendered to static HTML at build time, so headings and
+// text paint before any JavaScript runs; GitHub Pages serves the files.
+// All data lives in this browser's IndexedDB, so everything that depends on
+// it renders in the browser after hydration (onMount / $effect).
 export const prerender = true;
-export const ssr = false;
 export const trailingSlash = "always";

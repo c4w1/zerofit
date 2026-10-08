@@ -46,61 +46,55 @@
   </div>
 </section>
 
-{#if !app.ready}
-  <p class="muted">Loading…</p>
-{:else if app.activities.length === 0}
-  <div class="card">
+{#if app.ready && app.activities.length === 0}
+  <div class="card empty">
     <h2>No activities yet</h2>
     <p>Upload your own FIT files or load the demo: four anonymized real rides and a sample training week.</p>
   </div>
-{:else}
-  <div class="grid">
-    <section class="card" aria-labelledby="form-h">
-      <h2 id="form-h">Today's form</h2>
-      {#if today}
-        <div class="stats">
-          <div class="stat"><div class="label">Fitness (CTL)</div><div class="value">{num(today.ctl)}</div></div>
-          <div class="stat"><div class="label">Fatigue (ATL)</div><div class="value">{num(today.atl)}</div></div>
-          <div class="stat"><div class="label">Form (TSB)</div><div class="value">{num(today.tsb)}</div></div>
-        </div>
-        <p class="muted small">Across {app.activities.length} activities. <a href="{base}/fitness/">Fitness details</a></p>
-        {#if app.activities.some((a) => a.demo)}
-          <p class="muted small">Demo rides are shown as ridden in the last ten days; their real dates span three years.</p>
-        {/if}
-      {:else}
-        <p class="muted">Computing…</p>
-      {/if}
-    </section>
-
-    {#if latest}
-      <section class="card" aria-labelledby="latest-h">
-        <h2 id="latest-h">Latest ride</h2>
-        <p><a href="{base}/activity/?id={latest.id}">{latest.name}</a><br /><span class="muted">{date(latest.startMs)}</span></p>
-        <div class="stats">
-          <div class="stat"><div class="label">Moving</div><div class="value">{duration(latest.summary.moving_time_s)}</div></div>
-          <div class="stat"><div class="label">NP</div><div class="value">{num(latest.summary.normalized_power)}<span class="unit">W</span></div></div>
-          <div class="stat"><div class="label">TSS</div><div class="value">{num(latest.summary.tss ?? latest.summary.hr_tss)}</div></div>
-        </div>
-      </section>
-    {/if}
-
-    <section class="card" aria-labelledby="eftp-h">
-      <h2 id="eftp-h">Estimated FTP</h2>
-      {#if fitness?.eftp}
-        <div class="stats">
-          <div class="stat"><div class="label">eFTP</div><div class="value">{num(fitness.eftp.eftp)}<span class="unit">W</span></div></div>
-          {#if fitness.cp_2p}
-            <div class="stat"><div class="label">CP</div><div class="value">{num(fitness.cp_2p.cp)}<span class="unit">W</span></div></div>
-            <div class="stat"><div class="label">W′</div><div class="value">{num(fitness.cp_2p.w_prime / 1000, 1)}<span class="unit">kJ</span></div></div>
-          {/if}
-        </div>
-        <p class="muted small">From your best {duration(fitness.eftp.duration_s)} effort ({num(fitness.eftp.watts)} W).</p>
-      {:else}
-        <p class="muted">Needs rides with power.</p>
-      {/if}
-    </section>
-  </div>
 {/if}
+
+<!-- The cards always render at their final size; values fill in once the
+     data is loaded (no layout shift). -->
+<div class="grid">
+  <section class="card" aria-labelledby="form-h">
+    <h2 id="form-h">Today's form</h2>
+    <div class="stats">
+      <div class="stat"><div class="label">Fitness (CTL)</div><div class="value">{num(today?.ctl)}</div></div>
+      <div class="stat"><div class="label">Fatigue (ATL)</div><div class="value">{num(today?.atl)}</div></div>
+      <div class="stat"><div class="label">Form (TSB)</div><div class="value">{num(today?.tsb)}</div></div>
+    </div>
+    <p class="muted small">
+      {#if today}Across {app.activities.length} activities. <a href="{base}/fitness/">Fitness details</a>{:else}Loading…{/if}
+    </p>
+    <p class="muted small demo-note">
+      {#if app.activities.some((a) => a.demo)}Demo rides are shown as ridden in the last ten days; their real dates span three years.{/if}
+    </p>
+  </section>
+
+  <section class="card" aria-labelledby="latest-h">
+    <h2 id="latest-h">Latest ride</h2>
+    <p class="latest">
+      {#if latest}<a href="{base}/activity/?id={latest.id}">{latest.name}</a><br /><span class="muted">{date(latest.startMs)}</span>{:else}<span class="muted">—</span>{/if}
+    </p>
+    <div class="stats">
+      <div class="stat"><div class="label">Moving</div><div class="value">{latest ? duration(latest.summary.moving_time_s) : "—"}</div></div>
+      <div class="stat"><div class="label">NP</div><div class="value">{num(latest?.summary.normalized_power)}<span class="unit">W</span></div></div>
+      <div class="stat"><div class="label">TSS</div><div class="value">{num(latest?.summary.tss ?? latest?.summary.hr_tss)}</div></div>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="eftp-h">
+    <h2 id="eftp-h">Estimated FTP</h2>
+    <div class="stats">
+      <div class="stat"><div class="label">eFTP</div><div class="value">{num(fitness?.eftp?.eftp)}<span class="unit">W</span></div></div>
+      <div class="stat"><div class="label">CP</div><div class="value">{num(fitness?.cp_2p?.cp)}<span class="unit">W</span></div></div>
+      <div class="stat"><div class="label">W′</div><div class="value">{num(fitness?.cp_2p ? fitness.cp_2p.w_prime / 1000 : null, 1)}<span class="unit">kJ</span></div></div>
+    </div>
+    <p class="muted small">
+      {#if fitness?.eftp}From your best {duration(fitness.eftp.duration_s)} effort ({num(fitness.eftp.watts)} W).{:else if fitness}Needs rides with power.{:else}Loading…{/if}
+    </p>
+  </section>
+</div>
 
 <section class="how card">
   <h2>How it works</h2>
@@ -130,6 +124,16 @@
   }
   .small {
     font-size: 0.85rem;
+  }
+  .latest {
+    min-height: 3rem;
+  }
+  .demo-note {
+    min-height: 2.6em;
+    margin: 0;
+  }
+  .empty {
+    margin-bottom: 1rem;
   }
   .how {
     margin-top: 1rem;

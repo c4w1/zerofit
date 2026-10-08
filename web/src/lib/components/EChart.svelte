@@ -1,25 +1,19 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import * as echarts from "echarts/core";
-  import { BarChart, LineChart } from "echarts/charts";
-  import { AriaComponent, GridComponent, LegendComponent, MarkLineComponent, TooltipComponent } from "echarts/components";
-  import { CanvasRenderer } from "echarts/renderers";
+  import type { ECharts, EChartsCoreOption } from "echarts/core";
   import { cssVar, theme } from "$lib/theme.svelte";
-
-  // Only what the app uses: keeps ECharts' share of the bundle small.
-  echarts.use([BarChart, LineChart, GridComponent, TooltipComponent, LegendComponent, MarkLineComponent, AriaComponent, CanvasRenderer]);
 
   interface Props {
     /** Accessible name. */
     title: string;
     /** Builds the option from theme colours (called again when the theme changes). */
-    option: (color: (cssVariable: string) => string) => echarts.EChartsCoreOption;
+    option: (color: (cssVariable: string) => string) => EChartsCoreOption;
     height?: number;
   }
 
   let { title, option, height = 260 }: Props = $props();
   let el: HTMLDivElement;
-  let chart: echarts.ECharts | null = null;
+  let chart = $state.raw<ECharts | null>(null);
 
   function render() {
     if (!chart) return;
@@ -37,12 +31,19 @@
   }
 
   onMount(() => {
-    chart = echarts.init(el, undefined, { renderer: "canvas" });
-    render();
-    const ro = new ResizeObserver(() => chart?.resize());
-    ro.observe(el);
+    let disposed = false;
+    let ro: ResizeObserver | undefined;
+    // Loaded on demand: the box below already has its final size, so the
+    // page doesn't shift when the chart appears.
+    void import("$lib/charts/echarts").then(({ echarts }) => {
+      if (disposed) return;
+      chart = echarts.init(el, undefined, { renderer: "canvas" });
+      ro = new ResizeObserver(() => chart?.resize());
+      ro.observe(el);
+    });
     return () => {
-      ro.disconnect();
+      disposed = true;
+      ro?.disconnect();
       chart?.dispose();
       chart = null;
     };
@@ -51,6 +52,7 @@
   $effect(() => {
     void theme.version;
     void option;
+    void chart;
     render();
   });
 </script>

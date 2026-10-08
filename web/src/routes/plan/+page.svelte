@@ -300,6 +300,8 @@
     }
   }
   .day {
+    /* Room for one workout, so days don't grow when the plan loads. */
+    min-height: 10rem;
     padding: 0.6rem;
     display: flex;
     flex-direction: column;

@@ -122,6 +122,7 @@
         <span class="band">{bandLabel[p.band]}</span>
       {:else}
         <span class="muted">…</span>
+        <span class="band">&nbsp;</span>
       {/if}
     </button>
   {/each}
@@ -186,7 +187,9 @@
     <DataTable caption="Timeline chart data" headers={["Time", "Carbs (g)"]} rows={plan.entries.map((e) => [clock(e.time_min), num(e.carbs_g)])} />
   </div>
 {:else}
-  <p class="muted">Planning…</p>
+  <!-- Placeholder at the day card's height while plans are computed. -->
+  <p class="visually-hidden" role="status">Planning…</p>
+  <div class="card skeleton" style:height="900px"></div>
 {/if}
 
 <style>
@@ -246,5 +249,8 @@
   }
   .error {
     color: var(--danger);
+  }
+  .skeleton {
+    background: var(--surface);
   }
 </style>

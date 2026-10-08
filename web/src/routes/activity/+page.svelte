@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { browser } from "$app/environment";
   import { base } from "$app/paths";
   import { page } from "$app/state";
   import type uPlot from "uplot";
@@ -11,7 +12,8 @@
   import EChart from "$lib/components/EChart.svelte";
   import DataTable from "$lib/components/DataTable.svelte";
 
-  const id = $derived(page.url.searchParams.get("id") ?? "");
+  // Query parameters exist only in the browser (the page is prerendered).
+  const id = $derived(browser ? (page.url.searchParams.get("id") ?? "") : "");
 
   let stored = $state<StoredActivity | null>(null);
   let result = $state<AnalyzedActivity | null>(null);
@@ -115,7 +117,11 @@
 {#if error}
   <p class="error" role="alert">{error}</p>
 {:else if !stored || !result || !s}
-  <p class="muted">Analyzing…</p>
+  <!-- Placeholders with the final layout's heights, so nothing jumps. -->
+  <h1 class="placeholder-title">Activity</h1>
+  <p class="muted">Analyzing in your browser…</p>
+  <div class="card skeleton" style:height="300px"></div>
+  <div class="card skeleton" style:height="720px"></div>
 {:else}
   <h1>{stored.name}</h1>
   <p class="muted">
@@ -241,5 +247,8 @@
   summary {
     cursor: pointer;
     min-height: 2rem;
+  }
+  .skeleton {
+    background: var(--surface);
   }
 </style>
