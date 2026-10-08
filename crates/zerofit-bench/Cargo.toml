@@ -10,6 +10,7 @@ publish = false
 [dependencies]
 fitparser = "0.11.0"
 zerofit = { workspace = true, features = ["std"] }
+zerofit-analytics = { workspace = true, features = ["fit"] }
 zerofit-profile = { path = "../zerofit-profile" }
 
 [dev-dependencies]
@@ -21,6 +22,10 @@ harness = false
 
 [[bench]]
 name = "alloc_count"
+harness = false
+
+[[bench]]
+name = "analytics"
 harness = false
 
 # Same as the workspace lints, except `unsafe_code` is `deny` instead of

@@ -1185,6 +1185,7 @@ dependencies = [
  "criterion",
  "fitparser",
  "zerofit",
+ "zerofit-analytics",
  "zerofit-profile",
 ]
 

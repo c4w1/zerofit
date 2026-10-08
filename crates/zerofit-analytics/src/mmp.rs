@@ -16,11 +16,11 @@
 //! ride. That inner loop is two slices zipped together, branch-free and
 //! with no bounds checks, so the compiler vectorizes it.
 //!
-//! The prefix sums are `u32` with wrapping arithmetic whenever the ride's
-//! total work is below 2³² J (every ride under ~20 days at 2500 W):
-//! wrapping differences are exact as long as every window sum fits, and
-//! 32-bit lanes are twice as wide as 64-bit ones. Longer inputs fall
-//! back to `u64`.
+//! The prefix sums are `i32` whenever the ride's total work is below
+//! 2³¹ J (any ride under ~10 days at 2500 W): no overflow is possible,
+//! 32-bit lanes are twice as wide as 64-bit ones, and a signed max needs
+//! no emulation on baseline x86-64. Larger totals use wrapping `u32`
+//! (exact while every window sum fits) and then `u64`.
 //!
 //! **Why not faster?** Computing the maximum window sum for *every* window
 //! length is an instance of (max,+) convolution, for which no truly
@@ -80,7 +80,9 @@ impl PowerCurve {
     #[must_use]
     pub fn new(power: &[u16]) -> Self {
         let total: u64 = power.iter().map(|&p| u64::from(p)).sum();
-        let best_sum = if u32::try_from(total).is_ok() {
+        let best_sum = if i32::try_from(total).is_ok() {
+            best_sums_i32(power)
+        } else if u32::try_from(total).is_ok() {
             best_sums::<u32>(power)
         } else {
             best_sums::<u64>(power)
@@ -249,6 +251,54 @@ fn best_sums<T: Acc>(power: &[u16]) -> Vec<u64> {
         .collect()
 }
 
+/// Lanes in [`best_window_i32`]: independent running maxima that the
+/// compiler maps onto SIMD registers.
+const LANES: usize = 16;
+
+/// The i32 fast path: with the total below 2³¹ no sum can overflow, and a
+/// signed 32-bit max is a compare and a blend even on baseline x86-64
+/// (SSE2 has no unsigned 32-bit compare). The loop keeps [`LANES`]
+/// independent maxima over fixed-size chunks, a shape the
+/// auto-vectorizer handles reliably, and combines them at the end.
+fn best_sums_i32(power: &[u16]) -> Vec<u64> {
+    let mut prefix: Vec<i32> = Vec::with_capacity(power.len().saturating_add(1));
+    let mut acc = 0i32;
+    prefix.push(acc);
+    for &p in power {
+        // Cannot overflow: the caller checked the total fits in i32.
+        acc = acc.wrapping_add(i32::from(p));
+        prefix.push(acc);
+    }
+    (1..=power.len())
+        .map(|d| u64::try_from(best_window_i32(&prefix, d)).unwrap_or(0))
+        .collect()
+}
+
+#[inline]
+fn best_window_i32(prefix: &[i32], d: usize) -> i32 {
+    let Some(ends) = prefix.get(d..) else {
+        return 0;
+    };
+    let starts = prefix.get(..ends.len()).unwrap_or_default();
+    // Window sums are ≥ 0, so 0 is a valid identity for max.
+    let mut lanes = [0i32; LANES];
+    let end_chunks = ends.chunks_exact(LANES);
+    let start_chunks = starts.chunks_exact(LANES);
+    let (end_rest, start_rest) = (end_chunks.remainder(), start_chunks.remainder());
+    for (e, s) in end_chunks.zip(start_chunks) {
+        for ((lane, &e), &s) in lanes.iter_mut().zip(e).zip(s) {
+            *lane = (*lane).max(e.wrapping_sub(s));
+        }
+    }
+    let tail = end_rest
+        .iter()
+        .zip(start_rest)
+        .map(|(&e, &s)| e.wrapping_sub(s))
+        .max()
+        .unwrap_or(0);
+    lanes.into_iter().fold(tail, i32::max)
+}
+
 /// Best average power for selected durations only, in O(n·k) for `k`
 /// durations: the right tool when only a handful of points are needed
 /// (5 s, 1 min, 5 min, 20 min…). Durations longer than the input, or 0,
@@ -314,11 +364,19 @@ mod tests {
     }
 
     #[test]
-    fn u64_path_matches_u32_path() {
-        let power = [65535u16, 1, 65535, 7, 300];
-        let a = best_sums::<u32>(&power);
-        let b = best_sums::<u64>(&power);
-        assert_eq!(a, b);
+    fn all_paths_agree() {
+        let mut seed = 7u32;
+        let power: Vec<u16> = (0..200)
+            .map(|_| {
+                seed = seed.wrapping_mul(1_103_515_245).wrapping_add(12345);
+                u16::try_from((seed >> 16) % 2000).unwrap()
+            })
+            .collect();
+        for p in [&power[..], &[65535u16, 1, 65535, 7, 300][..], &[5][..]] {
+            let a = best_sums::<u32>(p);
+            assert_eq!(a, best_sums::<u64>(p));
+            assert_eq!(a, best_sums_i32(p));
+        }
     }
 
     #[test]

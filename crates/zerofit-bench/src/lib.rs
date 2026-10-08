@@ -11,6 +11,9 @@
 //! - [`stream`]: [`records`] through `ReadDecoder` from an in-memory reader.
 //! - [`fitparser()`]: `fitparser::from_bytes`, which builds a `Vec` of records
 //!   with named, scaled, owned field values.
+//!
+//! The `analytics` bench uses [`synthetic_ride`] and [`synthetic_daily_loads`]
+//! for inputs longer than any fixture.
 
 #![allow(clippy::cast_precision_loss, clippy::missing_panics_doc)]
 
@@ -128,4 +131,77 @@ fn value_sum(v: Option<Value<'_>>) -> f64 {
         Some(v) => v.as_f64().unwrap_or(1.0),
         None => 0.0,
     }
+}
+
+/// A deterministic synthetic ride of `seconds` records: a seeded LCG over
+/// a structure of warm-up, 5-minute intervals at ~120 % FTP with 3-minute
+/// recoveries, endurance riding and sprints, with heart rate following
+/// power, speed, altitude, cadence, 1 % of records missing (smart
+/// recording gaps) and a 2-minute stop every hour (a pause).
+///
+/// The first and last records are always present, so the ride spans
+/// exactly `seconds` of elapsed time.
+#[must_use]
+// Synthetic values are in range by construction (power ≤ ~1200 W, HR < 255).
+#[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
+pub fn synthetic_ride(seconds: u32, seed: u64) -> Vec<zerofit_analytics::resample::RawRecord> {
+    let mut state = seed;
+    let mut rand = move || {
+        state = state
+            .wrapping_mul(6_364_136_223_846_793_005)
+            .wrapping_add(1_442_695_040_888_963_407);
+        (state >> 33) as f64 / f64::from(1u32 << 31)
+    };
+    let mut records = Vec::with_capacity(seconds as usize);
+    let mut hr = 100.0;
+    let mut distance = 0.0;
+    for t in 0..seconds {
+        let in_hour = t % 3600;
+        let last = t + 1 == seconds;
+        let stopped = in_hour >= 3480 && t + 120 < seconds;
+        if !last && (stopped || rand() < 0.01) {
+            continue; // stop at the end of each hour, or a missed record
+        }
+        let block = (t / 480) % 6;
+        let target = match (t, block) {
+            (0..600, _) => 150.0,
+            (_, 0 | 1) if (t % 480) < 300 => 300.0,
+            _ if t % 1800 < 12 => 900.0,
+            _ => 190.0,
+        };
+        let watts = (target * (0.85 + 0.3 * rand())).max(0.0);
+        hr += (90.0 + watts * 0.3 - hr) / 40.0;
+        let velocity = 6.0 + watts / 60.0 + rand();
+        distance += velocity;
+        records.push(zerofit_analytics::resample::RawRecord {
+            timestamp: 1_000_000_000 + t,
+            power: Some(watts as u16),
+            heart_rate: Some(hr as u8),
+            cadence: Some((80.0 + 15.0 * rand()) as u8),
+            speed: Some(velocity),
+            altitude: Some(200.0 + 50.0 * (f64::from(t) / 900.0).sin()),
+            distance: Some(distance),
+        });
+    }
+    records
+}
+
+/// `days` of daily training load: rest days, endurance days and a weekly
+/// long ride, from a seeded LCG.
+#[must_use]
+pub fn synthetic_daily_loads(days: usize, seed: u64) -> Vec<f64> {
+    let mut state = seed;
+    (0..days)
+        .map(|day| {
+            state = state
+                .wrapping_mul(6_364_136_223_846_793_005)
+                .wrapping_add(1_442_695_040_888_963_407);
+            let noise = (state >> 33) as f64 / f64::from(1u32 << 31);
+            match day % 7 {
+                0 => 0.0,
+                6 => 180.0 + 60.0 * noise,
+                _ => 50.0 + 60.0 * noise,
+            }
+        })
+        .collect()
 }
