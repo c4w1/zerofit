@@ -153,8 +153,10 @@
             <strong>During:</strong>
             {#if s.during.carbs_g_per_hour > 0}
               {num(s.during.carbs_g_per_hour)} g carbohydrate per hour ({num(s.during_total_g)} g total), every {s.during.feed_interval_min} min{#if s.during.multiple_transportable}, from a glucose + fructose mix (above 60 g/h a single sugar's gut transporter saturates){/if}.
+            {:else if s.during.mouth_rinse}
+              no carbohydrate needed at this length; rinsing the mouth with a sports drink can still help a hard effort.
             {:else}
-              none needed for a session under an hour; water is enough.
+              none needed at this length and intensity; water is enough.
             {/if}
           </li>
           <li>

@@ -143,7 +143,7 @@ export interface SessionPlan {
   duration_min: number;
   load_kj_per_kg: number;
   pre: { hours_before: number; carbs_g_per_kg: number };
-  during: { carbs_g_per_hour: number; multiple_transportable: boolean; feed_interval_min: number };
+  during: { carbs_g_per_hour: number; multiple_transportable: boolean; mouth_rinse: boolean; feed_interval_min: number };
   during_total_g: number;
   recovery: { carbs_g_per_kg_per_hour: number; hours: number; protein_g_per_kg: number };
 }

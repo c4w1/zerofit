@@ -82,6 +82,11 @@ pub struct DuringRide {
     /// (glucose + fructose): above 60 g/h a single sugar's intestinal
     /// transporter (SGLT1) saturates.
     pub multiple_transportable: bool,
+    /// Whether a carbohydrate mouth rinse is worth suggesting: a
+    /// 45–75 min session at a high intensity, where rinsing improves
+    /// performance even without much carbohydrate absorbed (Carter et al.
+    /// 2004; Jeukendrup 2014).
+    pub mouth_rinse: bool,
     /// Minutes between feeds (0 if no feeding is needed).
     pub feed_interval_min: u32,
 }
@@ -89,43 +94,56 @@ pub struct DuringRide {
 /// Minutes between in-ride feeds.
 pub const FEED_INTERVAL_MIN: u32 = 20;
 
-/// In-ride carbohydrate by duration and intensity (Jeukendrup 2014,
-/// *Sports Med* 44:S25; Thomas, Erdman & Burke 2016):
+/// Intensity factor from which a 45–75 min session gets the mouth-rinse
+/// suggestion: threshold-type work and above.
+pub const MOUTH_RINSE_IF: f64 = 0.85;
+
+/// In-ride carbohydrate by duration, adjusted for intensity (Jeukendrup
+/// 2014, *Sports Med* 44:S25, Figure 2; Thomas, Erdman & Burke 2016):
 ///
-/// | duration | g/h |
-/// |---|---|
-/// | < 1 h | 0 (not needed; a carbohydrate mouth rinse may help high-intensity efforts) |
-/// | 1–2.5 h | 30–60 |
-/// | > 2.5 h | 60–90, from multiple transportable carbohydrates above 60 g/h |
+/// | duration | g/h | at IF ≤ 0.55 → IF ≥ 0.85 |
+/// |---|---|---|
+/// | < 45 min | none | 0 |
+/// | 45–75 min | small amounts or a mouth rinse | 0 → 30 |
+/// | 75 min–2 h | 30–60 | 30 → 60 |
+/// | 2–2.5 h | up to 60 | 45 → 60 |
+/// | > 2.5 h | 60–90, glucose + fructose above 60 | 60 → 90 |
 ///
-/// Inside each range intensity picks the point:
-/// `s = clamp((IF − 0.55) / 0.30, 0, 1)` gives 30 + 30·s for 1–2.5 h and
-/// 60 + 30·s beyond 2.5 h, so an easy 3 h ride gets 60 g/h and a hard one
-/// 90 g/h, rounded to whole grams. Boundaries: exactly 60 min is in the
-/// 1–2.5 h band, exactly
-/// 150 min still in it. The rate never decreases with duration or
-/// intensity.
+/// Inside each band intensity picks the point:
+/// `s = clamp((IF − 0.55) / 0.30, 0, 1)`, rounded to whole grams. The 2–3 h
+/// and "> 2.5 h" rows of the paper overlap; 150 min is the boundary here.
+/// Each band's floor is at least the previous band's ceiling at the same
+/// intensity, so the rate never decreases with duration or intensity (a
+/// property test). Boundaries belong to the lower band: exactly 45 min
+/// gets 0, 75 min is in the 0–30 band, 150 min in the 45–60 band.
 ///
 /// ```
 /// use zerofit_fueling::{PlannedSession, session::during_ride};
-/// assert_eq!(during_ride(&PlannedSession::new(0, 59, 0.9)).carbs_g_per_hour, 0.0);
-/// assert_eq!(during_ride(&PlannedSession::new(0, 90, 0.55)).carbs_g_per_hour, 30.0);
-/// assert_eq!(during_ride(&PlannedSession::new(0, 150, 0.85)).carbs_g_per_hour, 60.0);
+/// let rate = |min, i| during_ride(&PlannedSession::new(0, min, i)).carbs_g_per_hour;
+/// assert_eq!(rate(44, 1.0), 0.0);
+/// assert_eq!(rate(65, 0.55), 0.0);
+/// assert_eq!(rate(65, 0.85), 30.0);
+/// assert_eq!(rate(90, 0.70), 45.0);
+/// assert_eq!(rate(150, 0.55), 45.0);
 /// let long = during_ride(&PlannedSession::new(0, 240, 0.85));
 /// assert_eq!(long.carbs_g_per_hour, 90.0);
 /// assert!(long.multiple_transportable);
+/// assert!(during_ride(&PlannedSession::new(0, 60, 0.9)).mouth_rinse);
 /// ```
 #[must_use]
 pub fn during_ride(session: &PlannedSession) -> DuringRide {
-    let s = if session.intensity_factor.is_nan() {
+    let intensity = session.intensity_factor;
+    let s = if intensity.is_nan() {
         0.0
     } else {
-        ((session.intensity_factor - 0.55) / 0.30).clamp(0.0, 1.0)
+        ((intensity - 0.55) / 0.30).clamp(0.0, 1.0)
     };
-    let exact = match session.duration_min {
-        0..60 => 0.0,
-        60..=150 => 30.0 + 30.0 * s,
-        _ => 60.0 + 30.0 * s,
+    let (exact, rinse_band) = match session.duration_min {
+        0..=45 => (0.0, false),
+        46..=75 => (30.0 * s, true),
+        76..=120 => (30.0 + 30.0 * s, false),
+        121..=150 => (45.0 + 15.0 * s, false),
+        _ => (60.0 + 30.0 * s, false),
     };
     // Whole grams per hour: the precision anyone can eat to, and it keeps
     // IF 0.85 at exactly the top of its range despite float rounding.
@@ -133,6 +151,7 @@ pub fn during_ride(session: &PlannedSession) -> DuringRide {
     DuringRide {
         carbs_g_per_hour: rate,
         multiple_transportable: rate > 60.0,
+        mouth_rinse: rinse_band && intensity >= MOUTH_RINSE_IF,
         feed_interval_min: if rate > 0.0 { FEED_INTERVAL_MIN } else { 0 },
     }
 }
@@ -214,10 +233,14 @@ mod tests {
     fn during_ride_boundaries() {
         let rate = |min, i| during_ride(&PlannedSession::new(0, min, i)).carbs_g_per_hour;
         assert_eq!(rate(0, 1.0), 0.0);
-        assert_eq!(rate(59, 1.0), 0.0);
-        assert_eq!(rate(60, 0.5), 30.0);
-        assert_eq!(rate(60, 1.0), 60.0);
-        assert_eq!(rate(150, 0.5), 30.0);
+        assert_eq!(rate(45, 1.0), 0.0);
+        assert_eq!(rate(46, 0.5), 0.0);
+        assert_eq!(rate(46, 1.0), 30.0);
+        assert_eq!(rate(75, 0.70), 15.0);
+        assert_eq!(rate(76, 0.5), 30.0);
+        assert_eq!(rate(120, 1.0), 60.0);
+        assert_eq!(rate(121, 0.5), 45.0);
+        assert_eq!(rate(150, 1.0), 60.0);
         assert_eq!(rate(151, 0.5), 60.0);
         assert_eq!(rate(151, 1.0), 90.0);
         assert_eq!(rate(600, 0.70), 75.0);
@@ -227,6 +250,26 @@ mod tests {
             during_ride(&PlannedSession::new(0, 30, 1.0)).feed_interval_min,
             0
         );
+        // The demo's 65-min VO2 session: well under the old 60 g/h.
+        assert!(rate(65, 0.80) <= 30.0);
+        assert!(!during_ride(&PlannedSession::new(0, 65, 0.7)).mouth_rinse);
+        assert!(!during_ride(&PlannedSession::new(0, 90, 0.95)).mouth_rinse);
+    }
+
+    #[test]
+    fn during_ride_is_monotone() {
+        let mut last_by_if = [0.0f64; 7];
+        for minutes in 0..400 {
+            let mut last = 0.0;
+            for (k, slot) in last_by_if.iter_mut().enumerate() {
+                let intensity = 0.5 + 0.08 * f64::from(u8::try_from(k).unwrap());
+                let r = during_ride(&PlannedSession::new(0, minutes, intensity)).carbs_g_per_hour;
+                assert!(r >= last, "{minutes} min IF {intensity}");
+                assert!(r >= *slot, "{minutes} min IF {intensity}");
+                last = r;
+                *slot = r;
+            }
+        }
     }
 
     #[test]

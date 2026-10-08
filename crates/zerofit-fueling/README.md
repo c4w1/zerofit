@@ -35,7 +35,7 @@ let plan = day_plan(&DayInput {
 | Point within the range | piecewise linear in effective load (kJ/kg × intensity weight), anchors on the band boundaries | this crate; judgment call documented in `daily` |
 | Daily protein | 1.2–2.0 g/kg, rising with load; ~0.3 g/kg per meal | Thomas et al. 2016; Moore et al. 2015; Areta et al. 2013 |
 | Pre-ride | 1–4 g/kg, 1–4 h before (1 g/kg per hour of lead time, limited by wake time) | Thomas et al. 2016; Burke et al. 2011 |
-| During | < 1 h: none · 1–2.5 h: 30–60 g/h · > 2.5 h: 60–90 g/h, multiple transportable carbohydrates above 60 g/h | Jeukendrup 2014 |
+| During | < 45 min: none · 45–75 min: 0–30 g/h or a mouth rinse · 75 min–2 h: 30–60 g/h · 2–2.5 h: 45–60 g/h · > 2.5 h: 60–90 g/h, glucose + fructose above 60 g/h; intensity picks the point | Jeukendrup 2014; Carter et al. 2004 |
 | Recovery | next session < 24 h away: 1.0–1.2 g/kg/h for up to 4 h, within the day's budget; ~0.3 g/kg protein | Burke et al. 2011; Moore et al. 2009 |
 
 Intensity picks the point within each range, and so does duration through
