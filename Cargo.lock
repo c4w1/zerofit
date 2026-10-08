@@ -1179,16 +1179,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "zerofit-analytics-wasm"
-version = "0.1.0"
-dependencies = [
- "serde",
- "serde_json",
- "wasm-bindgen",
- "zerofit-analytics",
-]
-
-[[package]]
 name = "zerofit-bench"
 version = "0.1.0"
 dependencies = [
@@ -1223,6 +1213,17 @@ dependencies = [
  "serde",
  "serde_json",
  "zerofit",
+]
+
+[[package]]
+name = "zerofit-wasm"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "wasm-bindgen",
+ "zerofit-analytics",
+ "zerofit-fueling",
 ]
 
 [[package]]

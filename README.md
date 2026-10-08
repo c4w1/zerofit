@@ -29,7 +29,7 @@ for record in Decoder::new(&bytes) {
 |---|---|
 | [`zerofit`](crates/zerofit) | The FIT protocol: headers, CRCs, definitions, data messages, base types. Slice decoder, streaming decoder, minimal encoder. |
 | [`zerofit-profile`](crates/zerofit-profile) | The FIT profile, generated from the FIT SDK: typed `record`, `lap`, `session`, ... with scaling, units and enums; developer fields. |
-| [`zerofit-analytics`](crates/zerofit-analytics) | Training metrics on 1 Hz streams: NP, IF, TSS, hrTSS, decoupling, zones, mean-maximal power, CP/W', W'bal, CTL/ATL/TSB, eFTP. `no_std` + `alloc`, validated against intervals.icu; WebAssembly build in `zerofit-analytics-wasm`. |
+| [`zerofit-analytics`](crates/zerofit-analytics) | Training metrics on 1 Hz streams: NP, IF, TSS, hrTSS, decoupling, zones, mean-maximal power, CP/W', W'bal, CTL/ATL/TSB, eFTP. `no_std` + `alloc`, validated against intervals.icu; WebAssembly build in `zerofit-wasm`. |
 
 ## Features
 

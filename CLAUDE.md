@@ -29,7 +29,8 @@ crates/zerofit-profile/  typed profile layer; src/generated/ is codegen output (
 crates/zerofit-analytics/ training metrics (NP, TSS, MMP, CP, W'bal, CTL...), #![no_std] + alloc,
                          features: fit (default; zerofit + zerofit-profile), serde
 crates/zerofit-fueling/  fueling day plans from planned sessions, #![no_std] + alloc, no deps, feature: serde
-crates/zerofit-analytics-wasm/ publish = false; wasm-bindgen `analyze(bytes, settings_json)`; node smoke test
+crates/zerofit-wasm/     publish = false; all crates in one wasm-bindgen module for the web app
+web/                     SvelteKit static app (TypeScript); WASM runs in a Web Worker; IndexedDB storage
 crates/zerofit-codegen/  publish = false; Profile.xlsx -> profile-subset.json -> Rust
 crates/zerofit-bench/    publish = false; criterion + allocation-count benches vs fitparser
 xtask/                   publish = false; `cargo xtask codegen|extract|expected`
@@ -87,7 +88,7 @@ docs/INTERVIEW.md        design walkthrough and Q&A
   `checked_*`/`wrapping_*`, and return `Error`s with byte offsets.
 - **No `unsafe`** (`unsafe_code = "forbid"`) in every crate except
   `zerofit-bench`, whose counting `GlobalAlloc` needs it, and
-  `zerofit-analytics-wasm`, whose `#[wasm_bindgen]` exports expand to FFI
+  `zerofit-wasm`, whose `#[wasm_bindgen]` exports expand to FFI
   glue (`deny` + documented `#[allow]`s).
 - **Every public item has rustdoc** (`missing_docs = "deny"`), with a runnable
   example for types and functions users call directly.
@@ -112,7 +113,9 @@ docs/INTERVIEW.md        design walkthrough and Q&A
 - **Ask before adding any dependency.** Approved: `thiserror` (no_std,
   `default-features = false`), `libm` (zerofit-analytics), `serde` (optional,
   no_std, zerofit-analytics, zerofit-fueling), `wasm-bindgen` + `serde`/`serde_json`
-  (zerofit-analytics-wasm), `proptest` (dev), `serde` + `serde_json` (dev,
+  (zerofit-wasm), the web app's npm packages in `web/package.json`
+  (SvelteKit, Svelte, Vite, TypeScript, uPlot, ECharts, Playwright,
+  @axe-core/playwright, binaryen), `proptest` (dev), `serde` + `serde_json` (dev,
   fixtures; normal deps of xtask/codegen; dev-dep for examples), `calamine`
   (codegen only), `criterion` + `fitparser` (zerofit-bench), `libfuzzer-sys`
   (fuzz crate). Anything else needs approval.
@@ -145,9 +148,11 @@ cargo +1.85 check -p zerofit-analytics --all-features
 cargo +1.85 check -p zerofit-fueling --all-features
 cargo xtask codegen --check                            # generated code up to date
 # WebAssembly (wasm-bindgen-cli 0.2.129, matching the pinned crate):
-cargo build -p zerofit-analytics-wasm --release --target wasm32-unknown-unknown
-wasm-bindgen --target nodejs --out-dir target/wasm-pkg target/wasm32-unknown-unknown/release/zerofit_analytics_wasm.wasm
-node crates/zerofit-analytics-wasm/tests/smoke.mjs
+cargo build -p zerofit-wasm --profile wasm-release --target wasm32-unknown-unknown
+wasm-bindgen --target nodejs --out-dir target/wasm-pkg target/wasm32-unknown-unknown/wasm-release/zerofit_wasm.wasm
+node crates/zerofit-wasm/tests/smoke.mjs
+# Web app (needs the above toolchain; node 22+):
+cd web && npm ci && npm run prepare-assets && npm run check && npm run build && npm run test:e2e
 cargo publish --dry-run --workspace                    # never without --dry-run
 
 # Regenerate the profile subset from a new SDK, then the code:

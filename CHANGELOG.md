@@ -35,7 +35,7 @@ crates follow [Semantic Versioning](https://semver.org/).
   `thumbv7em-none-eabihf` and `wasm32-unknown-unknown`. MSRV 1.85.
 - Example `ride-report`; criterion benchmarks; validation against values
   intervals.icu writes into its FIT export; proptest invariants.
-- `zerofit-analytics-wasm` (unpublished): wasm-bindgen
+- `zerofit-wasm` (unpublished; first named `zerofit-analytics-wasm`): wasm-bindgen
   `analyze(bytes, settings_json)` with a node smoke test in CI.
 
 ## [0.1.0]

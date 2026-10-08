@@ -839,7 +839,7 @@ Measured on a Core Ultra 7 165U laptop:
 
 ### 10.9 WebAssembly
 
-`crates/zerofit-analytics-wasm` exports
+`crates/zerofit-wasm` (originally `zerofit-analytics-wasm`) exports
 `analyze(fitBytes, settingsJson) → summaryJson`. The logic is a plain
 Rust function (`analyze_json`) with native tests; the `#[wasm_bindgen]`
 export only converts the error type. That's also the only place `unsafe`

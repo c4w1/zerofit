@@ -174,9 +174,9 @@ into the constant factor:
   contains no FIT SDK-derived code.
 - `serde`: `Serialize` for the summary and result types.
 
-`zerofit-analytics-wasm` (in this repository, unpublished) wraps
-`analyze_fit` for WebAssembly: `analyze(fitBytes, settingsJson) →
-summaryJson`, with a node smoke test.
+`zerofit-wasm` (in this repository, unpublished) compiles this crate,
+the decoder and `zerofit-fueling` to one WebAssembly module for the web
+app in `web/`.
 
 ## License
 

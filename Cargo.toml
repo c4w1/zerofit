@@ -37,3 +37,12 @@ unimplemented = "deny"
 unreachable = "deny"
 missing_panics_doc = "deny"
 cast_possible_truncation = "deny"
+
+# The WebAssembly build for the web app (crates/zerofit-wasm). LTO with one
+# codegen unit cuts the module by 10% and is slightly faster; size-focused
+# opt-levels ("s"/"z") save only ~10 KB gzipped more but make the power-curve
+# loop 30-40% slower. Measurements: crates/zerofit-wasm/README.md.
+[profile.wasm-release]
+inherits = "release"
+lto = "fat"
+codegen-units = 1

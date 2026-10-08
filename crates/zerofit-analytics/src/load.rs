@@ -262,21 +262,74 @@ pub fn estimate_ftp(
     range: FitRange,
     fallback_w_prime: f64,
 ) -> Option<EftpEstimate> {
-    let w_prime = fit_curve_2p(curve, FitRange::TWO_PARAMETER)
-        .map(|fit| fit.w_prime)
-        .filter(|w| PLAUSIBLE_W_PRIME.contains(w))
-        .unwrap_or(fallback_w_prime);
+    let w_prime = plausible_w_prime(
+        fit_curve_2p(curve, FitRange::TWO_PARAMETER).map(|fit| fit.w_prime),
+        fallback_w_prime,
+    );
     let max = range.max_s.min(curve.max_duration());
-    (range.min_s.max(1)..=max)
-        .filter_map(|d| {
-            let watts = curve.watts(d)?;
-            let cp_d = watts - w_prime / f64_from_usize(d);
-            Some(EftpEstimate {
-                eftp: cp_d + w_prime / 3600.0,
-                duration_s: d,
-                watts,
-                w_prime,
-            })
+    best_on_hyperbola(
+        (range.min_s.max(1)..=max).filter_map(|d| Some((d, curve.watts(d)?))),
+        w_prime,
+    )
+}
+
+/// [`estimate_ftp`] from sampled `(duration_s, watts)` points of a power
+/// curve instead of the full curve, e.g. a season curve stored at
+/// log-spaced durations. W' is fitted from the points between 2 and
+/// 20 minutes; eFTP is the best over the points inside `range`, so its
+/// accuracy depends on how densely the points cover 3–30 minutes.
+///
+/// ```
+/// use zerofit_analytics::load::{EFTP_RANGE, estimate_ftp_from_points};
+/// // Points exactly on W'/t + CP with CP 260 W, W' 18 kJ.
+/// let points: Vec<(usize, f64)> = [60, 120, 180, 300, 600, 1200, 1800, 3600]
+///     .iter().map(|&d| (d, 18_000.0 / d as f64 + 260.0)).collect();
+/// let est = estimate_ftp_from_points(&points, EFTP_RANGE, 20_000.0).unwrap();
+/// assert!((est.eftp - (260.0 + 18_000.0 / 3600.0)).abs() < 1e-6);
+/// ```
+#[must_use]
+pub fn estimate_ftp_from_points(
+    points: &[(usize, f64)],
+    range: FitRange,
+    fallback_w_prime: f64,
+) -> Option<EftpEstimate> {
+    let fit_points: Vec<(f64, f64)> = points
+        .iter()
+        .filter(|(d, _)| {
+            (FitRange::TWO_PARAMETER.min_s..=FitRange::TWO_PARAMETER.max_s).contains(d)
+        })
+        .map(|&(d, w)| (f64_from_usize(d), w))
+        .collect();
+    let w_prime = plausible_w_prime(
+        crate::cp::fit_2p(&fit_points).map(|fit| fit.w_prime),
+        fallback_w_prime,
+    );
+    best_on_hyperbola(
+        points
+            .iter()
+            .copied()
+            .filter(|(d, _)| (range.min_s.max(1)..=range.max_s).contains(d)),
+        w_prime,
+    )
+}
+
+fn plausible_w_prime(fitted: Option<f64>, fallback: f64) -> f64 {
+    fitted
+        .filter(|w| PLAUSIBLE_W_PRIME.contains(w))
+        .unwrap_or(fallback)
+}
+
+/// The highest `MMP(d) − W'/d + W'/3600` over `points`.
+fn best_on_hyperbola(
+    points: impl Iterator<Item = (usize, f64)>,
+    w_prime: f64,
+) -> Option<EftpEstimate> {
+    points
+        .map(|(d, watts)| EftpEstimate {
+            eftp: watts - w_prime / f64_from_usize(d) + w_prime / 3600.0,
+            duration_s: d,
+            watts,
+            w_prime,
         })
         .max_by(|a, b| a.eftp.total_cmp(&b.eftp))
 }
