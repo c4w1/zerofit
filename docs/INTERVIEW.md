@@ -16,6 +16,7 @@ Contents:
 8. [The hardest bugs, and what found them](#8-the-hardest-bugs-and-what-found-them)
 9. [15 likely interview questions](#9-15-likely-interview-questions)
 10. [zerofit-analytics: training metrics on top of the decoder](#10-zerofit-analytics-training-metrics-on-top-of-the-decoder)
+11. [Fueling and the client-side app](#11-fueling-and-the-client-side-app)
 
 ---
 
@@ -937,3 +938,312 @@ In order:
    use, where only the K standard durations are kept as O(K) rolling
    windows.
 5. Fitting CP to the season envelope rather than single rides.
+
+---
+
+## 11. Fueling and the client-side app
+
+### 11.1 zerofit-fueling: rules and sources
+
+`crates/zerofit-fueling` turns a day of planned (or completed) sessions into
+a fueling plan. It's deterministic and dependency-free (`#![no_std]` +
+`alloc`); every number traces to a formula and a citation in the doc
+comments. There is no learned model.
+
+| Rule | Value | Where | Source |
+|---|---|---|---|
+| Daily carbohydrate | light 3–5, moderate (~1 h) 5–7, high (1–3 h) 6–10, very high (4–5+ h) 8–12 g/kg | `daily::daily_carbs_g_per_kg` | Thomas, Erdman & Burke 2016 (ACSM/AND/DC); Burke et al. 2011 (IOC) |
+| Daily protein | 1.2–2.0 g/kg, rising with load; ~0.3 g/kg per meal | `daily::daily_protein_g_per_kg`, `plan` | Thomas et al. 2016; Moore et al. 2015; Areta et al. 2013 |
+| Pre-ride | 1–4 g/kg, 1–4 h before | `session::pre_ride` | Thomas et al. 2016; Burke et al. 2011 |
+| In-ride | < 1 h: none · 1–2.5 h: 30–60 g/h · > 2.5 h: 60–90 g/h, glucose + fructose above 60 g/h | `session::during_ride` | Jeukendrup 2014 |
+| Recovery | next session < 24 h away: 1.0–1.2 g/kg/h for up to 4 h; ~0.3 g/kg protein | `session::recovery`, `plan` | Burke et al. 2011; Moore et al. 2009 |
+
+How a point inside each range is chosen:
+
+- **The day's load is one continuous number**: work per kg (planned kJ, or
+  duration × IF × FTP) weighted by `clamp(IF/0.75, 0.6, 1.4)`. The weight
+  exists because carbohydrate's share of energy rises with intensity
+  (Romijn 1993, van Loon 2001).
+- **Carbohydrate is piecewise linear in that load**, with anchors exactly on
+  the band boundaries (8, 15 and 35 kJ/kg ↦ 5.0, 6.5 and 9.0 g/kg). That
+  gives three guarantees:
+  - every target lies inside its band's consensus range (tested at every
+    0.25 kJ/kg);
+  - nearby loads get nearby targets, with no bucket cliffs;
+  - the target never falls as load rises (a property test).
+- **Intensity places the point in the in-ride ranges**, so an easy 3 h ride
+  gets 60 g/h and a hard one 90 g/h. The rate is rounded to whole grams,
+  which also absorbs the float error that left IF 0.85 one ulp below the
+  top of its range.
+- **The pre-ride meal is 1 g/kg per hour of lead time**, capped by the time
+  since waking or since the previous session. A 07:00 ride gets a 1 g/kg
+  snack, not an impossible 4 g/kg meal at 03:00.
+
+The day plan (`plan::day_plan`) builds a timeline:
+
+1. the pre-meal;
+2. feeds every 20 minutes during each ride;
+3. recovery feeds;
+4. regular meals within an hour of a session feed, or during a session,
+   are dropped (the feed replaces them);
+5. what's left of the daily carbohydrate and protein goes to the
+   remaining meals.
+
+Two things the tests forced:
+
+- **Recovery comes out of the daily budget.** A 3 h ride with another
+  session the next day produced pre + in-ride + 4 h of recovery ≈
+  10.6 g/kg, against a high-band daily target of 8.2. The consensus targets
+  are daily totals, and the session advice is timing within them. So
+  recovery hours are now spent from what's left of the budget: as many as
+  fit, at least one.
+- **The over-budget flag ignored the first recovery hour.** Proptest found
+  a plan whose session feeds exceeded the target without being flagged,
+  because the flag was computed before recovery was added.
+
+The UI shows "General guidance, not medical or dietary advice" above every
+fueling plan.
+
+### 11.2 Why fully client-side
+
+- **Privacy.** A FIT file contains where someone lives, when they leave
+  home, and their heart rate. The app never sends it anywhere: it's decoded
+  in a Web Worker and stored in this browser's IndexedDB, and the only
+  network requests are for the app's own static files. "Your data never
+  leaves this browser" is a property of the architecture, not a policy:
+  there is no endpoint to send data to.
+- **Cost and operations.** It's static files on GitHub Pages: no server,
+  no database, no accounts, no scaling, nothing to patch. The marginal
+  cost of a user is zero.
+- **WebAssembly makes it practical.** The same panic-free Rust that runs on
+  a microcontroller runs in the browser. One 110 KB (gzipped) module holds
+  the decoder, the analytics and the fueling rules, and analyzes a 4-hour
+  ride in 70 ms on a laptop.
+- **The trade-offs:**
+  - data lives in one browser: no sync, and clearing site data deletes it;
+  - every visitor's device does the work;
+  - first visits download the module (and here the demo rides).
+
+  The Settings page says where the data is and offers "Delete all data".
+
+### 11.3 The Worker and WASM boundary
+
+```
+UI thread                                   Worker
+call("analyze", [bytes, settings, true], [bytes])
+  ── postMessage({id, method, args}, transfer) ──►  z.analyze(bytes, settingsJson)   (Rust)
+                                                     summary_json() → JSON.parse
+                                                     take_power() → Uint16Array …
+  ◄── postMessage({id, ok, result}, [every typed array's buffer]) ──
+```
+
+- **Why a worker.** WebAssembly runs on whatever thread calls it. Decoding
+  a 6-hour ride and computing its power curve on the UI thread would
+  freeze scrolling and input. In a worker the UI stays responsive, and
+  Lighthouse reports 0 ms of blocking time on the landing page.
+- **Typed RPC.** `src/lib/worker/protocol.ts` declares each method's
+  arguments and return type once. `call<M>(method, args)` is typed from it,
+  and request ids match responses to promises. Errors cross as messages:
+  Rust `Result::Err` becomes a `JsError` in the worker, then a rejected
+  promise on the UI side.
+- **Two encodings, chosen by size.**
+  - Summaries, settings, workouts and day plans are small and structured,
+    so they cross the WASM boundary as JSON (serde on the Rust side).
+  - Per-second streams are large and numeric, so they cross as typed
+    arrays: a `Vec<u16>` returned from Rust becomes a `Uint16Array`.
+    `ActivityResult::take_*` *moves* each vector out (`mem::take`), so
+    nothing is copied twice.
+  - Between the worker and the UI, the arrays' `ArrayBuffer`s are
+    *transferred*: ownership moves to the other thread and nothing is
+    copied.
+- **What crosses, and what doesn't.** FIT bytes go to the worker as a
+  transferred *copy* (`bytes.slice(0)`), because the original stays on the
+  UI side to be stored. The WASM module never sees IndexedDB, and the UI
+  never sees Rust types.
+- **Panic-free on both sides.** The Rust library code can't panic (lints),
+  so a malformed file is an `Err` with a byte offset, never a trap that
+  kills the worker. The e2e test uploads a text file named `.fit` and
+  checks the message.
+
+### 11.4 Frontend architecture
+
+**Stack**
+
+- SvelteKit 2 with the static adapter, Svelte 5 runes and TypeScript.
+- Every route is **prerendered to HTML at build time**. Data-dependent
+  parts render after hydration into placeholders that already have their
+  final size.
+
+**State**
+
+- `src/lib/state.svelte.ts` holds one `$state` object (settings,
+  activities, plan, status).
+- Components read it reactively and change it only through its functions
+  (`addFiles`, `saveSettings`, `savePlan`, `loadDemo`), which also write
+  IndexedDB.
+
+**Storage**
+
+- `src/lib/db.ts` uses the raw IndexedDB API (no library).
+- Activities store the original FIT bytes, so changing FTP re-analyzes
+  every ride from source. They're keyed by a SHA-256 of the file, so
+  re-uploading replaces rather than duplicates.
+
+**Charts**
+
+- **uPlot** draws the per-second series: about 20k points per channel,
+  drawn on canvas.
+  - The activity page's four charts share a sync key for the cursor; a
+    `setScale` hook propagates zoom across the group.
+  - Each chart is keyboard-operable (arrow keys move the cursor, +/−
+    zoom, Esc resets) and announces values through an `aria-live`
+    region.
+- **ECharts** draws zones, power curves (log axis) and the fueling
+  timeline. It's imported modularly and lazily, because even the trimmed
+  chunk is 191 KB gzipped.
+- Every chart has a "Show data as a table" alternative.
+
+**Accessibility**
+
+- Real `label`s, a file input inside the drop zone, `aria-sort` on
+  sortable headers, a skip link, and `role="status"` for background work.
+- Contrast is checked in both themes. axe-core runs in Playwright on every
+  page in light and dark mode, with 0 violations.
+
+**Demo**
+
+- On first visit the four anonymized fixture rides load automatically,
+  plus a sample training week, with the FTP intervals.icu used for those
+  rides (323 W).
+- The rides span three years, so they're re-dated into the last ten days
+  to make "today's form" meaningful. The UI says so.
+
+### 11.5 What measuring changed
+
+The first Lighthouse run of the client-only build scored 37–65 on mobile:
+
+- empty HTML shells until JavaScript ran;
+- charts eagerly imported;
+- content popping in (CLS up to 0.44).
+
+Three fixes brought it up:
+
+1. prerendering;
+2. lazy chart libraries;
+3. size-reserving placeholders.
+
+Results: the landing page now scores 100/100 (mobile and desktop), every
+page has CLS ≤ 0.04, and the deep pages on a cold first visit score 72–98.
+Their remaining cost is the first download of the demo data and the WASM
+module under simulated slow 4G. Two measurement traps along the way:
+
+- **A stale preview server** served HTML that referenced old bundle
+  hashes. One run scored nearly 100 everywhere because the JavaScript
+  never loaded. The runner now owns its server and rejects any run with
+  console errors.
+- **The in-browser timing test** first measured the *previous* run's result
+  line (end to end "34 ms" < worker "70 ms"), until each run started from a
+  fresh page.
+
+### 11.6 Ten more likely questions
+
+**1. Why IndexedDB and not localStorage?**
+localStorage holds strings only, around 5 MB, and its API is synchronous:
+it blocks the UI thread. A season of FIT files is tens of megabytes of
+binary data. IndexedDB stores `ArrayBuffer`s directly, is asynchronous and
+has a much larger quota. I use the raw API through a ~100-line promise
+wrapper, because the app needs four operations and a dependency would add
+more than it removes.
+
+**2. How do you keep the UI responsive while analyzing 20 files?**
+Every Rust call runs in the worker, and the UI thread only awaits promises.
+`addFiles` processes files one at a time and updates an `aria-live` status
+line ("Analyzing 3 of 20…"), so memory stays bounded and screen-reader
+users hear progress. Measured worker times are tens of milliseconds for
+the demo rides and 70 ms for the synthetic 4-hour ride, and none of it runs
+on the UI thread.
+
+**3. Why are streams typed arrays but summaries JSON?**
+Size and shape. A 6-hour ride's power stream is 21,600 numbers. As JSON
+that's ~100 KB of text to build in Rust and parse in JS. As a
+`Uint16Array` it's 43 KB, created with one copy out of WASM memory and
+transferred to the UI with zero copies. A summary is ~40 named, optional
+fields: JSON with serde is clearer, and its cost is negligible.
+
+**4. What happens if the WASM code panics?**
+In the library crates it can't: the same lints as the decoder deny
+`unwrap`, indexing and unchecked arithmetic. In the WASM crate a panic
+would abort the instance (`panic = "abort"` on wasm32) and the call would
+reject; the RPC client rejects every pending promise when the worker
+reports an error. Malformed input is handled as data, though: an invalid
+FIT file is an `Err` with a byte offset, and the upload page shows it per
+file.
+
+**5. How did you shrink the WASM module, and what did you not do?**
+I measured six configurations, each for both size and the time to analyze
+a 4 h ride:
+
+| Build | Raw | Gzip | Time |
+|---|---|---|---|
+| defaults | 364 KB | 123 KB | 162 ms |
+| fat LTO + 1 codegen unit + `wasm-opt -Oz` (shipped) | 255 KB | 110 KB | 149 ms |
+| plus `opt-level = "z"` | 222 KB | 99 KB | 208 ms |
+
+`opt-level = "z"` saves only ~10 KB gzipped more, and makes the vectorized
+power-curve loop 40% slower, so I kept the default optimization level. The
+lesson: optimize for the metric the user feels, measured, not for the
+smallest number.
+
+**6. How do the fueling targets avoid jumping between buckets?**
+The consensus is four overlapping ranges keyed by hours of training. I
+replaced the hours with a continuous load index (work per kg weighted by
+intensity), and made carbohydrate piecewise linear in it, with anchors
+on the band boundaries. A test sweeps the load in 0.25 kJ/kg steps and
+asserts every target sits inside its band; a proptest asserts it never
+decreases. So a 59-minute ride and a 61-minute ride get nearly the same
+target, which a bucket table can't promise.
+
+**7. Isn't re-dating the demo rides misleading?**
+It would be if it were hidden. The fixtures are three rides spread over
+three years. Shown at their real dates, "today's form" for a demo visitor
+would be zero, and the fitness chart three isolated spikes. So the demo
+places them in the last ten days, keeps their time of day, and the
+Overview and Fitness pages state that this was done. Uploaded files keep
+their real dates.
+
+**8. How is accessibility tested, beyond running axe?**
+axe catches what's mechanically checkable: contrast in both themes, labels,
+roles, landmarks. It reports 0 violations on every page. The rest is
+designed in and covered by e2e tests:
+
+- charts are focusable with keyboard controls and a live readout, plus a
+  data-table alternative;
+- the drop zone is a real file input;
+- sortable headers expose `aria-sort`;
+- status messages use `role="status"`.
+
+What I haven't done is test with screen-reader users, which is the next
+step for anything real.
+
+**9. Why SvelteKit and not React?**
+Svelte compiles components to direct DOM updates without a runtime virtual
+DOM, so the framework adds little JavaScript and the bundle is dominated by
+what the app actually uses (ECharts, uPlot). Svelte 5 runes made the shared
+state a plain object with fine-grained reactivity, no store boilerplate.
+SvelteKit's static adapter prerenders every route to HTML, which is where
+the Lighthouse gains came from. React with Vite would have worked; the
+interesting parts (the worker, the WASM boundary, the storage) are
+framework-independent.
+
+**10. How would you add sync across devices without giving up privacy?**
+Encrypt on the device and sync ciphertext:
+
+1. Derive a key from a passphrase that never leaves the browser
+   (WebCrypto PBKDF2 or Argon2 in WASM).
+2. Encrypt each activity record with AES-GCM.
+3. Sync the ciphertext through any dumb store: a user-chosen cloud
+   folder, WebDAV, or a minimal object store.
+
+The server then holds only opaque blobs. Content-addressed ids (already
+SHA-256 of the file) make deduplication and conflict handling simple. The
+honest cost: lose the passphrase and the data is gone.
