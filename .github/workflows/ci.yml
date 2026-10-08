@@ -4,6 +4,7 @@ on:
   push:
     branches: [main, master]
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -104,6 +105,91 @@ jobs:
           wasm-bindgen --target nodejs --out-dir target/wasm-pkg
           target/wasm32-unknown-unknown/wasm-release/zerofit_wasm.wasm
       - run: node crates/zerofit-wasm/tests/smoke.mjs
+
+  web:
+    name: web app (check, build, Playwright e2e + axe)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      # Must match the `wasm-bindgen` version pinned in crates/zerofit-wasm/Cargo.toml.
+      - run: cargo install wasm-bindgen-cli --version 0.2.129 --locked
+      # The 4-hour ride the in-browser timing test analyzes.
+      - run: cargo run --release -p zerofit-bench --example synthetic-fit -- ../target/ride-4h.fit 14400
+      - run: npm ci
+      - run: npm run prepare-assets
+      - run: npm run check
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+        env:
+          CI: "true"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: |
+            web/playwright-report
+            web/test-results
+          retention-days: 14
+
+  pages-build:
+    name: build site for GitHub Pages
+    # Deploy only from main, and only when every check above passed.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [fmt, clippy, test, codegen, docs, no-std, wasm, msrv, web]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: cargo install wasm-bindgen-cli --version 0.2.129 --locked
+      - run: npm ci
+      - run: npm run prepare-assets
+      - run: npm run build
+        env:
+          BASE_PATH: /${{ github.event.repository.name }}
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/build
+
+  pages-deploy:
+    name: deploy to GitHub Pages
+    needs: pages-build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
 
   msrv:
     name: MSRV (1.85)

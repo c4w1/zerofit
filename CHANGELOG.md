@@ -1,11 +1,30 @@
 # Changelog
 
-All notable changes to the `zerofit`, `zerofit-profile` and
-`zerofit-analytics` crates. The format
+All notable changes to the `zerofit`, `zerofit-profile`,
+`zerofit-analytics` and `zerofit-fueling` crates. The format
 follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 crates follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
+
+### zerofit-fueling (new)
+
+- Daily carbohydrate (3–12 g/kg) piecewise linear in an effective load
+  index, anchored on the consensus band boundaries; protein 1.2–2.0 g/kg.
+- Pre-ride (1–4 g/kg, 1–4 h before), in-ride (0 / 30–60 / 60–90 g/h by
+  duration and intensity) and recovery (1.0–1.2 g/kg/h when the next
+  session is under 24 h away) rules, with sources in the doc comments.
+- `day_plan`: totals, per-meal targets and a timeline around each session.
+- `#![no_std]` + `alloc`, no dependencies; unit tests for every rule and
+  boundary, property tests for monotonicity in load.
+
+### Web app (`web/`, not a crate)
+
+- Fully client-side SvelteKit app: upload, activities, activity detail,
+  fitness, plan (workout builder, `.zwo`/FIT export), fueling, settings.
+  All crates run in one WebAssembly module inside a Web Worker; data stays
+  in IndexedDB. Playwright end-to-end and axe accessibility tests; deployed
+  to GitHub Pages by CI.
 
 ### zerofit-analytics (new)
 

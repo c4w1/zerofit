@@ -15,11 +15,14 @@ than feature count.
   `fit-dump` and `fit-anonymize` examples, publish-ready metadata.
 - **Not published.** The maintainer publishes after reviewing the FIT SDK
   license. Never run `cargo publish` without `--dry-run`.
-- **Also done:** `zerofit-analytics` (training metrics on 1 Hz streams).
-- **In progress:** `zerofit-fueling` (rules-based carbohydrate/protein
-  periodization), the combined WASM crate, and the client-side web app in
-  `web/` (SvelteKit, static, no backend).
+- **Also done:** `zerofit-analytics` (training metrics on 1 Hz streams,
+  workouts), `zerofit-fueling` (rules-based carbohydrate/protein
+  periodization), `zerofit-wasm` (all crates in one WASM module) and the
+  client-side web app in `web/` (SvelteKit, static, deployed to GitHub
+  Pages from `main` by CI). Docs: `docs/INTERVIEW.md`, `docs/RESUME.md`.
 - **Out of scope:** any server, accounts, tracking or analytics in the app.
+  The app must keep working with no network after load, apart from its own
+  static files.
 
 ## Crate map
 

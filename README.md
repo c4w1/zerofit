@@ -1,13 +1,57 @@
 # zerofit
 
-A zero-copy, `no_std`, panic-free Rust decoder for FIT activity files, the
-binary format written by Garmin, Wahoo and other bike computers and watches.
-`zerofit` decodes a file straight out of the byte buffer it already lives in:
-no allocation, no copying, field values decoded only when you ask for them.
-It builds for bare-metal ARM, reports every malformed input as a precise
-error with a byte offset instead of panicking, and is checked against
-Garmin's own FitCSVTool on real recordings and by continuous fuzzing. On real recordings it is 20-28x faster than the `fitparser` crate at
-fully decoding a file, and allocates nothing.
+**Ride analysis that never leaves your browser.** Rust crates for FIT
+activity files, from the binary protocol up to training metrics and
+fueling plans, compiled to WebAssembly and run entirely client-side.
+
+**Live demo: https://ondemous.github.io/zerofit/** (the demo data loads on
+first visit, so there's nothing to upload)
+
+[![The activity page: summary metrics and synced power, W' balance and heart-rate charts](docs/images/hero.png)](https://ondemous.github.io/zerofit/)
+
+`zerofit` is a zero-copy, `no_std`, panic-free FIT decoder, 20–28x faster
+than the `fitparser` crate with zero allocations. On top of it:
+
+- **`zerofit-analytics`** turns rides into the numbers training platforms
+  show: NP, TSS, the power curve, CP/W′, W′ balance and CTL/ATL. Every
+  formula is documented with its source, and the results are validated
+  against intervals.icu.
+- **`zerofit-fueling`** turns planned training into carbohydrate and
+  protein targets, using the published sports-nutrition consensus.
+
+All three run in a Web Worker as one 110 KB (gzipped) WebAssembly module,
+behind a SvelteKit app with no server, no accounts and no tracking.
+Analyzing a 4-hour ride takes 70 ms in the browser.
+
+## Architecture
+
+```mermaid
+flowchart LR
+  subgraph rust["Rust (no_std, panic-free lints)"]
+    dec["zerofit<br/>FIT decoder"] --> prof["zerofit-profile<br/>typed messages"]
+    prof --> ana["zerofit-analytics<br/>resample · NP/TSS · MMP · CP · W'bal · CTL"]
+    fuel["zerofit-fueling<br/>carb & protein periodization"]
+  end
+  ana --> wasm["zerofit-wasm<br/>one WebAssembly module<br/>255 KB · 110 KB gzip"]
+  fuel --> wasm
+  subgraph browser["Browser (no server)"]
+    worker["Web Worker<br/>owns the WASM module"]
+    ui["SvelteKit UI<br/>uPlot · ECharts"]
+    idb[("IndexedDB<br/>FIT files · plan · settings")]
+    ui <-- "typed RPC · transferable typed arrays" --> worker
+    ui <--> idb
+  end
+  wasm --> worker
+```
+
+| Crate | What it is | crates.io |
+|---|---|---|
+| [`zerofit`](crates/zerofit) | The FIT protocol: headers, CRCs, definitions, data messages, base types. Slice decoder, streaming decoder, minimal encoder. | [zerofit](https://crates.io/crates/zerofit) (not yet published) |
+| [`zerofit-profile`](crates/zerofit-profile) | The FIT profile, generated from the FIT SDK: typed `record`, `lap`, `session`, ... with scaling, units and enums; developer fields. | [zerofit-profile](https://crates.io/crates/zerofit-profile) (not yet published) |
+| [`zerofit-analytics`](crates/zerofit-analytics) | Training metrics on 1 Hz streams: resampling rules, NP, IF, TSS, hrTSS, decoupling, zones, mean-maximal power, CP/W′, W′bal, CTL/ATL/TSB, eFTP; structured workouts with `.zwo`/FIT export. | [zerofit-analytics](https://crates.io/crates/zerofit-analytics) (not yet published) |
+| [`zerofit-fueling`](crates/zerofit-fueling) | Rules-based carbohydrate and protein periodization (ACSM/IOC consensus): daily targets scaled by load, pre-ride, in-ride and recovery feeds, a day timeline. | [zerofit-fueling](https://crates.io/crates/zerofit-fueling) (not yet published) |
+| [`zerofit-wasm`](crates/zerofit-wasm) | All of the above as one WebAssembly module for the app (internal). | — |
+| [`web/`](web) | The client-side app: upload, activities, activity detail, fitness, plan, fueling, settings. | — |
 
 ```rust
 use zerofit::{Decoder, Record};
@@ -25,13 +69,48 @@ for record in Decoder::new(&bytes) {
 }
 ```
 
-| Crate | What it is |
-|---|---|
-| [`zerofit`](crates/zerofit) | The FIT protocol: headers, CRCs, definitions, data messages, base types. Slice decoder, streaming decoder, minimal encoder. |
-| [`zerofit-profile`](crates/zerofit-profile) | The FIT profile, generated from the FIT SDK: typed `record`, `lap`, `session`, ... with scaling, units and enums; developer fields. |
-| [`zerofit-analytics`](crates/zerofit-analytics) | Training metrics on 1 Hz streams: NP, IF, TSS, hrTSS, decoupling, zones, mean-maximal power, CP/W', W'bal, CTL/ATL/TSB, eFTP. `no_std` + `alloc`, validated against intervals.icu; WebAssembly build in `zerofit-wasm`. |
+## The numbers
 
-## Features
+Everything below was measured in this repository, on an Intel Core Ultra 7
+165U laptop unless noted.
+
+**Decoder vs `fitparser`** (criterion, details [below](#performance)):
+
+| Fixture | zerofit: decode + scale every field | fitparser 0.11 | Speed-up | Allocations (zerofit / fitparser) |
+|---|---:|---:|---:|---:|
+| `icu_intervals` (334 KiB) | 68.4 MiB/s | 2.42 MiB/s | 28x | 0 / 580,800 |
+| `wahoo_elemnt` (933 KiB) | 77.0 MiB/s | 2.72 MiB/s | 28x | 0 / 1,581,064 |
+| `icu_laps` (116 KiB) | 78.8 MiB/s | 3.24 MiB/s | 24x | 0 / 182,524 |
+
+**Analytics vs intervals.icu**: these are the values intervals.icu wrote into its own FIT
+export, using the FTP it used (323 W). Full table and the investigation of every
+difference in the [analytics README](crates/zerofit-analytics/README.md#validation-against-intervalsicu):
+
+| Ride | Work | Avg power | NP | IF | TSS |
+|---|---:|---:|---:|---:|---:|
+| `icu_laps` | **0.000 %** | −0.07 % | −0.77 % | −0.83 % | −0.69 % |
+| `icu_intervals` | +0.007 % | −0.31 % | +0.05 % | −0.01 % | +1.45 % |
+
+**Analytics speed** (criterion): a full analysis of a 4-hour ride takes 55.6 ms. The
+exact power curve for every duration of a 6-hour ride takes 75 ms (about 3 G
+windows/s). CTL/ATL over three years takes 11.7 µs.
+
+**In the browser** ([web README](web/README.md#measurements-2026-10-08)):
+
+| | |
+|---|---|
+| WASM module (LTO + `wasm-opt -Oz`) | 255 KB raw / 110 KB gzip (from 364 / 123 KB with defaults) |
+| Analyze a 4 h ride in the worker (Chromium, median of 5) | 70 ms (122 ms from file selection to result on screen) |
+| Lighthouse, landing page (mobile / desktop) | Performance 100 / 100 · Accessibility 100 · Best practices 100 · SEO 100 |
+| Lighthouse, deep pages on a cold first visit (mobile) | Performance 72–98 · Accessibility 100 |
+| axe-core (WCAG 2.1 A/AA), every page, light and dark | 0 violations |
+
+**Tests**: run `cargo test --workspace --all-features`, then `cd web && npm run test:e2e`.
+They cover unit tests, property tests and fixture tests across every
+crate, FitCSVTool ground truth, 96 generated corruption cases, three fuzz
+targets, and Playwright flows with accessibility checks.
+
+## Decoder features
 
 - **Zero-copy, zero-allocation decoding.** `Decoder` is an `Iterator` over a
   `&[u8]`; every message borrows from it. Definitions live in a fixed
@@ -81,6 +160,8 @@ Features: `zerofit/std` (default; `ReadDecoder`, implies `alloc`),
 (`developer::DeveloperData`).
 
 ## Performance
+
+### Decoder
 
 Measured with `cargo bench -p zerofit-bench` (criterion, median of 20
 samples) on an Intel Core Ultra 7 165U laptop (Windows 11, AC power),
@@ -158,7 +239,13 @@ cargo test --workspace --all-features
 cargo clippy --workspace --all-targets --all-features -- -D warnings
 cargo xtask codegen --check
 cargo bench -p zerofit-bench
+
+# The web app (needs the wasm32 target and wasm-bindgen-cli 0.2.129)
+cd web && npm ci && npm run prepare-assets && npm run dev
 ```
+
+CI builds and tests all crates, the WASM module and the site, and deploys
+the site to GitHub Pages on every push to `main` once every check has passed.
 
 Minimum supported Rust version: **1.85**.
 
