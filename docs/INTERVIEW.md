@@ -15,6 +15,7 @@ Contents:
 7. [How correctness is verified](#7-how-correctness-is-verified)
 8. [The hardest bugs, and what found them](#8-the-hardest-bugs-and-what-found-them)
 9. [15 likely interview questions](#9-15-likely-interview-questions)
+10. [zerofit-analytics: training metrics on top of the decoder](#10-zerofit-analytics-training-metrics-on-top-of-the-decoder)
 
 ---
 
@@ -613,3 +614,326 @@ iteration), `#[inline]` on the per-field path so it fuses across crates
 (2-4x on field decoding), and a generated field-number index for profile
 metadata. The tradeoff is that our messages borrow the buffer; if you need
 to keep data after dropping the buffer, you copy what you need.
+
+---
+
+## 10. zerofit-analytics: training metrics on top of the decoder
+
+`crates/zerofit-analytics` turns decoded rides into the numbers training
+platforms show. Same rules as the decoder: `#![no_std]` (+ `alloc`),
+panic-free by lint, every public item documented with its formula and
+source. The pipeline is FIT bytes → `fit::read_fit` (raw records, timer
+events) → `resample::resample` (1 Hz `ActivityStream`) → metric functions
+on slices, or `analyze_stream`/`analyze_fit` for all of them at once
+(`src/summary.rs`).
+
+### 10.1 Why the resampler matters more than any formula
+
+Every metric is a sum or rolling window over "one sample per second", but
+devices don't record one sample per second. Smart recording skips seconds,
+auto-pause stops recording, sensors drop out, and some files repeat a
+timestamp. Each choice changes every number downstream:
+
+- A 30 s stop counted as zeros lowers average power and NP. Removing it
+  doesn't.
+- Interpolating across a 10-minute café stop invents 10 minutes of riding.
+- A duplicated timestamp counted twice adds a second of work that never
+  happened.
+
+`src/resample.rs` makes each decision explicit, tests it and counts it in
+a `ResampleReport`:
+
+- **Duplicates** merge field by field, with the later record winning.
+- **Backwards timestamps** are dropped.
+- **Gaps over 30 s** are pauses and are removed, so the stream is
+  recording time.
+- **Gaps of 1–30 s** are linearly interpolated in every channel.
+- **Field dropouts up to 8 s** are repaired. Longer ones become 0 W for
+  power and missing for HR.
+- **Power over 2500 W** is treated as a spike.
+
+The 30 s and 8 s numbers are intervals.icu's, from its developer's forum
+posts. The payoff: on `icu_laps`, our stream's total work equals the
+`total_work` intervals.icu wrote into its export *to the joule*. That's
+the strongest evidence that both sides are working on the same series.
+
+### 10.2 The metrics in plain English
+
+- **Average power** = total work / recording time. Coasting zeros count;
+  paused time doesn't exist in the stream.
+- **Normalized power (Coggan)**: take a 30 s rolling average, raise each
+  value to the 4th power, average those, take the 4th root. The 30 s
+  window mimics how slowly the body responds. The 4th power reflects that
+  physiological cost rises steeply with intensity, so a ride of surges
+  "costs" more than its average suggests. Our implementation uses exact
+  integer rolling sums (`u64`), so there's no float drift over six hours.
+  It starts at the first full window. (`power::normalized_power`)
+- **IF** = NP / FTP: how hard the ride was relative to threshold.
+- **TSS** = hours × IF² × 100. One hour at FTP is 100 by definition;
+  doubling duration doubles it, and 10 % more intensity adds 21 %.
+  *Which* hours is a convention: TrainingPeaks uses file duration,
+  intervals.icu uses moving time. We default to moving time and take the
+  duration as a parameter. (`power::tss`, `summary::LoadDuration`)
+- **VI** = NP / average: 1.0 is a steady time trial, 1.3 a criterium.
+- **hrTSS**: Banister's TRIMP sums, per minute, the heart-rate-reserve
+  fraction x weighted by `0.64·e^(1.92x)`, because lactate rises
+  exponentially with HR. Dividing by the TRIMP of one hour at LTHR makes
+  an hour at threshold score 100, comparable with TSS. (`hr::hr_tss`)
+- **Efficiency factor** = NP / average HR: watts per beat. It rising over
+  weeks of similar rides means aerobic fitness improving.
+- **Pa:HR decoupling**: power per heartbeat in the first half of the ride
+  versus the second. If HR drifts up at the same power (heat,
+  dehydration, a weak aerobic base), the ratio falls and decoupling is
+  positive. Under 5 % on a long steady ride is good. (`hr::decoupling`)
+- **Time in zones**: seconds in each Coggan power zone (% FTP) and Friel
+  HR zone (% LTHR), with upper bounds inclusive as the tables are written.
+- **Mean-maximal power curve**: for every duration, the best average power
+  held that long (§10.3).
+- **Critical power and W'**: CP is the power you can sustain for a long
+  time, and W' is a fixed tank of work above it. At P > CP you empty the
+  tank at P − CP joules per second, so `P(t) = W'/t + CP`. We fit it by
+  linear least squares on `work = CP·t + W'` over log-spaced 2–20 minute
+  points, and report R², RMSE and standard errors. The 3-parameter Morton
+  model `P = W'/(t−k) + CP` adds a finite max power. It's fitted by
+  golden-section search over k with an inner linear solve. (`src/cp.rs`)
+- **W' balance (Skiba, differential)**: second by second, above CP the
+  tank drains by P − CP. Below CP, the *spent* part recovers exponentially
+  at rate (CP − P)/W'. That's one O(n) pass with no fitted time constant;
+  intervals.icu uses the same model. It can go negative, which says the
+  athlete's CP/W' settings are too low; we don't clamp that away.
+  (`src/wbal.rs`)
+- **CTL / ATL / TSB**: fitness and fatigue as exponentially weighted
+  averages of daily TSS, with 42- and 7-day time constants. Form is
+  fitness minus fatigue. (`src/load.rs`)
+- **eFTP**: each maximal 3–30 minute effort (d, P) places the athlete on
+  their own hyperbola `W'/t + CP_d` through that point. eFTP is the
+  highest such curve's value at one hour:
+  `max_d (MMP(d) − W'/d) + W'/3600`. With W' = 20 kJ it gives about 96 %
+  of 20-minute power, which is the familiar 95 % rule falling out of the
+  model. (`load::estimate_ftp`)
+
+### 10.3 The MMP algorithm and its complexity
+
+With prefix sums `S`, the sum of any window is `S[i+d] − S[i]`. So for one
+duration d the best window is a single pass over two offset slices, and
+the whole curve is `Σ_d (n − d + 1) ≈ n²/2` operations. That's 233 million
+for a 6-hour ride.
+
+Can you do better exactly? Computing the maximum window sum for every
+length at once is a (max,+) convolution, and no truly subquadratic
+algorithm is known for it, so the honest optimization is the constant
+factor (`src/mmp.rs`):
+
+- prefix sums in `i32` whenever the total work fits, which it always does
+  for real rides;
+- the inner loop written as 16 independent lane maxima over
+  `chunks_exact`, which is what the auto-vectorizer handles;
+- signed rather than unsigned, because baseline x86-64 (SSE2) has a
+  signed 32-bit compare but no unsigned one.
+
+The assembly confirms `psubd`/`pcmpgtd`/blend on four lanes. The result
+is 75 ms for a 6-hour curve (about 3 G windows/s) on a laptop. When only
+a few durations are needed, `mmp_at` is O(n·k). Larger totals fall back
+to wrapping `u32` and then `u64`.
+
+### 10.4 Two "obvious" invariants that are false
+
+The brief asked for property tests of "NP ≥ average power" and "the MMP
+curve is non-increasing". proptest falsified both, and the docs had
+claimed the second with a wrong proof:
+
+- **MMP can increase with duration.** `[980, 0, 980]`: the best 2 s
+  averages 490 W, the best 3 s 653 W. The "drop the weakest second"
+  argument fails because removing a middle second doesn't leave a window.
+  On the real fixtures the curve rises at thousands of durations and sits
+  up to 8 % below its envelope: two hard efforts with a lull between
+  them. What is true, and now tested: best *work* never decreases with
+  duration; MMP(k·d) ≤ MMP(d) (split the window into k pieces); MMP(1) is
+  the max and MMP(n) the average. `PowerCurve::envelope` gives the
+  monotone curve when a model needs one.
+- **NP can be below the average** at the edges. The first and last 29
+  seconds sit in fewer than 30 windows, so one hard second followed by
+  30 s of zeros gives NP 28 W against an average of 32 W. NP is always ≥
+  the mean of its rolling averages (power-mean inequality), and ≥ the
+  average when the ride starts and ends with ≥ 29 s of zeros. Both
+  versions are tested.
+
+### 10.5 How validation works
+
+Validation works in four layers, none of which uses the crate to check
+itself:
+
+1. **Hand-computed unit tests.** Constant power gives NP = average. One
+   hour at FTP gives TSS 100. A 60 s/60 s block test checks NP window by
+   window against an explicit sum. All zeros gives NP 0 and no NaN. W'bal
+   is checked against a hand-stepped sequence, CP recovery against an
+   exact hyperbola, and CTL against the closed form `L·(1 − e^(−n/42))`.
+2. **Brute force.** The MMP curve is compared to an O(n³) window
+   enumeration.
+3. **proptest invariants** (`tests/proptest.rs`):
+   - the corrected MMP and NP properties above;
+   - W'bal ≤ W';
+   - TSS exactly linear in duration at constant power, and never lower
+     when riding continues;
+   - resampler accounting (every output second is a kept record or a
+     filled gap; elapsed = output + paused);
+   - full-pipeline consistency.
+4. **intervals.icu** (`tests/fixtures.rs`):
+   - values recorded by hand from the web app
+     (`tests/fixtures/intervals_icu.json`, still to be filled in);
+   - the session values intervals.icu writes into its own FIT exports,
+     with the FTP it used. Every metric gets an explicit tolerance, and
+     the test prints the error table.
+
+### 10.6 How close we match intervals.icu, and why we differ
+
+Against intervals.icu's export (FTP 323 W):
+
+- **Total work**: exact on one ride, 0.007 % on the other.
+- **Average power**: within 0.3 %.
+- **IF**: within 0.9 %.
+- **NP**: 0.05 % on `icu_intervals`, −0.8 % on `icu_laps`.
+- **TSS**: −0.7 % and +1.45 %.
+
+Each difference was investigated before anything was tuned (nothing was):
+
+- **TSS**: NP and IF match, so the difference is all in the duration.
+  intervals.icu uses moving time from the velocity stream with an
+  unpublished threshold. A threshold fitted to one ride misfits the other,
+  so the default stays a documented 0.5 m/s. Using recording time instead
+  would be 3 % off.
+- **NP on `icu_laps`**: the streams are identical (the work matches to
+  the joule), so it's algorithmic. I tried several variants and none fits
+  both rides: per-segment windows, partial first windows, EWMA smoothing,
+  dropping zeros. The textbook definition stays; the gap is documented as
+  unexplained and under 1 %.
+- **Average power**: intervals.icu counts P + 2 fewer recording seconds
+  for P pauses, about 0.1 %.
+
+### 10.7 intervals.icu conventions vs the textbook
+
+| Topic | Textbook / TrainingPeaks | intervals.icu (our default) |
+|---|---|---|
+| TSS duration | file duration | moving time |
+| CTL/ATL daily weight | 1/τ | 1 − e^(−1/τ) (exact decay) |
+| TSB on day t | yesterday's CTL − ATL | today's, after training |
+| Power curve | recording time | elapsed time, pauses as 0 W |
+| Short power dropouts | varies | repaired up to 8 s |
+| hrTSS | TrainingPeaks: time in zones → TSS/h | HRSS: normalized TRIMP |
+| eFTP | 95 % of 20 min | best ≥ 3 min effort placed on a model curve, read at 1 h |
+
+The two weights differ by 1.2 % per day for τ = 42 but 7.3 % for τ = 7, so
+platforms agree on fitness and disagree visibly on fatigue and form.
+
+### 10.8 Performance
+
+Measured on a Core Ultra 7 165U laptop:
+
+| Workload | Time |
+|---|---|
+| Full analysis of a 4 h ride (resampling, every metric, the full curve, CP, eFTP, W'bal) | 56 ms, mostly the O(n²) curve |
+| 6 h MMP curve | 75 ms |
+| 24 selected durations | 0.9 ms |
+| CTL/ATL over 3 years of days | 12 µs |
+| `analyze_fit` on a real 1-hour file | 6 ms |
+
+### 10.9 WebAssembly
+
+`crates/zerofit-analytics-wasm` exports
+`analyze(fitBytes, settingsJson) → summaryJson`. The logic is a plain
+Rust function (`analyze_json`) with native tests; the `#[wasm_bindgen]`
+export only converts the error type. That's also the only place `unsafe`
+is allowed: the macro's FFI glue, with a documented `#[allow]`. CI builds
+for `wasm32-unknown-unknown`, runs `wasm-bindgen` (pinned to the crate's
+version) and a node smoke test that checks NP/TSS on a real ride, an
+HR-only ride and the error paths. The `.wasm` is about 220 KB.
+
+### 10.10 Ten more likely questions
+
+**1. Why `no_std` for an analytics library?**
+The metrics are pure arithmetic over slices, so nothing needs an OS. That
+lets the same code run on a bike computer's microcontroller, in a browser
+via WebAssembly, or on a server. It needs `alloc`, though: a stream is as
+long as the ride, so a fixed-size buffer would cap ride length
+arbitrarily. Per-metric functions borrow slices and don't allocate; only
+the resampler, the curve and the load series do. `core` has no
+`exp`/`sqrt`, so they come from `libm`.
+
+**2. Why is power stored as `u16` with dropouts as 0, while HR is
+`Option<u8>`?**
+Every power metric needs a value every second. NP's rolling window can't
+skip a second, and work is a sum. So power gets a concrete value plus a
+dropout flag (`ActivityStream::power_dropout`), and metrics take `&[u16]`
+directly. Missing heart rate has no honest substitute, so HR metrics skip
+`None` instead of averaging in zeros.
+
+**3. Your TSS doesn't match TrainingPeaks for the same file. Bug?**
+Probably a convention. TrainingPeaks uses the file's duration;
+intervals.icu, and our default, use moving time, so a café stop with the
+timer running adds no load. `LoadDuration::Recording` reproduces the
+TrainingPeaks convention. NP and IF should match either way; if they
+don't, look at how each tool fills gaps and pauses.
+
+**4. How do you know the resampler is right?**
+Each rule is a unit test. A property test checks the accounting:
+
+- every output second is a kept record or a filled gap;
+- elapsed time = output seconds + paused seconds;
+- timestamps strictly increase;
+- no panics on arbitrary input.
+
+Externally, our stream's total work equals intervals.icu's exported
+`total_work` to the joule on one ride and within 0.007 % on another.
+
+**5. Why is the 6-hour curve 75 ms and not 5 ms?**
+It's 233 million window evaluations, and the exact all-durations problem
+has no known subquadratic algorithm, so the only lever is the constant.
+We're at about 3 G evaluations/s with SSE2. AVX2's `vpmaxsd` would roughly
+double that, but a library shouldn't force `target-cpu` flags on its
+users. If 75 ms matters, compute `mmp_at` for the 20 durations you plot,
+or update a season curve incrementally per activity (`SeasonCurve::add`)
+instead of recomputing.
+
+**6. Why fit CP on log-spaced points instead of every second of 2–20
+minutes?**
+One-second steps would put 90 % of the points between 3 and 20 minutes
+and weight the fit toward the long end. Log spacing (about 10 % steps)
+weights each "decade" of duration equally. The model is also only valid
+in roughly 2–20 minutes: shorter efforts aren't W'-limited and longer
+ones hit fatigue the model ignores.
+
+**7. W'bal went negative. Is that a bug?**
+No. It means the athlete did more work above CP than the model's W'
+allows, so CP or W' is set too low. Clamping at zero would hide exactly
+the evidence you need to update the settings. W'bal never *exceeds* W',
+because recovery approaches it asymptotically, and a property test
+checks that.
+
+**8. What does a pause do to W'bal and NP?**
+NP's window runs across a removed pause: the stream is recording time,
+and inventing zeros would penalise stopping. W'bal treats the pause as
+rest at 0 W for its real duration, using the closed form
+`e^(−CP·Δt/W')`, because the athlete was recovering, not frozen in time.
+The stream keeps each sample's elapsed time for exactly this.
+
+**9. How would you make CTL/ATL match another platform exactly?**
+Three knobs, all in `LoadConfig`:
+
+- the daily weight (`Convention`);
+- whether TSB uses today's or yesterday's values;
+- the seed values (intervals.icu seeds from 184 days of history, so start
+  your series early or pass `initial_ctl`/`initial_atl`).
+
+Then make sure the daily loads match: same TSS convention, and multiple
+activities on one day summed (`daily_loads`).
+
+**10. What would you add next?**
+In order:
+
+1. Fill in `intervals_icu.json` and run the comparison on more rides.
+2. Interval detection.
+3. Running metrics: rTSS from normalized graded pace.
+4. An incremental, streaming version of the power curve for on-device
+   use, where only the K standard durations are kept as O(K) rolling
+   windows.
+5. Fitting CP to the season envelope rather than single rides.
