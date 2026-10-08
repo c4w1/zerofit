@@ -85,7 +85,7 @@
   </p>
   <p class="muted">
     zerofit {app.wasmVersion ? `· WASM v${app.wasmVersion} loaded in ${app.wasmLoadMs.toFixed(0)} ms` : ""} ·
-    <a href="https://github.com/ondemous/zerofit">source code</a> · MIT/Apache-2.0
+    <a href="https://github.com/c4w1/zerofit">source code</a> · MIT/Apache-2.0
   </p>
 </footer>
 

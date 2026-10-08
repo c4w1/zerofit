@@ -7,7 +7,7 @@ use it. Items in [brackets] don't exist yet: fill them in or drop them.
 ---
 
 **zerofit: privacy-first cycling analytics in Rust and WebAssembly**
-([live demo](https://ondemous.github.io/zerofit/) · [source](https://github.com/ondemous/zerofit))
+([live demo](https://c4w1.github.io/zerofit/) · [source](https://github.com/c4w1/zerofit))
 
 - Built a zero-copy, `no_std`, panic-free Rust decoder for Garmin FIT files.
   It decodes and scales every field **20–28× faster than the `fitparser`

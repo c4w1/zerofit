@@ -91,5 +91,5 @@ First release.
   the file's `field_description` messages.
 - Example: `fit-dump` (FIT to JSON or FitCSVTool-style CSV).
 
-[Unreleased]: https://github.com/ondemous/zerofit/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/ondemous/zerofit/releases/tag/v0.1.0
+[Unreleased]: https://github.com/c4w1/zerofit/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/c4w1/zerofit/releases/tag/v0.1.0

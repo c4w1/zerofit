@@ -4,10 +4,10 @@
 activity files, from the binary protocol up to training metrics and
 fueling plans, compiled to WebAssembly and run entirely client-side.
 
-**Live demo: https://ondemous.github.io/zerofit/** (the demo data loads on
+**Live demo: https://c4w1.github.io/zerofit/** (the demo data loads on
 first visit, so there's nothing to upload)
 
-[![The activity page: summary metrics and synced power, W' balance and heart-rate charts](docs/images/hero.png)](https://ondemous.github.io/zerofit/)
+[![The activity page: summary metrics and synced power, W' balance and heart-rate charts](docs/images/hero.png)](https://c4w1.github.io/zerofit/)
 
 `zerofit` is a zero-copy, `no_std`, panic-free FIT decoder, 20–28x faster
 than the `fitparser` crate with zero allocations. On top of it:
