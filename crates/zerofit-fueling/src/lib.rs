@@ -68,7 +68,9 @@ pub mod plan;
 pub mod session;
 
 pub use daily::{LoadBand, daily_carbs_g_per_kg, daily_protein_g_per_kg, day_load};
-pub use plan::{DayInput, DayPlan, Entry, EntryKind, MealKind, MealSchedule, PlanError, day_plan};
+pub use plan::{
+    DayInput, DayPlan, Entry, EntryKind, MealKind, MealSchedule, PlanError, PrePart, day_plan,
+};
 
 /// The athlete, as far as fueling cares.
 #[derive(Debug, Clone, Copy, PartialEq)]

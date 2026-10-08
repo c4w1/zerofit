@@ -729,6 +729,7 @@ mod tests {
         assert_eq!(v["band"], "High");
         assert!(v["entries"].as_array().unwrap().len() > 8);
         assert_eq!(v["entries"][0]["kind"]["type"], "pre_session");
+        assert_eq!(v["entries"][0]["kind"]["part"], "Meal");
         assert!(fueling_day_json(r#"{"body_mass_kg": 0, "sessions": []}"#).is_err());
     }
 

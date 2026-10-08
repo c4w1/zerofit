@@ -91,13 +91,15 @@ test("view the fueling plan", async ({ page }) => {
   await expect(page.getByRole("note", { name: "Disclaimer" })).toContainText("not medical or dietary advice");
 
   // Saturday has the sample week's 4-hour ride: a high or very high day
-  // with in-ride feeds and rapid recovery (Sunday's ride is < 24 h away).
+  // with in-ride feeds. Sunday's ride is ~20 h later, so no rapid
+  // recovery (that is for gaps under 8 h): a protein feed and meals.
   await page.getByRole("tab", { name: /Sat/ }).click();
   const gkg = Number((await page.getByTestId("carbs-gkg").textContent())?.replace(/[^\d.]/g, ""));
   expect(gkg).toBeGreaterThanOrEqual(6);
   const table = page.getByTestId("fuel-table");
   await expect(table.getByRole("row", { name: /On the bike/ }).first()).toBeVisible();
-  await expect(table.getByRole("row", { name: /Recovery, hour 1/ })).toBeVisible();
+  await expect(table.getByRole("row", { name: /Post-ride protein/ })).toBeVisible();
+  await expect(table.getByRole("row", { name: /Recovery, hour/ })).toHaveCount(0);
   await expect(page.getByText(/glucose \+ fructose/)).toBeVisible();
   expect(errors).toEqual([]);
 });

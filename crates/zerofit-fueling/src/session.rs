@@ -92,7 +92,7 @@ pub struct DuringRide {
 }
 
 /// Minutes between in-ride feeds.
-pub const FEED_INTERVAL_MIN: u32 = 20;
+pub const FEED_INTERVAL_MIN: u32 = 30;
 
 /// Intensity factor from which a 45–75 min session gets the mouth-rinse
 /// suggestion: threshold-type work and above.
@@ -168,12 +168,22 @@ pub struct Recovery {
     pub protein_g_per_kg: f64,
 }
 
+/// Hours between sessions below which recovery is "speedy refuelling".
+///
+/// Burke et al. 2011 (IOC consensus) and Thomas, Erdman & Burke 2016:
+/// *"when the period between exercise sessions is < 8 h"*. With a longer
+/// gap, regular meals that meet the daily target restore glycogen just
+/// as well (Burke et al. 1996; Parkin et al. 1997). An earlier version of
+/// this crate used 24 h, which put four hourly feeds after every evening
+/// session followed by a morning ride and starved the rest of the day.
+pub const RAPID_RECOVERY_HOURS: f64 = 8.0;
+
 /// Recovery fueling (Burke et al. 2011; Thomas, Erdman & Burke 2016):
-/// when the next session is **less than 24 h** after this one ends, eat
-/// **1.0–1.2 g/kg/h carbohydrate for the first ~4 h**, starting soon
-/// after the session, to restore muscle glycogen at the fastest rate.
-/// With a day or more until the next session, regular meals restore
-/// glycogen and no rapid recovery is needed.
+/// when the next session is **less than [`RAPID_RECOVERY_HOURS`]** after
+/// this one ends, eat **1.0–1.2 g/kg/h carbohydrate for the first ~4 h**,
+/// starting soon after the session, to restore muscle glycogen at the
+/// fastest rate. With more time, regular meals restore glycogen and no
+/// rapid recovery is needed.
 ///
 /// The rate is `1.0 + 0.2 · demand`. The hours are `min(4, hours until the
 /// next session)`, rounded down. Either way the first feed carries
@@ -185,10 +195,10 @@ pub struct Recovery {
 /// use zerofit_fueling::{Athlete, PlannedSession, session::recovery};
 /// let athlete = Athlete { body_mass_kg: 70.0, ftp_w: Some(250.0) };
 /// let ride = PlannedSession::new(480, 180, 0.75);
-/// let back_to_back = recovery(&ride, &athlete, Some(20.0));
-/// assert_eq!(back_to_back.hours, 4);
-/// assert!(back_to_back.carbs_g_per_kg_per_hour >= 1.0);
-/// let rest_tomorrow = recovery(&ride, &athlete, Some(30.0));
+/// let double_day = recovery(&ride, &athlete, Some(6.0));
+/// assert_eq!(double_day.hours, 4);
+/// assert!(double_day.carbs_g_per_kg_per_hour >= 1.0);
+/// let rest_tomorrow = recovery(&ride, &athlete, Some(20.0));
 /// assert_eq!((rest_tomorrow.hours, rest_tomorrow.carbs_g_per_kg_per_hour), (0, 0.0));
 /// assert_eq!(rest_tomorrow.protein_g_per_kg, 0.3);
 /// ```
@@ -198,7 +208,7 @@ pub fn recovery(
     athlete: &Athlete,
     hours_until_next: Option<f64>,
 ) -> Recovery {
-    let urgent = hours_until_next.filter(|h| h.is_finite() && *h < 24.0);
+    let urgent = hours_until_next.filter(|h| h.is_finite() && *h < RAPID_RECOVERY_HOURS);
     match urgent {
         Some(gap) => {
             let hours = crate::num::floor_u32(gap.clamp(0.0, 4.0)).max(1);
@@ -291,8 +301,9 @@ mod tests {
     #[test]
     fn recovery_window() {
         let ride = PlannedSession::new(480, 90, 0.7);
-        assert_eq!(recovery(&ride, &A, Some(23.99)).hours, 4);
-        assert_eq!(recovery(&ride, &A, Some(24.0)).hours, 0);
+        assert_eq!(recovery(&ride, &A, Some(7.99)).hours, 4);
+        assert_eq!(recovery(&ride, &A, Some(8.0)).hours, 0);
+        assert_eq!(recovery(&ride, &A, Some(20.0)).hours, 0);
         assert_eq!(recovery(&ride, &A, None).hours, 0);
         assert_eq!(recovery(&ride, &A, Some(2.5)).hours, 2);
         assert_eq!(recovery(&ride, &A, Some(0.2)).hours, 1);

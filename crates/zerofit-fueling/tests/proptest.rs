@@ -95,13 +95,19 @@ proptest! {
         })
         .unwrap();
         prop_assert!(plan.entries.windows(2).all(|w| w[0].time_min <= w[1].time_min));
-        prop_assert!(plan.entries.iter().all(|e| e.carbs_g >= 0.0 && e.protein_g >= 0.0));
+        for e in &plan.entries {
+            prop_assert!(e.carbs_g >= 0.0 && e.protein_g >= 0.0);
+            prop_assert_eq!(e.time_min % 15, 0, "{:?}", e);
+            prop_assert_eq!(e.carbs_g % 5.0, 0.0, "{:?}", e);
+            prop_assert_eq!(e.protein_g % 5.0, 0.0, "{:?}", e);
+        }
+        // Rounding to 5 g moves the total by at most 2.5 g.
         let protein: f64 = plan.entries.iter().map(|e| e.protein_g).sum();
-        prop_assert!(protein >= plan.protein_g - 1e-6);
+        prop_assert!((protein - plan.protein_g).abs() <= 2.5 + 1e-6);
         if plan.session_feeds_exceed_target {
-            prop_assert!(plan.carbs_planned_g >= plan.carbs_target_g);
+            prop_assert!(plan.carbs_planned_g >= plan.carbs_target_g - 2.5);
         } else {
-            prop_assert!((plan.carbs_planned_g - plan.carbs_target_g).abs() < 1e-6);
+            prop_assert!((plan.carbs_planned_g - plan.carbs_target_g).abs() <= 2.5 + 1e-6);
         }
         for e in &plan.entries {
             if let EntryKind::DuringSession { session } = e.kind {

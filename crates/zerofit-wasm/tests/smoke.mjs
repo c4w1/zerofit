@@ -95,7 +95,8 @@ const day = JSON.parse(
   ),
 );
 assert.equal(day.band, "High");
-assert.ok(Math.abs(day.carbs_planned_g - day.carbs_target_g) < 1e-6);
+assert.ok(Math.abs(day.carbs_planned_g - day.carbs_target_g) <= 2.5);
+assert.ok(day.entries.every((e) => e.time_min % 15 === 0 && e.carbs_g % 5 === 0));
 
 // Errors surface as JavaScript exceptions with a message.
 assert.throws(() => wasm.analyze(new Uint8Array([1, 2, 3]), ""), /FIT decoding failed/);

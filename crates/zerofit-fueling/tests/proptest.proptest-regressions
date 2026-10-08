@@ -5,3 +5,4 @@
 # It is recommended to check this file in to source control so that
 # everyone who runs the test benefits from these saved cases.
 cc 8575f48234225fb7e4e2f28cf5959314994c7c45aee71085344ac82c3c55cd3d # shrinks to athlete = Athlete { body_mass_kg: 88.32078065029741, ftp_w: None }, sessions = [(0, 296, 0.3), (372, 1, 0.7424632532167442)], next = None
+cc 0e1ee5cf72bd47eb2d75a94a7c86947deeb3badb225d55de2f81ee95e75d42a6 # shrinks to athlete = Athlete { body_mass_kg: 40.0, ftp_w: None }, sessions = [(68, 278, 0.3), (624, 43, 1.08133375953862)], next = None

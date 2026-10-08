@@ -57,14 +57,17 @@
   });
 
   const plan = $derived(typeof plans[selected] === "object" ? (plans[selected] as DayPlan) : null);
+  /** Hours as a clean value: "1 h", "2.5 h". */
+  const hours = (h: number) => `${Number.isInteger(h) ? h : h.toFixed(1)} h`;
   const bandLabel = { Light: "Light", Moderate: "Moderate", High: "High", VeryHigh: "Very high" } as const;
 
   function what(e: FuelEntry): string {
     switch (e.kind.type) {
       case "meal":
-        return { Breakfast: "Breakfast", Lunch: "Lunch", Dinner: "Dinner", EveningSnack: "Evening snack" }[e.kind.meal];
+        return { Breakfast: "Breakfast", Lunch: "Lunch", Dinner: "Dinner", PostRideDinner: "Post-ride dinner", EveningSnack: "Evening snack", Snack: "Protein snack" }[e.kind.meal];
       case "pre_session":
-        return `Pre-ride meal (session ${e.kind.session + 1})`;
+        if (e.kind.part === "TopUp") return `Pre-ride top-up (session ${e.kind.session + 1})`;
+        return e.kind.replaces_breakfast ? `Breakfast, pre-ride (session ${e.kind.session + 1})` : `Pre-ride meal (session ${e.kind.session + 1})`;
       case "during_session":
         return `On the bike (session ${e.kind.session + 1})`;
       case "recovery":
@@ -148,11 +151,13 @@
       <div class="session">
         <h3>Session {i + 1}: {clock(s.start_min)}, {duration(s.duration_min * 60)}</h3>
         <ul>
-          <li><strong>Before:</strong> {num(s.pre.carbs_g_per_kg, 1)} g/kg ({num(s.pre.carbs_g_per_kg * app.settings.weight_kg)} g) carbohydrate, {num(s.pre.hours_before, 1)} h before the start.</li>
+          <li>
+            <strong>Before:</strong> {num(s.pre.carbs_g_per_kg, 1)} g/kg ({num(Math.round((s.pre.carbs_g_per_kg * app.settings.weight_kg) / 5) * 5)} g) carbohydrate, {hours(s.pre.hours_before)} before the start{#if s.pre_replaces_breakfast}, as breakfast{/if}{#if s.pre_split}, split into a meal and a top-up an hour before{/if}.
+          </li>
           <li>
             <strong>During:</strong>
             {#if s.during.carbs_g_per_hour > 0}
-              {num(s.during.carbs_g_per_hour)} g carbohydrate per hour ({num(s.during_total_g)} g total), every {s.during.feed_interval_min} min{#if s.during.multiple_transportable}, from a glucose + fructose mix (above 60 g/h a single sugar's gut transporter saturates){/if}.
+              {num(s.during.carbs_g_per_hour)} g carbohydrate per hour (about {num(Math.round(s.during_total_g / 5) * 5)} g in total), every {s.during.feed_interval_min} min{#if s.during.multiple_transportable}, from a glucose + fructose mix (above 60 g/h a single sugar's gut transporter saturates){/if}.
             {:else if s.during.mouth_rinse}
               no carbohydrate needed at this length; rinsing the mouth with a sports drink can still help a hard effort.
             {:else}
@@ -162,9 +167,9 @@
           <li>
             <strong>After:</strong>
             {#if s.recovery.hours > 0}
-              {num(s.recovery.carbs_g_per_kg_per_hour, 1)} g/kg/h carbohydrate for {s.recovery.hours} h, because the next session is less than 24 h away, plus {num(s.recovery.protein_g_per_kg * app.settings.weight_kg)} g protein.
+              {num(s.recovery.carbs_g_per_kg_per_hour, 1)} g/kg/h carbohydrate for {s.recovery.hours} h, because the next session is less than 8 h away, plus a protein feed.
             {:else}
-              {num(s.recovery.protein_g_per_kg * app.settings.weight_kg)} g protein; regular meals restore glycogen before the next session.
+              a protein feed; regular meals restore glycogen before the next session.
             {/if}
           </li>
         </ul>
