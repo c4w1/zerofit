@@ -364,7 +364,8 @@ impl ActivityStream {
     /// Power over *elapsed* time: the recorded power with every paused
     /// second filled with 0 W. intervals.icu builds its power curve this way
     /// (a 4 h curve point is total work / elapsed time, stops included), so
-    /// the activity summary uses it for the MMP curve.
+    /// [`analyze_stream`](crate::analyze_stream) uses it for the power curve
+    /// by default.
     ///
     /// ```
     /// use zerofit_analytics::{ActivityStream, stream::Sample};

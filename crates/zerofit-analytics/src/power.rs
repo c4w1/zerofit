@@ -149,7 +149,7 @@ pub fn intensity_factor(np: f64, ftp: f64) -> Option<f64> {
 ///
 /// Judgment call: **which `t`.** TrainingPeaks uses the duration of the
 /// file. intervals.icu uses *moving time*, so a café stop with the timer
-/// running doesn't add load (the activity summary passes
+/// running doesn't add load ([`analyze_stream`](crate::analyze_stream) passes
 /// [`ActivityStream::moving_time`](crate::ActivityStream::moving_time)).
 /// This function takes `t` explicitly so either convention can be used.
 ///

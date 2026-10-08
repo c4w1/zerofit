@@ -20,7 +20,25 @@
 //!    time. See [`resample`] for exactly how gaps, pauses, dropouts and
 //!    duplicate timestamps are treated, because every metric depends on it.
 //! 2. Metric functions take the stream (or plain slices) plus
-//!    [`AthleteSettings`].
+//!    [`AthleteSettings`]; [`analyze_stream`] (or [`analyze_records`],
+//!    or `analyze_fit` from FIT bytes) runs all of them at once.
+//!
+//! ```
+//! use zerofit_analytics::{ActivityStream, AnalysisConfig, AthleteSettings, analyze_stream};
+//!
+//! // 10 minutes easy, 20 minutes at 300 W, 10 minutes easy.
+//! let mut power = vec![150u16; 600];
+//! power.extend([300u16; 1200]);
+//! power.extend([150u16; 600]);
+//! let stream = ActivityStream::from_power(0, &power);
+//!
+//! let athlete = AthleteSettings { ftp: Some(280.0), ..AthleteSettings::default() };
+//! let summary = analyze_stream(&stream, &athlete, &AnalysisConfig::default()).summary;
+//! assert_eq!(summary.average_power, Some(225.0));
+//! let np = summary.normalized_power.unwrap();
+//! assert!(np > 250.0 && np < 260.0);
+//! println!("NP {np:.0} W, IF {:.2}, TSS {:.0}", summary.intensity_factor.unwrap(), summary.tss.unwrap());
+//! ```
 //!
 //! # `no_std`
 //!
@@ -52,7 +70,11 @@ mod num;
 pub mod power;
 pub mod resample;
 pub mod stream;
+pub mod summary;
 pub mod wbal;
 
 pub use athlete::{AthleteSettings, DEFAULT_W_PRIME, TrimpCoefficients, Zones};
 pub use stream::{ActivityStream, DEFAULT_MOVING_SPEED, Sample, SampleState};
+#[cfg(feature = "fit")]
+pub use summary::analyze_fit;
+pub use summary::{ActivitySummary, Analysis, AnalysisConfig, analyze_records, analyze_stream};
