@@ -30,12 +30,24 @@
 //!
 //! # Monotonicity
 //!
-//! The exact curve never increases with duration: drop the lowest second
-//! from the best `(d+1)`-second window, and what remains is a `d`-second
-//! window whose average is at least as high. The sums here are exact
-//! integers and `f64` division is correctly rounded (so it preserves
-//! order), so the computed curve is non-increasing too, which a property
-//! test checks.
+//! The power-duration curve is usually drawn as non-increasing, but the
+//! exact MMP is **not** guaranteed to be: for `[980, 0, 980]`,
+//! MMP(2) = 490 W while MMP(3) = 653 W. Removing a second from the
+//! middle of a window doesn't leave a window, so the tempting "drop the
+//! weakest second" argument fails. What does hold, and what the property
+//! tests check:
+//!
+//! - the best *work* never decreases with duration (power is ≥ 0);
+//! - `MMP(k·d) ≤ MMP(d)` for every whole `k`: split the best `k·d`
+//!   window into `k` windows of `d`; one of them averages at least as
+//!   much;
+//! - `MMP(1)` is the maximum and `MMP(n)` the average.
+//!
+//! On real rides violations are rare and small (short durations around
+//! two hard efforts separated by a lull). This crate reports the exact
+//! values; [`PowerCurve::envelope`] gives the non-increasing upper
+//! envelope ("at least this much for at least this long") when a
+//! monotone curve is needed.
 
 use alloc::vec::Vec;
 
@@ -110,6 +122,30 @@ impl PowerCurve {
         (1usize..)
             .zip(&self.best_sum)
             .map(|(d, &s)| (d, f64_from_u64(s) / f64_from_usize(d)))
+    }
+
+    /// The non-increasing upper envelope, W: for each duration, the best
+    /// average over *that or any longer* duration
+    /// (`max over d' ≥ d of MMP(d')`). Index `d − 1` holds duration `d`.
+    /// If 653 W was held for 3 s, then 653 W was held for at least 2 s,
+    /// even if no 2-second window averaged that much.
+    ///
+    /// ```
+    /// use zerofit_analytics::mmp::PowerCurve;
+    /// let curve = PowerCurve::new(&[980, 0, 980]);
+    /// assert_eq!(curve.watts(2), Some(490.0)); // exact MMP dips…
+    /// let env = curve.envelope();
+    /// assert!((env[1] - 1960.0 / 3.0).abs() < 1e-9); // …the envelope doesn't
+    /// ```
+    #[must_use]
+    pub fn envelope(&self) -> Vec<f64> {
+        let mut out: Vec<f64> = self.iter().map(|(_, w)| w).collect();
+        let mut best = 0.0f64;
+        for w in out.iter_mut().rev() {
+            best = best.max(*w);
+            *w = best;
+        }
+        out
     }
 
     /// Raises every point to `other`'s where `other` is higher, and extends

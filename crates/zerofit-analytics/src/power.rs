@@ -78,6 +78,14 @@ pub fn max_power(power: &[u16]) -> Option<u16> {
 ///   average, as in the original definition.
 /// - **Windows span pauses.** The stream is recording time, so the window
 ///   continues across a removed pause instead of filling it with zeros.
+/// - **NP ≥ average power is not guaranteed at the edges.** NP is the
+///   4-power mean of the rolling averages, so it is always at least their
+///   arithmetic mean; but samples in the first and last 29 seconds appear
+///   in fewer than 30 windows, so the mean of the rolling averages can be
+///   below the plain average. One hard second followed by 30 s of zeros
+///   has NP ≈ 28 W and an average of 32 W. With ≥ 29 s of zeros at both
+///   ends (how real rides start and stop) NP ≥ average holds exactly; the
+///   property tests check both statements.
 /// - **Fewer than 30 samples: `None`.** There is no full window to
 ///   average, and falling back to average power would silently change the
 ///   metric's meaning.
