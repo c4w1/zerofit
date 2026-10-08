@@ -395,8 +395,11 @@ mod tests {
 
     #[test]
     fn empty() {
-        assert!(training_load(&[], &LoadConfig::default()).is_empty());
-        assert!(daily_loads(&[]).is_empty());
+        assert_eq!(
+            training_load(&[], &LoadConfig::default()),
+            [] as [DailyLoad; 0]
+        );
+        assert_eq!(daily_loads(&[]), [] as [f64; 0]);
         assert!(estimate_ftp(&PowerCurve::new(&[300; 100]), EFTP_RANGE, 20_000.0).is_none());
     }
 

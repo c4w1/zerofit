@@ -652,7 +652,7 @@ mod tests {
         let d = a.take_curve_durations();
         assert_eq!(d.len(), a.take_curve_watts().len());
         assert_eq!(d.last(), Some(&4549)); // elapsed-time curve
-        assert!(a.take_power().is_empty()); // moved out
+        assert_eq!(a.take_power(), [] as [u16; 0]); // moved out
     }
 
     #[test]
@@ -734,7 +734,7 @@ mod tests {
 
     #[test]
     fn grid_edges() {
-        assert!(curve_grid(0).is_empty());
+        assert_eq!(curve_grid(0), [] as [usize; 0]);
         assert_eq!(curve_grid(5), vec![1, 2, 3, 4, 5]);
         assert_eq!(curve_grid(21), {
             let mut v: Vec<usize> = (1..=20).collect();
@@ -745,6 +745,6 @@ mod tests {
 
     #[test]
     fn version_is_set() {
-        assert!(!version().is_empty());
+        assert_ne!(version(), "");
     }
 }

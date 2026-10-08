@@ -172,9 +172,9 @@ mod tests {
 
     #[test]
     fn invalid_parameters() {
-        assert!(w_prime_balance(&[100], 0.0, 10_000.0).is_empty());
-        assert!(w_prime_balance(&[100], 200.0, -1.0).is_empty());
-        assert!(w_prime_balance(&[100], f64::NAN, 1.0).is_empty());
+        assert_eq!(w_prime_balance(&[100], 0.0, 10_000.0), [] as [f64; 0]);
+        assert_eq!(w_prime_balance(&[100], 200.0, -1.0), [] as [f64; 0]);
+        assert_eq!(w_prime_balance(&[100], f64::NAN, 1.0), [] as [f64; 0]);
         assert_eq!(min_balance(&[]), None);
     }
 

@@ -421,6 +421,6 @@ mod tests {
         let s = ActivityStream::new(0);
         assert!(s.is_empty());
         assert_eq!(s.elapsed_time(), 0);
-        assert!(s.power_elapsed().is_empty());
+        assert_eq!(s.power_elapsed(), [] as [u16; 0]);
     }
 }

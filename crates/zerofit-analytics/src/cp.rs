@@ -349,7 +349,7 @@ mod tests {
         assert!(d.len() > 20 && d.len() < 30, "{}", d.len());
         let d = FitRange::TWO_PARAMETER.durations(500);
         assert_eq!(d.last(), Some(&500));
-        assert!(FitRange::TWO_PARAMETER.durations(60).is_empty());
+        assert_eq!(FitRange::TWO_PARAMETER.durations(60), [] as [usize; 0]);
     }
 
     #[test]
