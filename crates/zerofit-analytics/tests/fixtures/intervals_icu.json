@@ -1,0 +1,156 @@
+{
+  "_doc": [
+    "Values recorded by hand from intervals.icu for each fixture ride in crates/zerofit/tests/fixtures/.",
+    "Fill in what intervals.icu shows; leave null what it doesn't. tests/fixtures.rs compares every non-null value",
+    "against zerofit-analytics with the tolerances in that file and prints the error table.",
+    "settings: the athlete settings intervals.icu used for that activity (ftp_used is required for power metrics).",
+    "Units: seconds, watts, bpm, kJ; decoupling_pct in percent; mmp_watts keys are durations in seconds;",
+    "zone arrays are seconds per zone, Z1 first, in intervals.icu's zone order (7 power zones, 7 HR zones by default)."
+  ],
+  "rides": {
+    "icu_short": {
+      "settings": {
+        "ftp_used": null,
+        "weight_kg": null,
+        "lthr": null,
+        "max_hr": null,
+        "resting_hr": null,
+        "cp": null,
+        "w_prime_j": null
+      },
+      "intervals_icu": {
+        "moving_time_s": null,
+        "elapsed_time_s": null,
+        "average_power": null,
+        "normalized_power": null,
+        "intensity_factor": null,
+        "tss": null,
+        "variability_index": null,
+        "work_kj": null,
+        "average_hr": null,
+        "hr_tss": null,
+        "efficiency_factor": null,
+        "decoupling_pct": null,
+        "mmp_watts": {
+          "5": null,
+          "60": null,
+          "300": null,
+          "1200": null,
+          "3600": null
+        },
+        "eftp": null,
+        "min_w_prime_balance_kj": null,
+        "power_zone_seconds": null,
+        "hr_zone_seconds": null
+      }
+    },
+    "icu_laps": {
+      "settings": {
+        "ftp_used": null,
+        "weight_kg": null,
+        "lthr": null,
+        "max_hr": null,
+        "resting_hr": null,
+        "cp": null,
+        "w_prime_j": null
+      },
+      "intervals_icu": {
+        "moving_time_s": null,
+        "elapsed_time_s": null,
+        "average_power": null,
+        "normalized_power": null,
+        "intensity_factor": null,
+        "tss": null,
+        "variability_index": null,
+        "work_kj": null,
+        "average_hr": null,
+        "hr_tss": null,
+        "efficiency_factor": null,
+        "decoupling_pct": null,
+        "mmp_watts": {
+          "5": null,
+          "60": null,
+          "300": null,
+          "1200": null,
+          "3600": null
+        },
+        "eftp": null,
+        "min_w_prime_balance_kj": null,
+        "power_zone_seconds": null,
+        "hr_zone_seconds": null
+      }
+    },
+    "icu_intervals": {
+      "settings": {
+        "ftp_used": null,
+        "weight_kg": null,
+        "lthr": null,
+        "max_hr": null,
+        "resting_hr": null,
+        "cp": null,
+        "w_prime_j": null
+      },
+      "intervals_icu": {
+        "moving_time_s": null,
+        "elapsed_time_s": null,
+        "average_power": null,
+        "normalized_power": null,
+        "intensity_factor": null,
+        "tss": null,
+        "variability_index": null,
+        "work_kj": null,
+        "average_hr": null,
+        "hr_tss": null,
+        "efficiency_factor": null,
+        "decoupling_pct": null,
+        "mmp_watts": {
+          "5": null,
+          "60": null,
+          "300": null,
+          "1200": null,
+          "3600": null
+        },
+        "eftp": null,
+        "min_w_prime_balance_kj": null,
+        "power_zone_seconds": null,
+        "hr_zone_seconds": null
+      }
+    },
+    "wahoo_elemnt": {
+      "settings": {
+        "ftp_used": null,
+        "weight_kg": null,
+        "lthr": null,
+        "max_hr": null,
+        "resting_hr": null,
+        "cp": null,
+        "w_prime_j": null
+      },
+      "intervals_icu": {
+        "moving_time_s": null,
+        "elapsed_time_s": null,
+        "average_power": null,
+        "normalized_power": null,
+        "intensity_factor": null,
+        "tss": null,
+        "variability_index": null,
+        "work_kj": null,
+        "average_hr": null,
+        "hr_tss": null,
+        "efficiency_factor": null,
+        "decoupling_pct": null,
+        "mmp_watts": {
+          "5": null,
+          "60": null,
+          "300": null,
+          "1200": null,
+          "3600": null
+        },
+        "eftp": null,
+        "min_w_prime_balance_kj": null,
+        "power_zone_seconds": null,
+        "hr_zone_seconds": null
+      }
+    }
+  }
+}

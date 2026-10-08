@@ -43,9 +43,12 @@
 //!   much;
 //! - `MMP(1)` is the maximum and `MMP(n)` the average.
 //!
-//! On real rides violations are rare and small (short durations around
-//! two hard efforts separated by a lull). This crate reports the exact
-//! values; [`PowerCurve::envelope`] gives the non-increasing upper
+//! On real rides rises are common, not exotic: the fixture rides rise at
+//! 1 000–10 000 durations, by up to 10 W in one step, and the exact curve
+//! sits up to 8 % below its envelope. They appear wherever two hard
+//! efforts are separated by a lull: the window that spans both efforts
+//! can beat every shorter window, which must include easy riding on one
+//! side. This crate reports the exact values; [`PowerCurve::envelope`] gives the non-increasing upper
 //! envelope ("at least this much for at least this long") when a
 //! monotone curve is needed.
 
