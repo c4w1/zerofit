@@ -64,6 +64,9 @@
           <div class="stat"><div class="label">Form (TSB)</div><div class="value">{num(today.tsb)}</div></div>
         </div>
         <p class="muted small">Across {app.activities.length} activities. <a href="{base}/fitness/">Fitness details</a></p>
+        {#if app.activities.some((a) => a.demo)}
+          <p class="muted small">Demo rides are shown as ridden in the last ten days; their real dates span three years.</p>
+        {/if}
       {:else}
         <p class="muted">Computing…</p>
       {/if}

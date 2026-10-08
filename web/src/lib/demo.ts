@@ -4,12 +4,33 @@
 import type { Workout, WorkoutStep } from "./types";
 import { addDays, isoDay, mondayOf } from "./format";
 
+/**
+ * The rides and how many days ago each is shown as ridden. The fixtures were
+ * recorded over three years; re-dating them into the last ten days (keeping
+ * the time of day) makes the fitness chart and "today's form" meaningful in
+ * the demo. The UI says so wherever demo rides are shown.
+ */
 export const DEMO_RIDES = [
-  { file: "icu_laps.fit", name: "Group ride with laps (demo)" },
-  { file: "icu_intervals.fit", name: "Interval session, long day (demo)" },
-  { file: "wahoo_elemnt.fit", name: "Long ride, Wahoo ELEMNT (demo)" },
-  { file: "icu_short.fit", name: "Short spin, HR only (demo)" },
+  { file: "wahoo_elemnt.fit", name: "Long ride, Wahoo ELEMNT (demo)", daysAgo: 9 },
+  { file: "icu_intervals.fit", name: "Interval session, long day (demo)", daysAgo: 6 },
+  { file: "icu_laps.fit", name: "Group ride with laps (demo)", daysAgo: 3 },
+  { file: "icu_short.fit", name: "Short spin, HR only (demo)", daysAgo: 1 },
 ];
+
+/**
+ * The demo rider's FTP: the threshold intervals.icu used for these rides
+ * (`threshold_power` in their session messages), so IF and TSS match what
+ * the validation in zerofit-analytics compares against.
+ */
+export const DEMO_FTP = 323;
+
+/** `startMs` moved to `daysAgo` days before today, same time of day. */
+export function redate(startMs: number, daysAgo: number, today = new Date()): number {
+  const t = new Date(startMs);
+  const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() - daysAgo);
+  d.setHours(t.getHours(), t.getMinutes(), t.getSeconds());
+  return d.getTime();
+}
 
 export interface PlanItem {
   id: string;

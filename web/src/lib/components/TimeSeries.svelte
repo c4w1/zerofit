@@ -65,7 +65,13 @@
           stroke: text,
           grid: { stroke: grid, width: 1 },
           ticks: { stroke: grid },
-          values: xIsDuration ? (_u: uPlot, vals: number[]) => vals.map((v) => xFormat(v)) : undefined,
+          // Durations use the caller's format; dates tick on whole days only.
+          values: xIsDuration
+            ? (_u: uPlot, vals: number[]) => vals.map((v) => xFormat(v))
+            : (_u: uPlot, vals: number[]) =>
+                vals.map((v) => new Date(v * 1000).toLocaleDateString(undefined, { month: "short", day: "numeric" })),
+          incrs: xIsDuration ? undefined : [1, 2, 7, 14, 30, 61, 91, 182, 365].map((d) => d * 86_400),
+          space: xIsDuration ? 50 : 60,
         },
         ...scales.map((scale, i) => ({
           scale,

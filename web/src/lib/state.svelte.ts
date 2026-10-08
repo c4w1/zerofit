@@ -6,7 +6,7 @@ import { base } from "$app/paths";
 import { call } from "./worker/client";
 import * as db from "./db";
 import type { ActivityMeta, StoredActivity } from "./db";
-import { DEMO_RIDES, sampleWeek, type PlanItem } from "./demo";
+import { DEMO_FTP, DEMO_RIDES, redate, sampleWeek, type PlanItem } from "./demo";
 import { fitTimeToMs } from "./format";
 import type { AthleteSettings } from "./types";
 
@@ -56,17 +56,23 @@ function sortActivities(list: ActivityMeta[]): ActivityMeta[] {
 }
 
 /** Decodes and analyzes one file in the worker and stores it. */
-async function analyzeAndStore(name: string, bytes: ArrayBuffer, demo: boolean): Promise<ActivityMeta> {
+async function analyzeAndStore(
+  name: string,
+  bytes: ArrayBuffer,
+  demo: boolean,
+  startMs?: (fileStartMs: number) => number,
+): Promise<ActivityMeta> {
   const id = await db.contentId(bytes);
   // Send a copy: the original stays here to be stored.
   const copy = bytes.slice(0);
   const { activity } = await call("analyze", [copy, $state.snapshot(app.settings), false], [copy]);
+  const fileStart = activity.startTime > 0 ? fitTimeToMs(activity.startTime) : Date.now();
   const stored: StoredActivity = {
     id,
     name,
     bytes,
     sport: activity.sport,
-    startMs: activity.startTime > 0 ? fitTimeToMs(activity.startTime) : Date.now(),
+    startMs: startMs ? startMs(fileStart) : fileStart,
     summary: activity.summary,
     curveDurations: Array.from(activity.curveDurations),
     curveWatts: Array.from(activity.curveWatts),
@@ -87,12 +93,21 @@ export interface UploadResult {
 }
 
 /** Analyzes and stores files one by one; returns a result per file. */
-export async function addFiles(files: { name: string; bytes: ArrayBuffer }[], demo = false): Promise<UploadResult[]> {
+export async function addFiles(
+  files: { name: string; bytes: ArrayBuffer; daysAgo?: number }[],
+  demo = false,
+): Promise<UploadResult[]> {
   const results: UploadResult[] = [];
   for (const [i, f] of files.entries()) {
     app.status = `Analyzing ${f.name} (${i + 1} of ${files.length})…`;
     try {
-      const meta = await analyzeAndStore(f.name.replace(/\.fit$/i, ""), f.bytes, demo);
+      const daysAgo = f.daysAgo;
+      const meta = await analyzeAndStore(
+        f.name.replace(/\.fit$/i, ""),
+        f.bytes,
+        demo,
+        daysAgo === undefined ? undefined : (ms) => redate(ms, daysAgo),
+      );
       app.activities = sortActivities([...app.activities.filter((a) => a.id !== meta.id), meta]);
       results.push({
         name: f.name,
@@ -111,11 +126,16 @@ export async function addFiles(files: { name: string; bytes: ArrayBuffer }[], de
 /** Fetches the demo rides from the site and loads the sample week. */
 export async function loadDemo(): Promise<void> {
   app.status = "Loading demo rides…";
+  // Use the demo rider's FTP unless the visitor has saved their own settings.
+  if (!(await db.getKv("settings"))) {
+    app.settings = { ...db.DEFAULT_SETTINGS, ftp: DEMO_FTP };
+    await db.setKv("settings", $state.snapshot(app.settings));
+  }
   const files = await Promise.all(
     DEMO_RIDES.map(async (r) => {
       const res = await fetch(`${base}/demo/${r.file}`);
       if (!res.ok) throw new Error(`could not load ${r.file}`);
-      return { name: `${r.name}.fit`, bytes: await res.arrayBuffer() };
+      return { name: `${r.name}.fit`, bytes: await res.arrayBuffer(), daysAgo: r.daysAgo };
     }),
   );
   await addFiles(files, true);
@@ -132,7 +152,8 @@ export async function saveSettings(settings: AthleteSettings): Promise<void> {
   const all = await db.allActivities();
   for (const [i, a] of all.entries()) {
     app.status = `Re-analyzing with new settings (${i + 1} of ${all.length})…`;
-    await analyzeAndStore(a.name, a.bytes, a.demo);
+    // Keep each activity's stored date (demo rides are re-dated).
+    await analyzeAndStore(a.name, a.bytes, a.demo, () => a.startMs);
   }
   app.activities = sortActivities(await db.activityMetas());
   app.status = "";
