@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Analyze FIT rides, track fitness, plan workouts and fueling — entirely in your browser. Rust compiled to WebAssembly; no server, no accounts, no tracking." />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="%sveltekit.assets%/favicon.svg" type="image/svg+xml" />
+    <title>zerofit</title>
+    <script>
+      // Apply the saved theme before first paint (no flash).
+      try {
+        const t = localStorage.getItem("zerofit-theme");
+        if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+      } catch {}
+    </script>
+    %sveltekit.head%
+  </head>
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents">%sveltekit.body%</div>
+  </body>
+</html>
