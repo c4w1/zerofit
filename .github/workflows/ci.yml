@@ -81,6 +81,28 @@ jobs:
       - run: cargo build -p zerofit-profile --target thumbv7em-none-eabihf
       - run: cargo build -p zerofit-analytics --no-default-features --target thumbv7em-none-eabihf
 
+  wasm:
+    name: WebAssembly build + node smoke test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # Must match the `wasm-bindgen` version pinned in
+      # crates/zerofit-analytics-wasm/Cargo.toml.
+      - run: cargo install wasm-bindgen-cli --version 0.2.129 --locked
+      - run: cargo build -p zerofit-analytics --no-default-features --target wasm32-unknown-unknown
+      - run: cargo build -p zerofit-analytics-wasm --release --target wasm32-unknown-unknown
+      - run: >
+          wasm-bindgen --target nodejs --out-dir target/wasm-pkg
+          target/wasm32-unknown-unknown/release/zerofit_analytics_wasm.wasm
+      - run: node crates/zerofit-analytics-wasm/tests/smoke.mjs
+
   msrv:
     name: MSRV (1.85)
     runs-on: ubuntu-latest

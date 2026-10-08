@@ -26,6 +26,7 @@ crates/zerofit/          raw protocol decoder + encoder, #![no_std], features: a
 crates/zerofit-profile/  typed profile layer; src/generated/ is codegen output (checked in)
 crates/zerofit-analytics/ training metrics (NP, TSS, MMP, CP, W'bal, CTL...), #![no_std] + alloc,
                          features: fit (default; zerofit + zerofit-profile), serde
+crates/zerofit-analytics-wasm/ publish = false; wasm-bindgen `analyze(bytes, settings_json)`; node smoke test
 crates/zerofit-codegen/  publish = false; Profile.xlsx -> profile-subset.json -> Rust
 crates/zerofit-bench/    publish = false; criterion + allocation-count benches vs fitparser
 xtask/                   publish = false; `cargo xtask codegen|extract|expected`
@@ -82,8 +83,9 @@ docs/INTERVIEW.md        design walkthrough and Q&A
   arithmetic. These are denied by workspace lints. Use `get`, `split_at_checked`,
   `checked_*`/`wrapping_*`, and return `Error`s with byte offsets.
 - **No `unsafe`** (`unsafe_code = "forbid"`) in every crate except
-  `zerofit-bench`, whose counting `GlobalAlloc` needs it (`deny` + one
-  documented `#[allow]`).
+  `zerofit-bench`, whose counting `GlobalAlloc` needs it, and
+  `zerofit-analytics-wasm`, whose `#[wasm_bindgen]` exports expand to FFI
+  glue (`deny` + documented `#[allow]`s).
 - **Every public item has rustdoc** (`missing_docs = "deny"`), with a runnable
   example for types and functions users call directly.
 - **The cores must build for `thumbv7em-none-eabihf`**: `zerofit` with
@@ -136,6 +138,10 @@ cargo +1.85 check -p zerofit --all-features            # MSRV
 cargo +1.85 check -p zerofit-profile
 cargo +1.85 check -p zerofit-analytics --all-features
 cargo xtask codegen --check                            # generated code up to date
+# WebAssembly (wasm-bindgen-cli 0.2.129, matching the pinned crate):
+cargo build -p zerofit-analytics-wasm --release --target wasm32-unknown-unknown
+wasm-bindgen --target nodejs --out-dir target/wasm-pkg target/wasm32-unknown-unknown/release/zerofit_analytics_wasm.wasm
+node crates/zerofit-analytics-wasm/tests/smoke.mjs
 cargo publish --dry-run --workspace                    # never without --dry-run
 
 # Regenerate the profile subset from a new SDK, then the code:
@@ -145,6 +151,7 @@ FIT_CSV_TOOL=.../FitSDKRelease_21.171.00/java/FitCSVTool.jar cargo xtask expecte
 # Benchmarks (quiet machine):
 cargo bench -p zerofit-bench --bench decode
 cargo bench -p zerofit-bench --bench alloc_count
+cargo bench -p zerofit-bench --bench analytics
 # Fuzzing (nightly, run under WSL/Linux):
 cd fuzz && cargo +nightly fuzz run decode -- -max_total_time=60
 ```
