@@ -27,10 +27,9 @@
     days.flatMap((d) => itemsOn(d)).reduce((t, p) => t + (loads[p.id]?.tss ?? 0), 0),
   );
 
-  let saveTimer: ReturnType<typeof setTimeout> | undefined;
+  // Save on every edit, not debounced: a pending timer is lost on reload.
   function persist() {
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(() => savePlan($state.snapshot(app.plan)), 250);
+    savePlan().catch((e) => (app.error = `Could not save the plan: ${e instanceof Error ? e.message : String(e)}`));
   }
 
   function newWorkout(d: Date) {

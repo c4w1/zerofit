@@ -172,9 +172,9 @@ export async function saveSettings(settings: AthleteSettings): Promise<void> {
   app.status = "";
 }
 
-export async function savePlan(plan: PlanItem[]): Promise<void> {
-  app.plan = plan;
-  await db.setKv("plan", $state.snapshot(plan));
+/** Writes the plan (edited in place in `app.plan`) to IndexedDB. */
+export async function savePlan(): Promise<void> {
+  await db.setKv("plan", $state.snapshot(app.plan));
 }
 
 export async function removeActivity(id: string): Promise<void> {
