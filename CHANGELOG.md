@@ -1,10 +1,39 @@
 # Changelog
 
-All notable changes to the `zerofit` and `zerofit-profile` crates. The format
+All notable changes to the `zerofit`, `zerofit-profile` and
+`zerofit-analytics` crates. The format
 follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 crates follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
+
+### zerofit-analytics (new)
+
+- `resample`: raw records to a 1 Hz stream over recording time, with
+  documented and tested rules for duplicate timestamps, backwards
+  timestamps, pauses (gaps over 30 s), short gaps (interpolated), field
+  dropouts (repaired up to 8 s), power spikes and optional timer events;
+  a `ResampleReport` of what was done.
+- Power: average, work, NP (exact integer rolling sums), IF, TSS over
+  moving or recording time, VI, time in zones.
+- Heart rate: hrTSS (normalized Banister TRIMP), efficiency factor,
+  Pa:HR decoupling, time in zones.
+- `PowerCurve`: the exact mean-maximal power for every duration in
+  O(n²/2), vectorized; `mmp_at` for selected durations; `envelope`.
+- `cp`: 2-parameter (work-time regression) and Morton 3-parameter CP/W'
+  fits with R², RMSE and standard errors.
+- `wbal`: Skiba's differential W' balance, with recovery during pauses.
+- `load`: CTL/ATL/TSB (intervals.icu and TrainingPeaks conventions),
+  `SeasonCurve`, `estimate_ftp`.
+- `analyze_stream` / `analyze_records` / `analyze_fit` (feature `fit`):
+  every metric in one `ActivitySummary` (`Serialize` with feature
+  `serde`).
+- `#![no_std]` + `alloc`, panic-free lints, builds for
+  `thumbv7em-none-eabihf` and `wasm32-unknown-unknown`. MSRV 1.85.
+- Example `ride-report`; criterion benchmarks; validation against values
+  intervals.icu writes into its FIT export; proptest invariants.
+- `zerofit-analytics-wasm` (unpublished): wasm-bindgen
+  `analyze(bytes, settings_json)` with a node smoke test in CI.
 
 ## [0.1.0]
 
