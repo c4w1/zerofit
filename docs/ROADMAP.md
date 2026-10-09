@@ -7,7 +7,7 @@ later.
 
 ## Fueling
 
-- [ ] 1. Look-ahead fueling. The demo's Friday is 3.0 g/kg before Saturday's
+- [x] 1. Look-ahead fueling. The demo's Friday is 3.0 g/kg before Saturday's
   4-hour ride. A day's carb target must account for the next day's planned
   load ("fuel for the work required", Impey et al. 2018): raise it the day
   before any session over 90 min or any key high-intensity session, and

@@ -28,6 +28,12 @@
     );
   }
 
+  /** The day's highest event priority (A > B > C), if any. */
+  function priorityOn(day: string): "A" | "B" | "C" | undefined {
+    const ps = app.plan.filter((p) => p.date === day && p.priority).map((p) => p.priority!);
+    return ps.sort()[0];
+  }
+
   $effect(() => {
     if (!app.ready) return;
     const ds = days.map(isoDay);
@@ -37,14 +43,20 @@
       const next: Record<string, DayPlan | string> = {};
       for (const day of ds) {
         const sessions = await sessionsOn(day);
-        const tomorrow = await sessionsOn(isoDay(addDays(new Date(day + "T00:00"), 1)));
+        // Look-ahead: tomorrow's and the day after's sessions raise today.
+        const ahead = await Promise.all(
+          [1, 2].map(async (n) => {
+            const d = isoDay(addDays(new Date(day + "T00:00"), n));
+            return { sessions: await sessionsOn(d), priority: priorityOn(d) };
+          }),
+        );
         try {
           next[day] = await call("fuelingDay", [
             {
               body_mass_kg: app.settings.weight_kg,
               ftp_w: app.settings.ftp,
               sessions,
-              next_session_start_min: tomorrow[0] ? 1440 + tomorrow[0].start_min : undefined,
+              ahead,
             },
           ]);
         } catch (e) {
@@ -60,6 +72,8 @@
   /** Hours as a clean value: "1 h", "2.5 h". */
   const hours = (h: number) => `${Number.isInteger(h) ? h : h.toFixed(1)} h`;
   const bandLabel = { Light: "Light", Moderate: "Moderate", High: "High", VeryHigh: "Very high" } as const;
+  /** `LoadBand::bounds_g_per_kg` in zerofit-fueling. */
+  const bandBounds = { Light: [3, 5], Moderate: [5, 6.5], High: [6.5, 9], VeryHigh: [9, 12] } as const;
 
   function what(e: FuelEntry): string {
     switch (e.kind.type) {
@@ -122,7 +136,7 @@
       <span class="dn">{d.toLocaleDateString(undefined, { weekday: "short", day: "numeric" })}</span>
       {#if typeof p === "object"}
         <span class="gk">{num(p.carbs_g_per_kg, 1)} g/kg</span>
-        <span class="band">{bandLabel[p.band]}</span>
+        <span class="band">{bandLabel[p.band]}{#if p.raise}&nbsp;↑{/if}</span>
       {:else}
         <span class="muted">…</span>
         <span class="band">&nbsp;</span>
@@ -137,12 +151,23 @@
   <div class="card" role="tabpanel" aria-labelledby="day-h">
     <h2 id="day-h">{new Date(selected + "T00:00").toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" })}</h2>
     <div class="stats">
-      <div class="stat"><div class="label">Load band</div><div class="value">{bandLabel[plan.band]}</div></div>
+      <div class="stat"><div class="label">Load band</div><div class="value" data-testid="band">{bandLabel[plan.band]}</div></div>
       <div class="stat"><div class="label">Carbohydrate</div><div class="value" data-testid="carbs-gkg">{num(plan.carbs_g_per_kg, 1)}<span class="unit">g/kg</span></div></div>
       <div class="stat"><div class="label">Carbs total</div><div class="value">{num(plan.carbs_planned_g)}<span class="unit">g</span></div></div>
       <div class="stat"><div class="label">Protein</div><div class="value">{num(plan.protein_g_per_kg, 1)}<span class="unit">g/kg</span></div></div>
       <div class="stat"><div class="label">Protein total</div><div class="value">{num(plan.protein_g)}<span class="unit">g</span></div></div>
     </div>
+    <p class="small why" data-testid="band-why">
+      {bandLabel[plan.band]} is {num(plan.band === "VeryHigh" ? 9 : bandBounds[plan.band][0], 1)}{plan.band === "VeryHigh" ? "+" : `–${num(bandBounds[plan.band][1], 1)}`} g/kg.
+      {#if plan.training_min > 0}
+        Today: {duration(plan.training_min * 60)} at IF {num(plan.mean_intensity_factor, 2)} ≈ {num(plan.load_kj_per_kg)} kJ/kg of effective load → {num(plan.own_carbs_g_per_kg, 1)} g/kg.
+      {:else}
+        Today: no training → {num(plan.own_carbs_g_per_kg, 1)} g/kg.
+      {/if}
+    </p>
+    {#if plan.raise_text}
+      <p class="raise" data-testid="raise"><strong>{plan.raise_text}</strong> ({num(plan.raise?.from_g_per_kg, 1)} → {num(plan.carbs_g_per_kg, 1)} g/kg).</p>
+    {/if}
     {#if plan.session_feeds_exceed_target}
       <p class="small">Session fueling alone exceeds the daily target: the in-ride and recovery rules take priority today.</p>
     {/if}
@@ -250,6 +275,16 @@
   }
   .small {
     font-size: 0.85rem;
+  }
+  .why {
+    margin: 0.5rem 0 0;
+    color: var(--text-muted);
+  }
+  .raise {
+    margin: 0.5rem 0 0;
+    padding: 0.4rem 0.6rem;
+    border-left: 3px solid var(--accent);
+    background: var(--surface-2);
   }
   h3 {
     margin-top: 1.25rem;

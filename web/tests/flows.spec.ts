@@ -101,6 +101,12 @@ test("view the fueling plan", async ({ page }) => {
   await expect(table.getByRole("row", { name: /Post-ride protein/ })).toBeVisible();
   await expect(table.getByRole("row", { name: /Recovery, hour/ })).toHaveCount(0);
   await expect(page.getByText(/glucose \+ fructose/)).toBeVisible();
+
+  // Friday is a rest day, raised for Saturday's 4-hour ride.
+  await page.getByRole("tab", { name: /Fri/ }).click();
+  await expect(page.getByTestId("raise")).toContainText("Raised: 4 h ride tomorrow");
+  await expect(page.getByTestId("carbs-gkg")).toContainText("8.0");
+  await expect(page.getByTestId("band")).toHaveText("High");
   expect(errors).toEqual([]);
 });
 

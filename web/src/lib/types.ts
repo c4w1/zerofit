@@ -152,9 +152,27 @@ export interface SessionPlan {
   recovery: { carbs_g_per_kg_per_hour: number; hours: number; protein_g_per_kg: number };
 }
 
+export type RaiseReason =
+  | { type: "carb_load"; days_before: number; event_min: number }
+  | { type: "very_long_session_tomorrow"; minutes: number }
+  | { type: "long_session_tomorrow"; minutes: number }
+  | { type: "key_session_tomorrow"; minutes: number; intensity_factor: number };
+
+export interface Raise {
+  reason: RaiseReason;
+  from_g_per_kg: number;
+  to_g_per_kg: number;
+}
+
 export interface DayPlan {
   load_kj_per_kg: number;
+  training_min: number;
+  mean_intensity_factor: number | null;
   band: LoadBand;
+  own_carbs_g_per_kg: number;
+  raise: Raise | null;
+  /** Plain-English reason for `raise` ("Raised: 4 h ride tomorrow"). */
+  raise_text?: string;
   carbs_g_per_kg: number;
   carbs_target_g: number;
   carbs_planned_g: number;
@@ -176,7 +194,8 @@ export interface FuelDayIn {
   body_mass_kg: number;
   ftp_w?: number;
   sessions: FuelSessionIn[];
-  next_session_start_min?: number;
+  /** The next days, tomorrow first. */
+  ahead?: { sessions: FuelSessionIn[]; priority?: "A" | "B" | "C" }[];
   wake_min?: number;
 }
 

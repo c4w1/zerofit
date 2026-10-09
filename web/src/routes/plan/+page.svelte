@@ -178,6 +178,23 @@
           }}
         />
       </label>
+      <label>
+        Priority
+        <select
+          value={selected.priority ?? ""}
+          onchange={(e) => {
+            const v = (e.currentTarget as HTMLSelectElement).value;
+            selected.priority = v === "A" || v === "B" || v === "C" ? v : undefined;
+            persist();
+          }}
+          data-testid="priority"
+        >
+          <option value="">Training</option>
+          <option value="A">A event (carb-load)</option>
+          <option value="B">B event</option>
+          <option value="C">C event</option>
+        </select>
+      </label>
     </div>
 
     <div class="stats planned" aria-live="polite">

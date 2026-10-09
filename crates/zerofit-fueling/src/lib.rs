@@ -32,17 +32,22 @@
 //! # Example
 //!
 //! ```
-//! use zerofit_fueling::{Athlete, PlannedSession, day_plan, DayInput, MealSchedule};
+//! use zerofit_fueling::{Athlete, DayAhead, PlannedSession, day_plan, DayInput, MealSchedule};
 //!
 //! let athlete = Athlete { body_mass_kg: 70.0, ftp_w: Some(260.0) };
 //! // A 2.5 h endurance ride at 08:30 with 3 × 10 min at threshold.
 //! let sessions = [PlannedSession { work_kj: Some(1900.0), ..PlannedSession::new(510, 150, 0.78) }];
+//! // Tomorrow: 4 h 45 min at 09:00, so today is raised for it.
+//! let tomorrow = [PlannedSession::new(9 * 60, 285, 0.7)];
 //! let plan = day_plan(&DayInput {
 //!     athlete,
 //!     sessions: &sessions,
-//!     next_session_start_min: Some(24 * 60 + 18 * 60), // tomorrow 18:00
+//!     ahead: &[DayAhead { sessions: &tomorrow, priority: None }],
 //!     schedule: MealSchedule::default(),
 //! })?;
+//! if let Some(raise) = plan.raise {
+//!     println!("{raise}"); // "Raised: 4 h 45 min ride tomorrow"
+//! }
 //! println!("{:.1} g/kg carbohydrate ({:.0} g), {:.0} g protein",
 //!          plan.carbs_g_per_kg, plan.carbs_target_g, plan.protein_g);
 //! for e in &plan.entries {
@@ -63,11 +68,13 @@
 extern crate alloc;
 
 pub mod daily;
+pub mod lookahead;
 mod num;
 pub mod plan;
 pub mod session;
 
 pub use daily::{LoadBand, daily_carbs_g_per_kg, daily_protein_g_per_kg, day_load};
+pub use lookahead::{DayAhead, Priority, Raise, RaiseReason};
 pub use plan::{
     DayInput, DayPlan, Entry, EntryKind, MealKind, MealSchedule, PlanError, PrePart, day_plan,
 };

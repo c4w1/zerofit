@@ -953,6 +953,7 @@ comments. There is no learned model.
 | Rule | Value | Where | Source |
 |---|---|---|---|
 | Daily carbohydrate | light 3–5, moderate (~1 h) 5–7, high (1–3 h) 6–10, very high (4–5+ h) 8–12 g/kg | `daily::daily_carbs_g_per_kg` | Thomas, Erdman & Burke 2016 (ACSM/AND/DC); Burke et al. 2011 (IOC) |
+| Look-ahead | the day before a session > 90 min: ≥ 5–7 g/kg (≥ 8 before 4 h+); before IF ≥ 0.80 for ≥ 45 min: ≥ 5.5; 1–2 days before an A event > 90 min: 10–12 g/kg carbohydrate loading | `lookahead::raise` | Impey et al. 2018; Thomas et al. 2016 |
 | Daily protein | 1.2–2.0 g/kg, rising with load; ~0.3 g/kg per meal | `daily::daily_protein_g_per_kg`, `plan` | Thomas et al. 2016; Moore et al. 2015; Areta et al. 2013 |
 | Pre-ride | 1–4 g/kg, 1–4 h before | `session::pre_ride` | Thomas et al. 2016; Burke et al. 2011 |
 | In-ride | < 1 h: none · 1–2.5 h: 30–60 g/h · > 2.5 h: 60–90 g/h, glucose + fructose above 60 g/h | `session::during_ride` | Jeukendrup 2014 |
@@ -988,6 +989,16 @@ The day plan (`plan::day_plan`) builds a timeline:
    are dropped (the feed replaces them);
 5. what's left of the daily carbohydrate and protein goes to the
    remaining meals.
+
+**Look-ahead.** Muscle glycogen for tomorrow's session is stored today,
+so a day's own load isn't enough: the demo's rest Friday was 3.0 g/kg
+before a 4-hour Saturday ride. `lookahead::raise` looks at the next two
+days and only ever *raises* a target, so a property test can state
+"a harder tomorrow never lowers today". The reason travels with the
+number ("Raised: 4 h ride tomorrow", "Carb-loading: 3 h A event
+tomorrow"). The judgment call is 8 g/kg (the bottom of the very-high
+range) before a long *training* ride, rather than a full 10–12 g/kg load
+before every long weekend ride; full loading is for A events.
 
 Two things the tests forced:
 

@@ -108,6 +108,49 @@ impl LoadBand {
         }
     }
 
+    /// The band's share of the carbohydrate scale this crate uses, g/kg:
+    /// non-overlapping cut-offs at the anchors of [`CARB_ANCHORS`] (3–5,
+    /// 5–6.5, 6.5–9, 9–12). Each lies inside the consensus range
+    /// ([`Self::range_g_per_kg`]); unlike the consensus ranges, which
+    /// overlap, they let the label follow from the number.
+    #[must_use]
+    pub const fn bounds_g_per_kg(self) -> (f64, f64) {
+        match self {
+            Self::Light => (3.0, 5.0),
+            Self::Moderate => (5.0, 6.5),
+            Self::High => (6.5, 9.0),
+            Self::VeryHigh => (9.0, 12.0),
+        }
+    }
+
+    /// The band of a daily carbohydrate target `g` (g/kg), by
+    /// [`Self::bounds_g_per_kg`]: Light below 5, Moderate below 6.5, High
+    /// below 9, Very high from 9. For a day's own target this is the same
+    /// band as [`Self::for_load`] of its load, because the anchors map the
+    /// load boundaries onto these values; for a day raised by look-ahead
+    /// it is the band of the raised target.
+    ///
+    /// ```
+    /// use zerofit_fueling::daily::{LoadBand, daily_carbs_g_per_kg};
+    /// assert_eq!(LoadBand::for_g_per_kg(6.4), LoadBand::Moderate);
+    /// assert_eq!(LoadBand::for_g_per_kg(6.5), LoadBand::High);
+    /// for x in [0.0, 7.9, 8.0, 14.9, 15.0, 34.9, 35.0, 50.0] {
+    ///     assert_eq!(LoadBand::for_g_per_kg(daily_carbs_g_per_kg(x)), LoadBand::for_load(x));
+    /// }
+    /// ```
+    #[must_use]
+    pub fn for_g_per_kg(g: f64) -> Self {
+        if g < 5.0 {
+            Self::Light
+        } else if g < 6.5 {
+            Self::Moderate
+        } else if g < 9.0 {
+            Self::High
+        } else {
+            Self::VeryHigh
+        }
+    }
+
     /// The band for an effective day load `x` (kJ/kg): Light below 8,
     /// Moderate below 15, High below 35, Very high from 35.
     ///

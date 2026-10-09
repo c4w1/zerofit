@@ -39,6 +39,8 @@ export interface PlanItem {
   /** Minutes after midnight. */
   start_min: number;
   workout: Workout;
+  /** Event priority: an A event is carbohydrate-loaded for the day or two before. */
+  priority?: "A" | "B" | "C";
 }
 
 const steady = (min: number, pct: number, kind: WorkoutStep["kind"] = "active"): WorkoutStep => ({

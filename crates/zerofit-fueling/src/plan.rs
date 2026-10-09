@@ -6,6 +6,7 @@ use alloc::vec::Vec;
 use crate::daily::{
     LoadBand, daily_carbs_g_per_kg, daily_protein_g_per_kg, day_load, session_load,
 };
+use crate::lookahead::{DayAhead, Raise, mean_intensity, raise};
 use crate::num::{f64_from_usize, floor_u32, round_u32};
 use crate::session::{DuringRide, PreRide, Recovery, during_ride, pre_ride, recovery};
 use crate::{Athlete, PlannedSession};
@@ -250,9 +251,19 @@ pub struct SessionPlan {
 pub struct DayPlan {
     /// Effective day load, kJ/kg.
     pub load_kj_per_kg: f64,
-    /// Load category.
+    /// Minutes of training today.
+    pub training_min: u32,
+    /// Duration-weighted mean intensity factor of today's sessions.
+    pub mean_intensity_factor: Option<f64>,
+    /// The band of the final carbohydrate target
+    /// ([`LoadBand::for_g_per_kg`]), so the label always agrees with the
+    /// number shown next to it.
     pub band: LoadBand,
-    /// Carbohydrate target, g/kg.
+    /// The day's own target from its load, g/kg, before look-ahead.
+    pub own_carbs_g_per_kg: f64,
+    /// Why the target was raised above the day's own, if it was.
+    pub raise: Option<Raise>,
+    /// Carbohydrate target, g/kg: the day's own, or the raised one.
     pub carbs_g_per_kg: f64,
     /// Carbohydrate target, g.
     pub carbs_target_g: f64,
@@ -307,11 +318,11 @@ pub struct DayInput<'a> {
     pub athlete: Athlete,
     /// The day's sessions, sorted by start, not overlapping.
     pub sessions: &'a [PlannedSession],
-    /// Start of the first session after this day, minutes after *this*
-    /// day's midnight (e.g. 1440 + 420 for 07:00 tomorrow); decides
-    /// whether the last session needs rapid recovery. `None` if none is
-    /// planned.
-    pub next_session_start_min: Option<u32>,
+    /// The next days, tomorrow first (the first two are used): their
+    /// sessions raise today's target ([`crate::lookahead::raise`]), and
+    /// tomorrow's first session decides whether today's last one needs
+    /// rapid recovery.
+    pub ahead: &'a [DayAhead<'a>],
     /// Wake time and regular meals.
     pub schedule: MealSchedule,
 }
@@ -322,7 +333,8 @@ const MEAL_MERGE_WINDOW_MIN: u32 = 60;
 
 /// Builds the day plan.
 ///
-/// 1. **Targets**: [`day_load`] → [`daily_carbs_g_per_kg`] and
+/// 1. **Targets**: [`day_load`] → [`daily_carbs_g_per_kg`], raised for
+///    the days ahead by [`crate::lookahead::raise`], and
 ///    [`daily_protein_g_per_kg`], times body mass. Protein is raised if
 ///    needed so every feeding gets [`PROTEIN_PER_FEEDING_G_PER_KG`].
 /// 2. **Meals around the sessions**:
@@ -366,32 +378,30 @@ const MEAL_MERGE_WINDOW_MIN: u32 = 60;
 ///
 /// ```
 /// use zerofit_fueling::{Athlete, PlannedSession, plan::{DayInput, MealSchedule, day_plan}};
-/// let sessions = [PlannedSession::new(9 * 60, 180, 0.75)];
+/// // 09:00 3 h, and a second ride at 17:00.
+/// let sessions = [PlannedSession::new(9 * 60, 180, 0.75), PlannedSession::new(17 * 60, 60, 0.6)];
 /// let plan = day_plan(&DayInput {
 ///     athlete: Athlete { body_mass_kg: 70.0, ftp_w: Some(250.0) },
 ///     sessions: &sessions,
-///     next_session_start_min: Some(17 * 60), // a second ride at 17:00
+///     ahead: &[],
 ///     schedule: MealSchedule::default(),
 /// })?;
 /// assert!((plan.carbs_planned_g - plan.carbs_target_g).abs() <= 2.5);
 /// assert!(plan.sessions[0].during.carbs_g_per_hour >= 60.0); // a 3 h ride
 /// assert!(plan.sessions[0].recovery.hours >= 1); // next ride within 8 h
+/// assert!(plan.raise.is_none());
 /// assert!(plan.entries.iter().all(|e| e.time_min % 15 == 0));
 /// assert!(plan.entries.windows(2).all(|w| w[0].time_min <= w[1].time_min));
 /// # Ok::<(), zerofit_fueling::plan::PlanError>(())
 /// ```
 pub fn day_plan(input: &DayInput<'_>) -> Result<DayPlan, PlanError> {
     validate(input)?;
-    let load = day_load(input.sessions, &input.athlete);
-    let carbs_g_per_kg = daily_carbs_g_per_kg(load);
-    Ok(build(input, load, carbs_g_per_kg))
-}
-
-/// Builds the plan for a given daily carbohydrate target (g/kg). Input is
-/// already validated.
-pub(crate) fn build(input: &DayInput<'_>, load: f64, carbs_g_per_kg: f64) -> DayPlan {
     let athlete = input.athlete;
     let mass = athlete.body_mass_kg;
+    let load = day_load(input.sessions, &athlete);
+    let own_carbs_g_per_kg = daily_carbs_g_per_kg(load);
+    let raise = raise(own_carbs_g_per_kg, input.ahead);
+    let carbs_g_per_kg = raise.map_or(own_carbs_g_per_kg, |r| r.to_g_per_kg);
     let carbs_target_g = carbs_g_per_kg * mass;
 
     let mut sessions = draft_sessions(input);
@@ -449,9 +459,17 @@ pub(crate) fn build(input: &DayInput<'_>, load: f64, carbs_g_per_kg: f64) -> Day
     round_grams(&mut entries, |e| &mut e.carbs_g);
     round_grams(&mut entries, |e| &mut e.protein_g);
     let carbs_planned_g = entries.iter().map(|e| e.carbs_g).sum();
-    DayPlan {
+    Ok(DayPlan {
         load_kj_per_kg: load,
-        band: LoadBand::for_load(load),
+        training_min: input
+            .sessions
+            .iter()
+            .map(|s| s.duration_min)
+            .fold(0, u32::saturating_add),
+        mean_intensity_factor: mean_intensity(input.sessions),
+        band: LoadBand::for_g_per_kg(carbs_g_per_kg),
+        own_carbs_g_per_kg,
+        raise,
         carbs_g_per_kg,
         carbs_target_g,
         carbs_planned_g,
@@ -460,14 +478,14 @@ pub(crate) fn build(input: &DayInput<'_>, load: f64, carbs_g_per_kg: f64) -> Day
         session_feeds_exceed_target,
         sessions: sessions.into_iter().map(|d| d.plan).collect(),
         entries,
-    }
+    })
 }
 
 /// Protein target cap, g/kg/day: the top of the consensus range (Thomas,
 /// Erdman & Burke 2016; Jäger et al. 2017).
 const MAX_PROTEIN_G_PER_KG: f64 = 2.0;
 
-pub(crate) fn validate(input: &DayInput<'_>) -> Result<(), PlanError> {
+fn validate(input: &DayInput<'_>) -> Result<(), PlanError> {
     let mass = input.athlete.body_mass_kg;
     if !(mass.is_finite() && mass > 0.0) {
         return Err(PlanError::InvalidBodyMass);
@@ -533,11 +551,16 @@ fn draft_sessions(input: &DayInput<'_>) -> Vec<Draft> {
                     && breakfast.is_some_and(|b| b.abs_diff(pre_time) < MEAL_MERGE_WINDOW_MIN)));
         let during = during_ride(s);
         let during_total_g = during.carbs_g_per_hour * f64::from(s.duration_min) / 60.0;
+        let tomorrow_start = input
+            .ahead
+            .first()
+            .and_then(|d| d.sessions.iter().map(|n| n.start_min).min())
+            .map(|t| t.saturating_add(1440));
         let next_start = input
             .sessions
             .get(index.saturating_add(1))
             .map(|n| n.start_min)
-            .or(input.next_session_start_min);
+            .or(tomorrow_start);
         let hours_until_next = next_start.map(|n| f64::from(n.saturating_sub(s.end_min())) / 60.0);
         let rec = recovery(s, &athlete, hours_until_next);
         // Evening: dinner falls inside the session's footprint, from an
@@ -977,11 +1000,20 @@ mod tests {
         ftp_w: Some(250.0),
     };
 
+    /// A plan with, if `next` is given, an easy hour tomorrow starting
+    /// at `next - 1440`.
     fn plan(sessions: &[PlannedSession], next: Option<u32>) -> DayPlan {
+        let tomorrow = next.map(|n| [PlannedSession::new(n.saturating_sub(1440), 60, 0.6)]);
+        let ahead = tomorrow.as_ref().map(|t| {
+            [DayAhead {
+                sessions: t,
+                priority: None,
+            }]
+        });
         day_plan(&DayInput {
             athlete: A,
             sessions,
-            next_session_start_min: next,
+            ahead: ahead.as_ref().map_or(&[], |a| a),
             schedule: MealSchedule::default(),
         })
         .unwrap()
@@ -1136,7 +1168,13 @@ mod tests {
     #[test]
     fn long_ride_timeline() {
         // 09:00, 3 h at IF 0.75; a second ride at 17:00 (5 h later).
-        let p = plan(&[PlannedSession::new(540, 180, 0.75)], Some(17 * 60));
+        let p = plan(
+            &[
+                PlannedSession::new(540, 180, 0.75),
+                PlannedSession::new(17 * 60, 60, 0.6),
+            ],
+            None,
+        );
         well_formed(&p);
         sums_to_target(&p);
         let s = p.sessions[0];
@@ -1144,7 +1182,7 @@ mod tests {
         let during: Vec<_> = p
             .entries
             .iter()
-            .filter(|e| matches!(e.kind, EntryKind::DuringSession { .. }))
+            .filter(|e| matches!(e.kind, EntryKind::DuringSession { session: 0 }))
             .collect();
         assert_eq!(during.len(), 5); // 30, 60, ..., 150 min
         assert!(s.recovery.hours >= 1);
@@ -1191,8 +1229,14 @@ mod tests {
 
     #[test]
     fn feeds_exceeding_target_are_flagged() {
-        // 7 h hard ride and another long ride tomorrow morning.
-        let p = plan(&[PlannedSession::new(480, 420, 0.95)], Some(1440 + 420));
+        // 7 h hard ride and another long ride at 15:30.
+        let p = plan(
+            &[
+                PlannedSession::new(480, 420, 0.95),
+                PlannedSession::new(930, 240, 0.8),
+            ],
+            None,
+        );
         assert_eq!(p.band, LoadBand::VeryHigh);
         if p.session_feeds_exceed_target {
             assert!(p.carbs_planned_g >= p.carbs_target_g - GRAM_STEP);
@@ -1209,7 +1253,7 @@ mod tests {
                 ftp_w: None,
             },
             sessions,
-            next_session_start_min: None,
+            ahead: &[],
             schedule: MealSchedule::default(),
         };
         assert_eq!(day_plan(&input(0.0, &[])), Err(PlanError::InvalidBodyMass));
@@ -1242,7 +1286,7 @@ mod tests {
         let p = day_plan(&DayInput {
             athlete: A,
             sessions: &sessions,
-            next_session_start_min: None,
+            ahead: &[],
             schedule,
         })
         .unwrap();

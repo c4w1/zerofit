@@ -90,11 +90,12 @@ const day = JSON.parse(
       body_mass_kg: 70,
       ftp_w: 250,
       sessions: [{ start_min: 540, duration_min: 180, intensity_factor: 0.75 }],
-      next_session_start_min: 1980,
+      ahead: [{ sessions: [{ start_min: 540, duration_min: 60, intensity_factor: 0.6 }] }],
     }),
   ),
 );
 assert.equal(day.band, "High");
+assert.equal(day.raise, null);
 assert.ok(Math.abs(day.carbs_planned_g - day.carbs_target_g) <= 2.5);
 assert.ok(day.entries.every((e) => e.time_min % 15 === 0 && e.carbs_g % 5 === 0));
 

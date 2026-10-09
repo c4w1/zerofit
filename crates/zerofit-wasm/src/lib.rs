@@ -31,7 +31,9 @@ use zerofit_analytics::workout::{PlannedLoad, StepKind, StepTarget, Workout, Wor
 use zerofit_analytics::{
     AnalysisConfig, AthleteSettings, DEFAULT_W_PRIME, TrimpCoefficients, analyze_records,
 };
-use zerofit_fueling::{Athlete, DayInput, DayPlan, MealSchedule, PlannedSession};
+use zerofit_fueling::{
+    Athlete, DayAhead, DayInput, DayPlan, MealSchedule, PlannedSession, Priority,
+};
 
 // ---------------------------------------------------------------- settings
 
@@ -466,10 +468,49 @@ struct FuelIn {
     #[serde(default)]
     ftp_w: Option<f64>,
     sessions: Vec<SessionIn>,
+    /// The next days, tomorrow first (look-ahead uses two).
     #[serde(default)]
-    next_session_start_min: Option<u32>,
+    ahead: Vec<AheadIn>,
     #[serde(default)]
     wake_min: Option<u32>,
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct AheadIn {
+    #[serde(default)]
+    sessions: Vec<SessionIn>,
+    #[serde(default)]
+    priority: Option<PriorityIn>,
+}
+
+#[derive(Deserialize, Clone, Copy)]
+enum PriorityIn {
+    A,
+    B,
+    C,
+}
+
+impl From<PriorityIn> for Priority {
+    fn from(p: PriorityIn) -> Self {
+        match p {
+            PriorityIn::A => Self::A,
+            PriorityIn::B => Self::B,
+            PriorityIn::C => Self::C,
+        }
+    }
+}
+
+fn planned_sessions(sessions: &[SessionIn]) -> Vec<PlannedSession> {
+    let mut out: Vec<PlannedSession> = sessions
+        .iter()
+        .map(|s| PlannedSession {
+            work_kj: s.work_kj,
+            ..PlannedSession::new(s.start_min, s.duration_min, s.intensity_factor)
+        })
+        .collect();
+    out.sort_by_key(|s| s.start_min);
+    out
 }
 
 #[derive(Deserialize)]
@@ -491,15 +532,21 @@ struct SessionIn {
 pub fn fueling_day_json(input_json: &str) -> Result<String, String> {
     let input: FuelIn =
         serde_json::from_str(input_json).map_err(|e| format!("invalid input: {e}"))?;
-    let mut sessions: Vec<PlannedSession> = input
-        .sessions
+    let sessions = planned_sessions(&input.sessions);
+    let ahead_sessions: Vec<Vec<PlannedSession>> = input
+        .ahead
         .iter()
-        .map(|s| PlannedSession {
-            work_kj: s.work_kj,
-            ..PlannedSession::new(s.start_min, s.duration_min, s.intensity_factor)
+        .map(|d| planned_sessions(&d.sessions))
+        .collect();
+    let ahead: Vec<DayAhead<'_>> = input
+        .ahead
+        .iter()
+        .zip(&ahead_sessions)
+        .map(|(d, s)| DayAhead {
+            sessions: s,
+            priority: d.priority.map(Priority::from),
         })
         .collect();
-    sessions.sort_by_key(|s| s.start_min);
     let mut schedule = MealSchedule::default();
     if let Some(w) = input.wake_min {
         schedule.wake_min = w;
@@ -510,11 +557,17 @@ pub fn fueling_day_json(input_json: &str) -> Result<String, String> {
             ftp_w: input.ftp_w,
         },
         sessions: &sessions,
-        next_session_start_min: input.next_session_start_min,
+        ahead: &ahead,
         schedule,
     })
     .map_err(|e| e.to_string())?;
-    serde_json::to_string(&plan).map_err(|e| e.to_string())
+    // The plain-English raise reason comes from the crate's `Display`, so
+    // the wording lives in one place.
+    let mut value = serde_json::to_value(&plan).map_err(|e| e.to_string())?;
+    if let (Some(obj), Some(raise)) = (value.as_object_mut(), plan.raise) {
+        obj.insert("raise_text".into(), raise.to_string().into());
+    }
+    serde_json::to_string(&value).map_err(|e| e.to_string())
 }
 
 // ----------------------------------------------------------------- exports
@@ -724,9 +777,13 @@ mod tests {
     fn fueling_day_plan() {
         let json = r#"{"body_mass_kg": 70, "ftp_w": 250,
             "sessions": [{"start_min": 540, "duration_min": 180, "intensity_factor": 0.75}],
-            "next_session_start_min": 1980}"#;
+            "ahead": [{"sessions": [{"start_min": 540, "duration_min": 300, "intensity_factor": 0.7}],
+                       "priority": "A"}]}"#;
         let v: serde_json::Value = serde_json::from_str(&fueling_day_json(json).unwrap()).unwrap();
-        assert_eq!(v["band"], "High");
+        assert_eq!(v["band"], "VeryHigh");
+        assert_eq!(v["raise"]["reason"]["type"], "carb_load");
+        assert_eq!(v["raise_text"], "Carb-loading: 5 h A event tomorrow");
+        assert!(v["own_carbs_g_per_kg"].as_f64().unwrap() < 9.0);
         assert!(v["entries"].as_array().unwrap().len() > 8);
         assert_eq!(v["entries"][0]["kind"]["type"], "pre_session");
         assert_eq!(v["entries"][0]["kind"]["part"], "Meal");
