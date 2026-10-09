@@ -972,6 +972,14 @@ How a point inside each range is chosen:
     0.25 kJ/kg);
   - nearby loads get nearby targets, with no bucket cliffs;
   - the target never falls as load rises (a property test).
+- **The label follows from the number shown.** The consensus ranges
+  overlap (moderate 5–7, high 6–10), so a label can't be read off a number
+  by them. Labels use non-overlapping cut-offs at the anchors (Light
+  < 5, Moderate < 6.5, High < 9, Very high ≥ 9 g/kg), applied to the final
+  target after look-ahead and rounded to the 0.1 g/kg the UI shows. Before,
+  the label came from the load and the number was unrounded, so "6.4 g/kg
+  Moderate" sat next to "6.5 g/kg High" with no explanation; now the card
+  states the cut-off and how the day's load produced its number.
 - **Intensity places the point in the in-ride ranges**, so an easy 3 h ride
   gets 60 g/h and a hard one 90 g/h. The rate is rounded to whole grams,
   which also absorbs the float error that left IF 0.85 one ulp below the

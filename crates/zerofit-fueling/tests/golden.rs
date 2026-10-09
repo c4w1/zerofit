@@ -147,3 +147,28 @@ fn a_hard_day_is_never_lowered_by_an_easy_tomorrow() {
     assert_eq!(p.carbs_g_per_kg, p.own_carbs_g_per_kg);
     adds_up(&p);
 }
+
+#[test]
+fn the_band_follows_from_the_number_shown() {
+    // Every session length and intensity a plan might have: the label must
+    // agree with the target as printed (one decimal), which is what a
+    // reader compares ("6.4 g/kg Moderate", "6.5 g/kg High").
+    for minutes in (20..=300).step_by(5) {
+        for if_pct in (50..=105).step_by(5) {
+            let s = [PlannedSession::new(
+                9 * 60,
+                minutes,
+                f64::from(if_pct) / 100.0,
+            )];
+            let p = plan(&s, &[]);
+            let shown: f64 = format!("{:.1}", p.carbs_g_per_kg).parse().unwrap();
+            assert_eq!(shown, p.carbs_g_per_kg, "{minutes} min IF {if_pct}");
+            let (lo, hi) = p.band.bounds_g_per_kg();
+            assert!(
+                lo <= shown && (shown < hi || p.band == LoadBand::VeryHigh),
+                "{minutes} min IF {if_pct}: {shown} g/kg labelled {:?}",
+                p.band
+            );
+        }
+    }
+}

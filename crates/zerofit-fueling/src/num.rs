@@ -21,6 +21,12 @@ pub(crate) fn round_u32(x: f64) -> u32 {
     libm_floor(x + 0.5) as u32
 }
 
+/// `x` (non-negative) rounded to one decimal, the precision targets are
+/// shown at.
+pub(crate) fn round_tenth(x: f64) -> f64 {
+    f64::from(round_u32(x * 10.0)) / 10.0
+}
+
 /// `floor` without `std` or `libm`: truncation toward zero, minus one for
 /// negative non-integers. Values beyond 2^52 are already integers.
 #[allow(clippy::cast_possible_truncation, clippy::cast_precision_loss)]

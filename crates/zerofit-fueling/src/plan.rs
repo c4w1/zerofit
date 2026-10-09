@@ -7,7 +7,7 @@ use crate::daily::{
     LoadBand, daily_carbs_g_per_kg, daily_protein_g_per_kg, day_load, session_load,
 };
 use crate::lookahead::{DayAhead, Raise, mean_intensity, raise};
-use crate::num::{f64_from_usize, floor_u32, round_u32};
+use crate::num::{f64_from_usize, floor_u32, round_tenth, round_u32};
 use crate::session::{DuringRide, PreRide, Recovery, during_ride, pre_ride, recovery};
 use crate::{Athlete, PlannedSession};
 
@@ -259,11 +259,13 @@ pub struct DayPlan {
     /// ([`LoadBand::for_g_per_kg`]), so the label always agrees with the
     /// number shown next to it.
     pub band: LoadBand,
-    /// The day's own target from its load, g/kg, before look-ahead.
+    /// The day's own target from its load, g/kg, before look-ahead,
+    /// rounded to 0.1 g/kg.
     pub own_carbs_g_per_kg: f64,
     /// Why the target was raised above the day's own, if it was.
     pub raise: Option<Raise>,
-    /// Carbohydrate target, g/kg: the day's own, or the raised one.
+    /// Carbohydrate target, g/kg: the day's own, or the raised one,
+    /// rounded to 0.1 g/kg.
     pub carbs_g_per_kg: f64,
     /// Carbohydrate target, g.
     pub carbs_target_g: f64,
@@ -399,8 +401,16 @@ pub fn day_plan(input: &DayInput<'_>) -> Result<DayPlan, PlanError> {
     let athlete = input.athlete;
     let mass = athlete.body_mass_kg;
     let load = day_load(input.sessions, &athlete);
-    let own_carbs_g_per_kg = daily_carbs_g_per_kg(load);
-    let raise = raise(own_carbs_g_per_kg, input.ahead);
+    // Targets are rounded to the 0.1 g/kg they are shown at, so the band
+    // label always follows from the number on screen (6.46 would show as
+    // "6.5" but fall in the Moderate band below 6.5).
+    let own_carbs_g_per_kg = round_tenth(daily_carbs_g_per_kg(load));
+    let raise = raise(own_carbs_g_per_kg, input.ahead)
+        .map(|r| Raise {
+            to_g_per_kg: round_tenth(r.to_g_per_kg),
+            ..r
+        })
+        .filter(|r| r.to_g_per_kg > own_carbs_g_per_kg);
     let carbs_g_per_kg = raise.map_or(own_carbs_g_per_kg, |r| r.to_g_per_kg);
     let carbs_target_g = carbs_g_per_kg * mass;
 

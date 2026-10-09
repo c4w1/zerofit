@@ -158,7 +158,7 @@
       <div class="stat"><div class="label">Protein total</div><div class="value">{num(plan.protein_g)}<span class="unit">g</span></div></div>
     </div>
     <p class="small why" data-testid="band-why">
-      {bandLabel[plan.band]} is {num(plan.band === "VeryHigh" ? 9 : bandBounds[plan.band][0], 1)}{plan.band === "VeryHigh" ? "+" : `–${num(bandBounds[plan.band][1], 1)}`} g/kg.
+      {bandLabel[plan.band]}: {plan.band === "VeryHigh" ? `${num(9, 1)} g/kg and above` : `${num(bandBounds[plan.band][0], 1)} to under ${num(bandBounds[plan.band][1], 1)} g/kg`}.
       {#if plan.training_min > 0}
         Today: {duration(plan.training_min * 60)} at IF {num(plan.mean_intensity_factor, 2)} ≈ {num(plan.load_kj_per_kg)} kJ/kg of effective load → {num(plan.own_carbs_g_per_kg, 1)} g/kg.
       {:else}

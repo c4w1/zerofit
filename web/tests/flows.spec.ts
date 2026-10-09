@@ -107,6 +107,18 @@ test("view the fueling plan", async ({ page }) => {
   await expect(page.getByTestId("raise")).toContainText("Raised: 4 h ride tomorrow");
   await expect(page.getByTestId("carbs-gkg")).toContainText("8.0");
   await expect(page.getByTestId("band")).toHaveText("High");
+
+  // Every day's label follows from the number shown next to it, by the
+  // cut-offs the card states (5, 6.5 and 9 g/kg).
+  const tabs = page.getByRole("tab");
+  await expect(tabs.first().locator(".gk")).toContainText("g/kg");
+  for (const tab of await tabs.all()) {
+    const g = Number((await tab.locator(".gk").textContent())?.replace(/[^\d.]/g, ""));
+    const band = (await tab.locator(".band").textContent())?.replace(/[^A-Za-z ]/g, "").trim();
+    const expected = g < 5 ? "Light" : g < 6.5 ? "Moderate" : g < 9 ? "High" : "Very high";
+    expect(band, `${g} g/kg`).toBe(expected);
+  }
+  await expect(page.getByTestId("band-why")).toContainText("High: 6.5 to under 9.0 g/kg");
   expect(errors).toEqual([]);
 });
 

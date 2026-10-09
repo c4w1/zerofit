@@ -39,6 +39,7 @@ let plan = day_plan(&DayInput {
 | Rule | Value | Source |
 |---|---|---|
 | Daily carbohydrate | light 3–5, moderate (~1 h) 5–7, high (1–3 h) 6–10, very high (4–5+ h) 8–12 g/kg | Thomas, Erdman & Burke 2016 (ACSM/AND/DC); Burke et al. 2011 (IOC) |
+| Band label | from the final target (after look-ahead, rounded to 0.1 g/kg) by non-overlapping cut-offs: Light < 5, Moderate < 6.5, High < 9, Very high ≥ 9 g/kg, so the label always agrees with the number | this crate (`LoadBand::for_g_per_kg`) |
 | Point within the range | piecewise linear in effective load (kJ/kg × intensity weight), anchors on the band boundaries | this crate; judgment call documented in `daily` |
 | Look-ahead (the day before) | session > 90 min tomorrow: at least 5 g/kg rising to 7 at 4 h · ≥ 4 h: at least 8 · IF ≥ 0.80 for ≥ 45 min: at least 5.5 · A event > 90 min in 1–2 days: carbohydrate-load, 10 g/kg rising to 12 at 4.5 h; it only raises, and the reason is shown ("Raised: 4 h ride tomorrow") | Impey et al. 2018 ("fuel for the work required"); Thomas, Erdman & Burke 2016 (ACSM, loading 36–48 h before events > 90 min); Burke et al. 2011 |
 | Daily protein | 1.2–2.0 g/kg, rising with load, and at least 0.3 g/kg per feeding | Thomas et al. 2016; Jäger et al. 2017 (ISSN) |

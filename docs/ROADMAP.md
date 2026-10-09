@@ -16,7 +16,7 @@ later.
   Golden-day tests (rest before a long ride, rest before rest, day before
   an A race) and a proptest that a day's target never drops when
   tomorrow's load rises.
-- [ ] 2. Load-band labels consistent with the g/kg numbers, with a visible reason
+- [x] 2. Load-band labels consistent with the g/kg numbers, with a visible reason
   (currently Tuesday 6.4 g/kg "Moderate" vs Thursday 6.5 g/kg "High").
 
 ## Demo data
